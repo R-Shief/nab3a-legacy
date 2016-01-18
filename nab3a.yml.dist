@@ -1,0 +1,66 @@
+#
+#  See <https://dev.twitter.com/streaming/overview Twitter's official
+#  documentation for the Streaming API.
+#
+#  An the filter endpoint, you can use three properties to regulate the content
+#  the API provides to you.
+#
+#  track: [ words, you, like ]
+#  follow: [ 123456, 78901234, 789012313445424 ]
+#  location:
+#    - [ -122.75, 36.8, -121.75, 37.8 ]
+#    - [ -74, 40, -73, 41 ]
+#
+#  `language` is useful on the filter and sample endpoints, but it does not narrow
+#  or focus the scope of your collection on the sample endpoint. The language
+#  parameter only means that other languages are excluded and you receive a
+#  smaller stream.
+#
+#  We shall begin with an empty file named `nalb3a.yml` or a copy of the `nalb3a
+#
+#  This is the most basic configuration:
+
+twitter:
+  consumer_key: ~
+  consumer_secret: ~
+  access_token: ~
+  access_token_secret: ~
+
+nab3a:
+  type: filter
+  track: [ '#BlackLivesMatter', BDS, Kayden Clark ]
+  follow: [ 615963, 16799023, 53789862 ]
+  locations:
+      - [ 29.4965, 34.2677, 33.43338, 35.940941 ]
+
+#
+#  You specify your `default` parameters by declaring them without a name for those
+#  parameters. That simple configuration can easily support multiple sets of
+#  Streaming API search parameters.
+#
+#   nab3a:
+#     default:
+#       type: filter
+#       track: [ '#BlackLivesMatter', BDS, Kayden Clark ]
+#       follow: [ 615963, 16799023, 53789862 ]
+#       locations:
+#           - [ 29.4965, 34.2677, 33.43338, 35.940941 ]
+#
+#  When you have named parameters, you can also maintain multiple collections of data.
+#
+#   nab3a:
+#     default:
+#       type: filter
+#       track: [ '#BlackLivesMatter', BDS, Kayden Clark ]
+#       follow: [ 615963, 16799023, 53789862 ]
+#       locations:
+#           - [ 29.4965, 34.2677, 33.43338, 35.940941 ]
+#     sampled_hebrew:
+#       type: sample
+#       language: he
+#     partners_in_slime:
+#       type: filter
+#       track: [ 'Partners in Slime', Ghostbusters, Ecto, '#staypuft' ]
+#       locations:
+#           - [ -17.93, -150, -17.41, -149.11 ]
+

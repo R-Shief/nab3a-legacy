@@ -1,0 +1,57 @@
+parameters:
+
+services:
+    loader_resolver:
+        class: Symfony\Component\Config\Loader\LoaderResolver
+        arguments:
+            -
+                - "@yaml_loader"
+                - "@closure_loader"
+        public: false
+
+    loader:
+        class: Symfony\Component\Config\Loader\DelegatingLoader
+        arguments:
+            - "@loader_resolver"
+
+    file_locator:
+        class: Symfony\Component\Config\FileLocator
+        arguments:
+            -
+                - '.'
+                - 'app'
+
+    yaml_loader:
+        class: AppBundle\Loader\YamlFileLoader
+        arguments: ['@file_locator']
+        public: false
+
+    closure_loader:
+        class: AppBundle\Loader\ClosureLoader
+        public: false
+
+    twitter_stream.watcher.streaming_parameters:
+        class: AppBundle\StreamParameter\Watcher
+        arguments: [ "@event_loop", "@loader" ]
+        configurator: ["@twitter_stream.guesser.event_type", 'configure' ]
+
+    monolog.processor.memory_usage:
+        class: Monolog\Processor\MemoryUsageProcessor
+        arguments: [ true, false ]
+        tags:
+            - { name: monolog.processor }
+
+    event_loop:
+        class: React\EventLoop\LoopInterface
+        factory: ['React\EventLoop\Factory','create']
+        configurator: ['@event_loop.configurator', configure ]
+
+    event_loop.configurator:
+        class: AppBundle\EventLoop\Configurator
+        arguments:
+            -
+                - '@guzzle.event_loop.plugin'
+
+    guzzle.event_loop.plugin:
+        class: AppBundle\Guzzle\EventLoopPlugin
+        public: false

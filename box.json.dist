@@ -1,0 +1,13 @@
+{
+    "directories": ["src"],
+    "main": "bin/nab3a",
+    "output": "nab3a.phar",
+    "stub": true,
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ]
+}

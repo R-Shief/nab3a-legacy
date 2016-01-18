@@ -1,0 +1,11 @@
+imports:
+    - { resource: services.yml }
+
+parameters:
+    secret: ThisTokenIsNotSoSecretChangeIt
+    kernel.name: nab3a
+
+framework:
+    secret: %secret%
+    form: true
+    serializer: true

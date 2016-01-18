@@ -1,0 +1,43 @@
+parameters: ~
+
+services:
+    console.application:
+        class: AppBundle\Console\Application
+        arguments:
+            - "@service_container"
+            - 'nab3a'
+            - "@=constant('Symfony\\\\Component\\\\HttpKernel\\\\Kernel::VERSION') ~ ' ' ~ parameter('kernel.name') ~ '/' ~ parameter('kernel.environment') ~ (parameter('kernel.debug') ? '/debug' : '')"
+        arguments: ['@service_container', '', '0.0.0']
+        calls:
+            - [ setDispatcher, [ "@event_dispatcher" ] ]
+            - [ setContainer, [ "@service_container" ] ]
+            - [ add, ["@filter.command"] ]
+            - [ add, ["@sample.command"] ]
+            - [ add, ["@validate.command"] ]
+
+    command:
+        abstract: true
+        calls:
+            - [ setContainer, ['@service_container'] ]
+            - [ setLogger, [ '@logger' ] ]
+        tags:
+            - { name: monolog.logger }
+
+    filter.command:
+        class: AppBundle\Command\FilterCommand
+        parent: command
+
+    sample.command:
+        class: AppBundle\Command\SampleCommand
+        parent: command
+
+    cache.clear.command:
+        class: Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand
+        calls:
+            - [ setContainer, ['@service_container']]
+
+    validate.command:
+        # RUBA! The mistake was in the middle part of the name. Command vs Console. Command is corret.
+        class: AppBundle\Command\ValidationCommand
+        calls:
+            - [ setContainer, ['@service_container']]

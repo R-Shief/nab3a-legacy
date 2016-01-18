@@ -1,0 +1,41 @@
+{
+    "name": "r-shief/nab3a",
+    "description": "",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": ["app/Nab3aKernel.php"]
+    },
+    "require": {
+        "bangpound/callable-compiler-pass": "@dev",
+        "bangpound/kernel-traits": "@dev",
+        "clue/stdio-react": "^0.3.1",
+        "evenement/evenement": "^2.0",
+        "guzzlehttp/guzzle": "^6.1",
+        "guzzlehttp/oauth-subscriber": "^0.3.0",
+        "matthiasnoback/symfony-console-form": "dev-develop",
+        "react/event-loop": "dev-master as 0.4.x-dev",
+        "react/stream": "~0.4",
+        "symfony/expression-language": "^3.0",
+        "symfony/framework-bundle": "^3.0",
+        "symfony/monolog-bundle": "^2.8",
+        "symfony/property-access": "^3.0",
+        "symfony/serializer": "^3.0",
+        "symfony/validator": "^3.0",
+        "symfony/yaml": "^3.0"
+    },
+    "require-dev": {
+        "symfony/debug-bundle": "^3.0"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "optimize-autoloader": true
+    },
+    "repositories": [
+        {
+            "url": "https://github.com/bangpound/symfony-console-form.git",
+            "type": "vcs"
+        }
+    ]
+}

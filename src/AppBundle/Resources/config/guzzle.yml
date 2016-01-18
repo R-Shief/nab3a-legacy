@@ -1,0 +1,115 @@
+parameters:
+
+services:
+    guzzle.middleware.history:
+        class: AppBundle\Guzzle\HistoryMiddlewarePlugin
+        public: false
+
+    guzzle.stack.configurator:
+        class: AppBundle\Guzzle\Configurator
+        arguments:
+            - "@event_loop"
+            -
+                - "@guzzle.middleware.retry"
+                - "@guzzle.middleware.log"
+                - "@guzzle.middleware.oauth"
+                - "@guzzle.middleware.history"
+        public: false
+
+    guzzle.stack:
+        class: GuzzleHttp\HandlerStack
+        factory: [ '@guzzle.stack.configurator', create ]
+        configurator: [ '@guzzle.stack.configurator', 'configure' ]
+
+    guzzle.middleware.retry:
+        class: AppBundle\Guzzle\RetryMiddlewarePlugin
+
+    guzzle.middleware.oauth:
+        class: AppBundle\Guzzle\OauthMiddlewarePlugin
+        arguments:
+            -
+                consumer_key: %twitter_consumer_key%
+                consumer_secret: %twitter_consumer_secret%
+                token: %twitter_access_token%
+                token_secret: %twitter_access_token_secret%
+        public: false
+
+    guzzle.middleware.log:
+        class: AppBundle\Guzzle\LoggingMiddlewarePlugin
+        public: false
+        calls:
+            - [ setLogger, ['@logger'] ]
+        tags:
+            - { name: monolog.logger, channel: guzzle }
+        public: false
+
+    guzzle.client:
+        class: GuzzleHttp\Client
+        arguments:
+            -
+                base_uri: https://stream.twitter.com/1.1/
+                handler: "@guzzle.stack"
+                auth: oauth
+                decode_content: 'deflate, gzip'
+                stream: true
+
+    guzzle.task_queue:
+        class: GuzzleHttp\Promise\TaskQueue
+        factory: GuzzleHttp\Promise\queue
+
+    guzzle.emitter:
+        class: AppBundle\Guzzle\Emitter
+        calls:
+            - [ setLogger, [ '@logger']]
+        tags:
+            - { name: monolog.logger, channel: guzzle }
+
+
+    monolog.processor.memory_usage:
+        class: Monolog\Processor\MemoryUsageProcessor
+        arguments: [ true, false ]
+        tags:
+            - { name: monolog.processor }
+
+    twitter_stream.message_emitter.configurator:
+        class: AppBundle\Evenement\Configurator
+        arguments:
+            -
+                - '@twitter_stream.message_emitter.plugin.logging'
+#                - '@twitter_stream.message_emitter.plugin.rabbitmq'
+        public: false
+
+    twitter_stream.message_emitter:
+        class: AppBundle\StreamMessage\Emitter
+        arguments: ['@twitter_stream.guesser.event_type']
+        configurator: [ '@twitter_stream.message_emitter.configurator', 'configure' ]
+
+    twitter_stream.guesser.event_type:
+        class: AppBundle\StreamMessage\TypeGuesser
+        arguments: [ '@serializer']
+        public: false
+
+#    twitter_stream.message_emitter.plugin.rabbitmq:
+#        class: AppBundle\RabbitMq\EnqueueTweetPlugin
+#        arguments:
+#            - "@old_sound_rabbit_mq.twitter_producer"
+#            - 'tweet':
+#            - { content_type: "application/json" }
+#        public: false
+
+    twitter_stream.message_emitter.plugin.logging:
+        class: AppBundle\Logger\LogMessagePlugin
+        arguments: ['@serializer']
+        calls:
+            - [ setLogger, [ "@logger" ] ]
+        tags:
+            - { name: monolog.logger, channel: twitter }
+        public: false
+
+    twitter_stream.request_factory:
+        class: AppBundle\Stream\RequestFactory
+        arguments: [ '@guzzle.client', { delimited: length } ]
+
+    twitter_stream.stream_factory:
+        class: AppBundle\Stream\StreamFactory
+        arguments: [ '@event_loop' ]

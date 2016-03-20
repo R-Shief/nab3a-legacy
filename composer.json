@@ -9,7 +9,6 @@
     },
     "require": {
         "bangpound/callable-compiler-pass": "@dev",
-        "bangpound/kernel-traits": "@dev",
         "clue/stdio-react": "^0.3.1",
         "evenement/evenement": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
@@ -26,7 +25,8 @@
         "symfony/yaml": "^3.0"
     },
     "require-dev": {
-        "symfony/debug-bundle": "^3.0"
+        "symfony/debug-bundle": "^3.0",
+        "sensio/generator-bundle": "^3.0"
     },
     "config": {
         "bin-dir": "bin",

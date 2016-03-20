@@ -36,8 +36,8 @@ class RetryMiddleware
     private static function retryMiddlewares()
     {
         return array(
-          [Middleware::retry(self::rateLimitErrorDecider(), self::exponentialDelay(60000)), 'rate_limit'],
           [Middleware::retry(self::httpErrorDecider(), self::exponentialDelay(5000, 320000)), 'http_error'],
+          [Middleware::retry(self::rateLimitErrorDecider(), self::exponentialDelay(60000)), 'rate_limit'],
           [Middleware::retry(self::connectExceptionDecider(), self::linearDelay(250, 16000)), 'connect_error'],
         );
     }

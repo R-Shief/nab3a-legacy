@@ -37,7 +37,6 @@ services:
             - [ setContainer, ['@service_container']]
 
     validate.command:
-        # RUBA! The mistake was in the middle part of the name. Command vs Console. Command is corret.
         class: AppBundle\Command\ValidationCommand
         calls:
             - [ setContainer, ['@service_container']]

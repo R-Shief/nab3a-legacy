@@ -16,11 +16,11 @@ class AppKernel extends Kernel
         $bundles = [
           new Bangpound\LocalConfigBundle\LocalConfigBundle(
               [
-                  new AppBundle\Twitter\TwitterExtension(),
-                  new AppBundle\Nab3a\Nab3aExtension(),
+                  new Nab3aBundle\Twitter\TwitterExtension(),
+                  new Nab3aBundle\Nab3a\Nab3aExtension(),
               ]
           ),
-          new AppBundle\AppBundle($this),
+          new Nab3aBundle\Nab3aBundle($this),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
         ];

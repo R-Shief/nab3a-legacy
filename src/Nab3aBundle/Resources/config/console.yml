@@ -1,0 +1,42 @@
+parameters: ~
+
+services:
+    console.application:
+        class: Nab3aBundle\Console\Application
+        arguments:
+            - "@service_container"
+            - 'nab3a'
+            - "@=constant('Symfony\\\\Component\\\\HttpKernel\\\\Kernel::VERSION') ~ ' ' ~ parameter('kernel.name') ~ '/' ~ parameter('kernel.environment') ~ (parameter('kernel.debug') ? '/debug' : '')"
+        arguments: ['@service_container', '', '0.0.0']
+        calls:
+            - [ setDispatcher, [ "@event_dispatcher" ] ]
+            - [ setContainer, [ "@service_container" ] ]
+            - [ add, ["@filter.command"] ]
+            - [ add, ["@sample.command"] ]
+            - [ add, ["@validate.command"] ]
+
+    command:
+        abstract: true
+        calls:
+            - [ setContainer, ['@service_container'] ]
+            - [ setLogger, [ '@logger' ] ]
+        tags:
+            - { name: monolog.logger }
+
+    filter.command:
+        class: Nab3aBundle\Command\FilterCommand
+        parent: command
+
+    sample.command:
+        class: Nab3aBundle\Command\SampleCommand
+        parent: command
+
+    cache.clear.command:
+        class: Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand
+        calls:
+            - [ setContainer, ['@service_container']]
+
+    validate.command:
+        class: Nab3aBundle\Command\ValidationCommand
+        calls:
+            - [ setContainer, ['@service_container']]

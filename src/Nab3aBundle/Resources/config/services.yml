@@ -1,0 +1,64 @@
+parameters:
+
+services:
+    event_dispatcher:
+        class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+        arguments: ['@service_container']
+
+    cache_warmer:
+        class: Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate
+        arguments: [{  }]
+
+    kernel.class_cache.cache_warmer:
+        class: Symfony\Bundle\FrameworkBundle\CacheWarmer\ClassCacheCacheWarmer
+        tags:
+            - { name: kernel.cache_warmer }
+
+    cache_clearer:
+        class: Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer
+        arguments: [{  }]
+
+    service_container:
+        synthetic: true
+        autowiring_types:
+            - Symfony\Component\DependencyInjection\ContainerInterface
+    kernel:
+        synthetic: true
+
+    filesystem:
+        class: Symfony\Component\Filesystem\Filesystem
+
+    file_locator:
+        class: Symfony\Component\HttpKernel\Config\FileLocator
+        arguments: ['@kernel', '%kernel.root_dir%/Resources']
+
+    config_cache_factory:
+        class: Symfony\Component\Config\ResourceCheckerConfigCacheFactory
+        arguments: [{  }]
+
+    matthias_pid_file.console_event_listener:
+        class: Nab3aBundle\EventListener\PidFileEventListener
+        tags:
+            # Incomplete feature made the tool inacessible during development.
+            - { name: DISABLED.kernel.event_listener, event: "console.command" }
+
+    monolog.processor.memory_usage:
+        class: Monolog\Processor\MemoryUsageProcessor
+        arguments: [ true, false ]
+        tags:
+            - { name: monolog.processor }
+
+    event_loop:
+        class: React\EventLoop\LoopInterface
+        factory: ['React\EventLoop\Factory','create']
+        configurator: ['@event_loop.configurator', configure ]
+
+    event_loop.configurator:
+        class: Nab3aBundle\EventLoop\Configurator
+        arguments:
+            -
+                - '@guzzle.event_loop.plugin'
+
+    guzzle.event_loop.plugin:
+        class: Nab3aBundle\Guzzle\EventLoopPlugin
+        public: false

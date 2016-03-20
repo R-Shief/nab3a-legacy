@@ -16,8 +16,8 @@ class AppKernel extends Kernel
         $bundles = [
           new Bangpound\LocalConfigBundle\LocalConfigBundle(
               [
-                  new \AppBundle\Twitter\TwitterExtension(),
-                  new \AppBundle\Nab3a\Nab3aExtension(),
+                  new AppBundle\Twitter\TwitterExtension(),
+                  new AppBundle\Nab3a\Nab3aExtension(),
               ]
           ),
           new AppBundle\AppBundle($this),

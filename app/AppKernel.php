@@ -9,15 +9,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\Loader;
 
-class Nab3aKernel extends Kernel
+class AppKernel extends Kernel
 {
-    use Bangpound\Kernel\ClassBasedNameTrait;
-    use Bangpound\Kernel\YamlEnvironmentTrait;
-
-
     public function registerBundles()
     {
         $bundles = [
+          new Bangpound\LocalConfigBundle\LocalConfigBundle(
+              [
+                  new \AppBundle\Twitter\TwitterExtension(),
+                  new \AppBundle\Nab3a\Nab3aExtension(),
+              ]
+          ),
           new AppBundle\AppBundle($this),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -25,6 +27,7 @@ class Nab3aKernel extends Kernel
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
         };
 
@@ -43,32 +46,10 @@ class Nab3aKernel extends Kernel
             $container->addObjectResource($this);
         });
 
-        $loader->load('nab3a.yml');
-        $loader->load(function (ContainerBuilder $container) {
-            $container->addObjectResource($this);
-        });
-
         // Property access is used by both the Form and the Validator component
         $loader->load(function (ContainerBuilder $container) {
             $container->removeDefinition('uri_signer');
             $container->removeDefinition('translator');
         });
-    }
-
-    protected function getContainerLoader(ContainerInterface $container)
-    {
-        /* @var ContainerBuilder $container */
-        $locator = new FileLocator([getcwd(), $this->getRootDir(), getenv('HOME').'/.rshief']);
-
-        $resolver = new LoaderResolver(array(
-          new Loader\XmlFileLoader($container, $locator),
-          new Loader\YamlFileLoader($container, $locator),
-          new Loader\IniFileLoader($container, $locator),
-          new Loader\PhpFileLoader($container, $locator),
-          new Loader\DirectoryLoader($container, $locator),
-          new Loader\ClosureLoader($container),
-        ));
-
-        return new DelegatingLoader($resolver);
     }
 }

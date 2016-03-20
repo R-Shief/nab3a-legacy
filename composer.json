@@ -5,7 +5,7 @@
         "psr-4": {
             "": "src/"
         },
-        "classmap": ["app/Nab3aKernel.php"]
+        "classmap": ["app/AppKernel.php"]
     },
     "require": {
         "bangpound/callable-compiler-pass": "@dev",

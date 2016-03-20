@@ -3,7 +3,6 @@ imports:
 
 parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
-    kernel.name: nab3a
 
 framework:
     secret: %secret%

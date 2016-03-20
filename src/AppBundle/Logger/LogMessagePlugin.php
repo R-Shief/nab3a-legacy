@@ -54,7 +54,6 @@ class LogMessagePlugin implements PluginInterface
     private function log($event, $level = LogLevel::NOTICE)
     {
         return function ($data) use ($event, $level) {
-            echo $event;
             switch ($event) {
                 case 'keep-alive':
                     $message = 'keep alive';

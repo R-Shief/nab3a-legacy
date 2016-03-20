@@ -5,3 +5,7 @@ framework:
     secret: %secret%
     form: true
     serializer: true
+
+local_config:
+    enabled: true
+    filename: nab3a.yml

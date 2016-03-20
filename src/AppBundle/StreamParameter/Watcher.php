@@ -2,37 +2,22 @@
 
 namespace AppBundle\StreamParameter;
 
+use AppBundle\Loader\LoaderHelper;
+use AppBundle\Nab3a\Nab3aExtension;
+use AppBundle\Twitter\TwitterExtension;
 use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\Timer\TimerInterface;
-use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class Watcher implements EventEmitterInterface
 {
     use EventEmitterTrait;
-
-    /**
-     * @var LoaderInterface
-     */
-    private $loader;
-
-    /**
-     * @var LoopInterface
-     */
-    private $loop;
-
-    /**
-     * FilterParameterWatcher constructor.
-     *
-     * @param LoopInterface   $loop
-     * @param LoaderInterface $loader
-     */
-    public function __construct(LoopInterface $loop, LoaderInterface $loader)
-    {
-        $this->loader = $loader;
-        $this->loop = $loop;
-    }
 
     /**
      * @param $resource
@@ -40,16 +25,16 @@ class Watcher implements EventEmitterInterface
      *
      * @return TimerInterface
      */
-    public function watch($resource, $interval = 15)
+    public function watch(LoopInterface $loop, $resource, $interval = 15)
     {
         // The listener notices changes in the streaming filter parameters.
         $function = $this->listenerFactory($resource);
 
         // Load the parameters at startup.
-        $this->loop->nextTick($function);
+        $loop->nextTick($function);
 
         // Also schedule them to be watched.
-        return $this->loop->addPeriodicTimer($interval, $function);
+        return $loop->addPeriodicTimer($interval, $function);
     }
 
     /**
@@ -61,13 +46,37 @@ class Watcher implements EventEmitterInterface
      */
     private function listenerFactory($resource)
     {
-        /* @var array $current */
         return function () use ($resource, &$current) {
-            $params = $this->loader->load($resource);
+            $cont = new ContainerBuilder();
+            $cont->registerExtension(new TwitterExtension());
+            $cont->registerExtension(new Nab3aExtension());
+            $loader = $this->getLocalConfigLoader($cont);
+            $loader->load($resource);
+            $cont->compile();
+            $params = $cont->getParameterBag()->get('nab3a');
             if (!$current || $current !== $params) {
                 $current = $params;
-                $this->emit('filter_change', [$params]);
+                $this->emit('filter_change', [LoaderHelper::makeQueryParams($params['track'], $params['follow'], $params['locations'])]);
             }
         };
+    }
+
+    protected function getLocalConfigLoader(ContainerBuilder $container, $cwd = null)
+    {
+        if (!$cwd) {
+            $cwd = getcwd();
+        }
+        $locator = new FileLocator([$cwd]);
+
+        $resolver = new LoaderResolver(array(
+          new Loader\XmlFileLoader($container, $locator),
+          new Loader\YamlFileLoader($container, $locator),
+          new Loader\IniFileLoader($container, $locator),
+          new Loader\PhpFileLoader($container, $locator),
+          new Loader\DirectoryLoader($container, $locator),
+          new Loader\ClosureLoader($container),
+        ));
+
+        return new DelegatingLoader($resolver);
     }
 }

@@ -22,6 +22,7 @@ class FilterCommand extends AbstractCommand
     {
         $loop = $this->container->get('event_loop');
         $watcher = $this->container->get('twitter_stream.watcher.streaming_parameters');
+        $watcher->watch($loop, 'nab3a.yml');
 
         // @todo
         //

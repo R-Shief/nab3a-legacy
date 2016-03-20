@@ -1,6 +1,6 @@
 <?php
 
-namespace Loader;
+namespace AppBundle\Loader;
 
 class LoaderHelper
 {

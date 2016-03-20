@@ -23,7 +23,6 @@ class AppKernel extends Kernel
           new AppBundle\AppBundle($this),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
-          new Matthias\SymfonyConsoleForm\Bundle\SymfonyConsoleFormBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

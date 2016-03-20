@@ -12,7 +12,6 @@
         "evenement/evenement": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
-        "matthiasnoback/symfony-console-form": "dev-develop",
         "react/event-loop": "dev-master as 0.4.x-dev",
         "react/stream": "~0.4",
         "symfony/expression-language": "^3.0",

@@ -24,7 +24,7 @@ class ValidationCommand extends AbstractCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return StreamParameter
+     * @return StreamParameters
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

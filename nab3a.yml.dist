@@ -16,7 +16,8 @@
 #  parameter only means that other languages are excluded and you receive a
 #  smaller stream.
 #
-#  We shall begin with an empty file named `nalb3a.yml` or a copy of the `nalb3a
+#  We shall begin with an empty file named `nalb3a.yml` or a copy of the
+# `nab3a.yml.dist` file.
 #
 #  This is the most basic configuration:
 

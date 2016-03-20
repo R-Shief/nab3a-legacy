@@ -1,7 +1,5 @@
 <?php
 
-// in the "command" namespace, symfony's framework bundle application
-// class autodiscovers it.
 namespace AppBundle\Command;
 
 use AppBundle\Model\StreamParameters;

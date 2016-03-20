@@ -4,6 +4,7 @@ parameters:
 framework:
     secret: %secret%
     serializer: true
+    validation: true
 
 local_config:
     enabled: true

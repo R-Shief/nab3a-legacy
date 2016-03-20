@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3ea76e5f9e4e49718b81aa22be95e1c7",
-    "content-hash": "15a599767ed81e0a95ce62aeec4dd168",
+    "hash": "d70ea0cbadfb69d4b92fd1d73a0b1404",
+    "content-hash": "5bc07bc581bb08800b350f5ba25c56b3",
     "packages": [
         {
             "name": "bangpound/callable-compiler-pass",
@@ -46,53 +46,6 @@
             ],
             "description": "Create compiler passes in Symfony without defining another class",
             "time": "2016-03-11 01:49:53"
-        },
-        {
-            "name": "clue/stdio-react",
-            "version": "v0.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clue/php-stdio-react.git",
-                "reference": "a7a2b8f732fdebaf091d3adf5ac03810160f410f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stdio-react/zipball/a7a2b8f732fdebaf091d3adf5ac03810160f410f",
-                "reference": "a7a2b8f732fdebaf091d3adf5ac03810160f410f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3",
-                "react/event-loop": "0.3.*|0.4.*",
-                "react/stream": "0.3.*|0.4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clue\\React\\Stdio\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@lueck.tv"
-                }
-            ],
-            "description": "Async standard console input & output (STDIN, STDOUT)",
-            "homepage": "https://github.com/clue/php-stdio-react",
-            "keywords": [
-                "async",
-                "reactphp",
-                "readline",
-                "stdin",
-                "stdio",
-                "stdout"
-            ],
-            "time": "2015-11-26 19:06:42"
         },
         {
             "name": "doctrine/annotations",

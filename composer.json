@@ -9,7 +9,6 @@
     },
     "require": {
         "bangpound/callable-compiler-pass": "@dev",
-        "clue/stdio-react": "^0.3.1",
         "evenement/evenement": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3.0",

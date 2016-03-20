@@ -11,7 +11,6 @@ class SampleCommand extends AbstractCommand
     protected function configure()
     {
         $this->setName('stream:sample')
-          ->addArgument('')
           ->addArgument('destination', InputArgument::OPTIONAL, 'destination for stream');
     }
 

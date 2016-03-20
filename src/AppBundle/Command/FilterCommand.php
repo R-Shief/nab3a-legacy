@@ -41,7 +41,7 @@ class FilterCommand extends AbstractCommand
         $watcher->on('filter_change', function ($params) {
             $promise = $this->container->get('twitter_stream.request_factory')->filter($params);
             $promise = $this->container->get('twitter_stream.stream_factory')->stream($promise);
-            $promise = $this->container->get('twitter_stream.message_factory')->messages($promise);
+            $promise = $this->container->get('twitter_stream.message_emitter')->messages($promise);
         });
 
         $loop->run();

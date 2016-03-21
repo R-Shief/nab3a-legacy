@@ -4,7 +4,7 @@ namespace Nab3aBundle\StreamParameter;
 
 use Nab3aBundle\Loader\LoaderHelper;
 use Nab3aBundle\Nab3a\Nab3aExtension;
-use Nab3aBundle\Twitter\TwitterExtension;
+use Nab3aBundle\Twitter\TwitterPlugin;
 use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 use React\EventLoop\LoopInterface;
@@ -48,7 +48,7 @@ class Watcher implements EventEmitterInterface
     {
         return function () use ($resource, &$current) {
             $cont = new ContainerBuilder();
-            $cont->registerExtension(new TwitterExtension());
+            $cont->registerExtension(new TwitterPlugin());
             $cont->registerExtension(new Nab3aExtension());
             $loader = $this->getLocalConfigLoader($cont);
             $loader->load($resource);

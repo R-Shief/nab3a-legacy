@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\TwitterStream;
+namespace Nab3aBundle\Stream;
 
 use Psr\Log\LoggerAwareTrait;
 

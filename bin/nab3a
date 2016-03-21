@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
-use ReactPHP\EventLoop\Factory;
 
 // if you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
@@ -15,6 +15,7 @@ set_time_limit(0);
  * @var Composer\Autoload\ClassLoader
  */
 $loader = require __DIR__.'/../vendor/autoload.php';
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');

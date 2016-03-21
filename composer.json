@@ -15,6 +15,7 @@
         "matthiasnoback/symfony-bundle-plugins": "^1.1",
         "react/event-loop": "dev-master as 0.4.x-dev",
         "react/stream": "~0.4",
+        "symfony/console": "^3.0",
         "symfony/expression-language": "^3.0",
         "symfony/framework-bundle": "^3.0",
         "symfony/intl": "^3.0",

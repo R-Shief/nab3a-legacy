@@ -1,5 +1,0 @@
-parameters: ~
-
-services:
-    property_accessor:
-        class: Symfony\Component\PropertyAccess\PropertyAccessor

@@ -11,7 +11,7 @@ class StreamParameters
      *
      * @var string
      */
-    protected $lang;
+    protected $language;
 
     /**
      * @Assert\Count(
@@ -20,7 +20,7 @@ class StreamParameters
      * )
      * @Assert\All({
      *     @Assert\NotBlank,
-     *     @Assert\Length(min = 5)
+     *     @Assert\Length(max=60)
      * })
      *
      * @var array
@@ -36,6 +36,7 @@ class StreamParameters
      *   min = "0",
      *   max = "5000"
      * )
+     * @Assert\All({@Assert\Type("integer")})
      *
      * @var array
      */
@@ -47,7 +48,12 @@ class StreamParameters
      *   max = "25"
      * )
      * @Assert\All({
-     *     @Assert\Count(
+     *     @Assert\Collection(fields={
+     *       {@Assert\Type("float"),@Assert\Range(min=-180,max=180)},
+     *       {@Assert\Type("float"),@Assert\Range(min=-90,max=90)},
+     *       {@Assert\Type("float"),@Assert\Range(min=-180,max=180)},
+     *       {@Assert\Type("float"),@Assert\Range(min=-90,max=90)}
+     *     })
      * })
      *
      * @var array
@@ -57,17 +63,17 @@ class StreamParameters
     /**
      * @return mixed
      */
-    public function getLang()
+    public function getLanguage()
     {
-        return $this->lang;
+        return $this->language;
     }
 
     /**
-     * @param mixed $lang
+     * @param mixed $language
      */
-    public function setLang($lang)
+    public function setLanguage($language)
     {
-        $this->lang = $lang;
+        $this->language = $language;
     }
 
     /**

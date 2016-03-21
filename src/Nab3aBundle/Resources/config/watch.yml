@@ -1,0 +1,3 @@
+services:
+    nab3a.watch.stream_parameter:
+        class: Nab3aBundle\StreamParameter\Watcher

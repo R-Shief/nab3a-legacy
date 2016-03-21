@@ -1,0 +1,65 @@
+services:
+    twitter_stream.message_emitter.configurator:
+        class: Nab3aBundle\Evenement\Configurator
+        arguments:
+            -
+                - '@twitter_stream.message_emitter.plugin.logging'
+#                - '@twitter_stream.message_emitter.plugin.rabbitmq'
+        public: false
+
+    twitter_stream.message_emitter:
+        class: Nab3aBundle\StreamMessage\Emitter
+        arguments: ['@twitter_stream.guesser.event_type']
+        configurator: [ '@twitter_stream.message_emitter.configurator', 'configure' ]
+
+    twitter_stream.guesser.event_type:
+        class: Nab3aBundle\StreamMessage\TypeGuesser
+        arguments: [ '@serializer']
+        public: false
+
+#    twitter_stream.message_emitter.plugin.rabbitmq:
+#        class: Nab3aBundle\RabbitMq\EnqueueTweetPlugin
+#        arguments:
+#            - "@old_sound_rabbit_mq.twitter_producer"
+#            - 'tweet':
+#            - { content_type: "application/json" }
+#        public: false
+
+    twitter_stream.message_emitter.plugin.logging:
+        class: Nab3aBundle\Logger\LogMessagePlugin
+        arguments: ['@serializer']
+        calls:
+            - [ setLogger, [ "@logger" ] ]
+        tags:
+            - { name: monolog.logger, channel: twitter }
+        public: false
+
+    twitter_stream.request_factory:
+        class: Nab3aBundle\Stream\RequestFactory
+        arguments: [ '@twitter.guzzle.client', { delimited: length } ]
+
+    twitter_stream.stream_factory:
+        class: Nab3aBundle\Stream\StreamFactory
+        arguments: [ '@event_loop' ]
+
+    twitter.guzzle.client:
+        parent: guzzle.client
+        arguments:
+            -
+                base_uri: https://stream.twitter.com/1.1/
+                handler: "@twitter.guzzle.stack"
+                auth: oauth
+                decode_content: 'deflate, gzip'
+                stream: true
+
+    twitter.guzzle.stack:
+        parent: guzzle.stack
+        factory: [ '@twitter.guzzle.stack.configurator', create ]
+        configurator: [ '@twitter.guzzle.stack.configurator', 'configure' ]
+
+    twitter.guzzle.stack.configurator:
+        parent: guzzle.stack.configurator
+
+    twitter.guzzle.middleware.oauth:
+        parent: guzzle.middleware.oauth
+

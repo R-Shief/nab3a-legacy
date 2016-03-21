@@ -8,13 +8,11 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
-          new Bangpound\LocalConfigBundle\LocalConfigBundle(
-              [
-                  new Nab3aBundle\Twitter\TwitterExtension(),
-                  new Nab3aBundle\Nab3a\Nab3aExtension(),
-              ]
-          ),
-          new Nab3aBundle\Nab3aBundle($this),
+          new Nab3aBundle\Nab3aBundle([
+            new Nab3aBundle\Stream\StreamPlugin(),
+            new Nab3aBundle\Twitter\TwitterPlugin(),
+            new Nab3aBundle\Watch\WatchPlugin(),
+          ]),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
         ];
@@ -35,5 +33,6 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config.yml');
+        $loader->load(getcwd() .'/nab3a.yml');
     }
 }

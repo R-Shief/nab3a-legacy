@@ -11,9 +11,6 @@ services:
         calls:
             - [ setDispatcher, [ "@event_dispatcher" ] ]
             - [ setContainer, [ "@service_container" ] ]
-            - [ add, ["@filter.command"] ]
-            - [ add, ["@sample.command"] ]
-            - [ add, ["@validate.command"] ]
 
     command:
         abstract: true
@@ -22,21 +19,3 @@ services:
             - [ setLogger, [ '@logger' ] ]
         tags:
             - { name: monolog.logger }
-
-    filter.command:
-        class: Nab3aBundle\Command\FilterCommand
-        parent: command
-
-    sample.command:
-        class: Nab3aBundle\Command\SampleCommand
-        parent: command
-
-    cache.clear.command:
-        class: Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand
-        calls:
-            - [ setContainer, ['@service_container']]
-
-    validate.command:
-        class: Nab3aBundle\Command\ValidationCommand
-        calls:
-            - [ setContainer, ['@service_container']]

@@ -4,8 +4,5 @@ parameters:
 framework:
     secret: %secret%
     serializer: true
-    validation: true
-
-local_config:
-    enabled: true
-    filename: nab3a.yml
+    validation:
+        enable_annotations: true

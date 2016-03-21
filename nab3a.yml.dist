@@ -21,18 +21,19 @@
 #
 #  This is the most basic configuration:
 
-twitter:
-  consumer_key: ~
-  consumer_secret: ~
-  access_token: ~
-  access_token_secret: ~
-
 nab3a:
-  type: filter
-  track: [ '#BlackLivesMatter', BDS, Kayden Clark ]
-  follow: [ 615963, 16799023, 53789862 ]
-  locations:
-      - [ 29.4965, 34.2677, 33.43338, 35.940941 ]
+    stream:
+        source: twitter
+        type: filter
+        track: [ '#BlackLivesMatter', BDS, Kayden Clark ]
+        follow: [ 615963, 16799023, 53789862 ]
+        locations:
+            - [ 29.4965, 34.2677, 33.43338, 35.940941 ]
+    twitter:
+        consumer_key: ~
+        consumer_secret: ~
+        access_token: ~
+        access_token_secret: ~
 
 #
 #  You specify your `default` parameters by declaring them without a name for those

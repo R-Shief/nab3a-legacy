@@ -7,22 +7,35 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FilterCommand extends AbstractCommand
+class StreamCommand extends AbstractCommand
 {
     protected function configure()
     {
-        $this->setName('stream:filter')
-          ->addOption('name', null, InputOption::VALUE_OPTIONAL, 'container parameter with filter parameters', 'filter_parameters')
-          ->addArgument('source', InputArgument::OPTIONAL, 'source for filter parameters [url or file]')
-          ->addArgument('destination', InputArgument::OPTIONAL, 'destination for stream')
+        $this
+          ->setName('stream')
+          ->addArgument('name', InputArgument::OPTIONAL, 'container parameter with filter parameters', 'default')
+          ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $loop = $this->container->get('event_loop');
-        $watcher = $this->container->get('twitter_stream.watcher.streaming_parameters');
-        $watcher->watch($loop, 'nab3a.yml');
+
+        $params = $this->container->getParameter('nab3a.stream.'.$input->getArgument('name'));
+
+        $callback = function ($params) {
+            $promise = $this->container->get('twitter_stream.request_factory')->fromStream($params);
+            $promise = $this->container->get('twitter_stream.stream_factory')->stream($promise);
+            $promise = $this->container->get('twitter_stream.message_emitter')->messages($promise);
+        };
+
+        if ($input->getOption('watch')) {
+            $watcher = $this->container->get('watcher');
+            $watcher->on('filter_change', $callback($params));
+        } else {
+            $callback($params);
+        }
 
         // @todo
         //
@@ -38,12 +51,6 @@ class FilterCommand extends AbstractCommand
         // When this app receives those errors, it manages them correctly,
         // but it still stupidly allows these situations to arise.
         // $timer = $watcher->watch($resource);
-
-        $watcher->on('filter_change', function ($params) {
-            $promise = $this->container->get('twitter_stream.request_factory')->filter($params);
-            $promise = $this->container->get('twitter_stream.stream_factory')->stream($promise);
-            $promise = $this->container->get('twitter_stream.message_emitter')->messages($promise);
-        });
 
         $loop->run();
     }

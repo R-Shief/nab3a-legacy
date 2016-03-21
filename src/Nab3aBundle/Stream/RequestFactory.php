@@ -4,6 +4,7 @@ namespace Nab3aBundle\Stream;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
+use Nab3aBundle\Loader\LoaderHelper;
 
 class RequestFactory
 {
@@ -36,7 +37,9 @@ class RequestFactory
      */
     public function filter($params)
     {
-        // @todo At least one predicate parameter (follow, locations, or track) must be specified. The default access level allows up to 400 track keywords, 5,000 follow userids and 25 0.1-360 degree location boxes.
+        // @todo At least one predicate parameter (follow, locations, or track)
+        //   must be specified. The default access level allows up to 400 track
+        //   keywords, 5,000 follow userids and 25 0.1-360 degree location boxes.
         return $this->request(self::FILTER_METHOD, self::FILTER_URL, [
           'form_params' => array_filter($params) + $this->options,
         ]);
@@ -64,5 +67,19 @@ class RequestFactory
     public function request($method, $uri, array $options = [])
     {
         return $this->client->requestAsync($method, $uri, $options);
+    }
+
+    public function fromStream($config)
+    {
+        switch ($config['type']) {
+            case 'filter':
+                $params = LoaderHelper::makeQueryParams($config['parameters']['track'], $config['parameters']['follow'], $config['parameters']['locations']);
+
+                return $this->filter($params);
+            case 'sample':
+                $params = $config['parameters'];
+
+                return $this->sample($params);
+        }
     }
 }

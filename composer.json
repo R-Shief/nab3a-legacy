@@ -20,7 +20,9 @@
         "symfony/property-access": "^3.0",
         "symfony/serializer": "^3.0",
         "symfony/validator": "^3.0",
-        "symfony/yaml": "^3.0"
+        "symfony/yaml": "^3.0",
+        "matthiasnoback/symfony-bundle-plugins": "^1.1",
+        "symfony/intl": "^3.0"
     },
     "require-dev": {
         "symfony/debug-bundle": "^3.0",

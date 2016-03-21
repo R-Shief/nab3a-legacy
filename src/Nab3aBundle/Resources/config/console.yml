@@ -2,12 +2,11 @@ parameters: ~
 
 services:
     console.application:
-        class: Nab3aBundle\Console\Application
+        class: Symfony\Component\Console\Application
         arguments:
             - 'nab3a'
         calls:
             - [ setDispatcher, [ "@event_dispatcher" ] ]
-            - [ setContainer, [ "@service_container" ] ]
 
     command:
         abstract: true

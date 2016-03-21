@@ -1,23 +1,23 @@
 services:
-    twitter_stream.message_emitter.configurator:
+    nab3a.twitter.message_emitter.configurator:
         class: Nab3aBundle\Evenement\Configurator
         arguments:
             -
-                - '@twitter_stream.message_emitter.plugin.logging'
-#                - '@twitter_stream.message_emitter.plugin.rabbitmq'
+                - '@nab3a.twitter.message_emitter.plugin.logging'
+#                - '@nab3a.twitter.message_emitter.plugin.rabbitmq'
         public: false
 
-    twitter_stream.message_emitter:
+    nab3a.twitter.message_emitter:
         class: Nab3aBundle\StreamMessage\Emitter
-        arguments: ['@twitter_stream.guesser.event_type']
-        configurator: [ '@twitter_stream.message_emitter.configurator', 'configure' ]
+        arguments: ['@nab3a.twitter.guesser.event_type']
+        configurator: [ '@nab3a.twitter.message_emitter.configurator', 'configure' ]
 
-    twitter_stream.guesser.event_type:
+    nab3a.twitter.guesser.event_type:
         class: Nab3aBundle\StreamMessage\TypeGuesser
         arguments: [ '@serializer']
         public: false
 
-#    twitter_stream.message_emitter.plugin.rabbitmq:
+#    nab3a.twitter.message_emitter.plugin.rabbitmq:
 #        class: Nab3aBundle\RabbitMq\EnqueueTweetPlugin
 #        arguments:
 #            - "@old_sound_rabbit_mq.twitter_producer"
@@ -25,7 +25,7 @@ services:
 #            - { content_type: "application/json" }
 #        public: false
 
-    twitter_stream.message_emitter.plugin.logging:
+    nab3a.twitter.message_emitter.plugin.logging:
         class: Nab3aBundle\Logger\LogMessagePlugin
         arguments: ['@serializer']
         calls:
@@ -34,11 +34,11 @@ services:
             - { name: monolog.logger, channel: twitter }
         public: false
 
-    twitter_stream.request_factory:
+    nab3a.twitter.request_factory:
         class: Nab3aBundle\Stream\RequestFactory
         arguments: [ '@twitter.guzzle.client', { delimited: length } ]
 
-    twitter_stream.stream_factory:
+    nab3a.twitter.stream_factory:
         class: Nab3aBundle\Stream\StreamFactory
         arguments: [ '@event_loop' ]
 

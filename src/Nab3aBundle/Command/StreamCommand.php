@@ -25,9 +25,9 @@ class StreamCommand extends AbstractCommand
         $params = $this->container->getParameter('nab3a.stream.'.$input->getArgument('name'));
 
         $callback = function ($params) {
-            $promise = $this->container->get('twitter_stream.request_factory')->fromStream($params);
-            $promise = $this->container->get('twitter_stream.stream_factory')->stream($promise);
-            $promise = $this->container->get('twitter_stream.message_emitter')->messages($promise);
+            $promise = $this->container->get('nab3a.twitter.request_factory')->fromStream($params);
+            $promise = $this->container->get('nab3a.twitter.stream_factory')->stream($promise);
+            $promise = $this->container->get('nab3a.twitter.message_emitter')->messages($promise);
         };
 
         if ($input->getOption('watch')) {

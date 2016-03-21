@@ -8,21 +8,21 @@
         "classmap": ["app/AppKernel.php"]
     },
     "require": {
-        "bangpound/callable-compiler-pass": "@dev",
+        "bangpound/callable-compiler-pass": "^1.0",
         "evenement/evenement": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
+        "matthiasnoback/symfony-bundle-plugins": "^1.1",
         "react/event-loop": "dev-master as 0.4.x-dev",
         "react/stream": "~0.4",
         "symfony/expression-language": "^3.0",
         "symfony/framework-bundle": "^3.0",
+        "symfony/intl": "^3.0",
         "symfony/monolog-bundle": "^2.8",
         "symfony/property-access": "^3.0",
         "symfony/serializer": "^3.0",
         "symfony/validator": "^3.0",
-        "symfony/yaml": "^3.0",
-        "matthiasnoback/symfony-bundle-plugins": "^1.1",
-        "symfony/intl": "^3.0"
+        "symfony/yaml": "^3.0"
     },
     "require-dev": {
         "kherge/box": "~2.0",
@@ -31,11 +31,5 @@
     },
     "config": {
         "optimize-autoloader": true
-    },
-    "repositories": [
-        {
-            "url": "https://github.com/bangpound/symfony-console-form.git",
-            "type": "vcs"
-        }
-    ]
+    }
 }

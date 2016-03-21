@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "304098041a36ffbbac12aa70138bdd07",
-    "content-hash": "60622cad246f55933ef67130c602ce35",
+    "hash": "e9a37a81680034855422884404101df0",
+    "content-hash": "043216f9074b092f0623a4fb00961221",
     "packages": [
         {
             "name": "bangpound/callable-compiler-pass",
@@ -287,16 +287,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.1.1",
+            "version": "6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "c6851d6e48f63b69357cbfa55bca116448140e0c"
+                "reference": "d094e337976dff9d8e2424e8485872194e768662"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/c6851d6e48f63b69357cbfa55bca116448140e0c",
-                "reference": "c6851d6e48f63b69357cbfa55bca116448140e0c",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d094e337976dff9d8e2424e8485872194e768662",
+                "reference": "d094e337976dff9d8e2424e8485872194e768662",
                 "shasum": ""
             },
             "require": {
@@ -312,7 +312,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.1-dev"
+                    "dev-master": "6.2-dev"
                 }
             },
             "autoload": {
@@ -345,7 +345,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2015-11-23 00:47:50"
+            "time": "2016-03-21 20:02:09"
         },
         {
             "name": "guzzlehttp/oauth-subscriber",
@@ -773,7 +773,7 @@
         },
         {
             "name": "react/event-loop",
-            "version": "dev-master",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
@@ -1262,55 +1262,6 @@
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
             "time": "2016-01-27 05:14:46"
-        },
-        {
-            "name": "symfony/expression-language",
-            "version": "v3.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/expression-language.git",
-                "reference": "74381acd249d71100b0184a1fee210bc7c69c47d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/expression-language/zipball/74381acd249d71100b0184a1fee210bc7c69c47d",
-                "reference": "74381acd249d71100b0184a1fee210bc7c69c47d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\ExpressionLanguage\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony ExpressionLanguage Component",
-            "homepage": "https://symfony.com",
-            "time": "2016-01-03 15:35:16"
         },
         {
             "name": "symfony/filesystem",
@@ -3094,18 +3045,9 @@
             "time": "2016-01-25 21:22:18"
         }
     ],
-    "aliases": [
-        {
-            "alias": "0.4.x-dev",
-            "alias_normalized": "0.4.9999999.9999999-dev",
-            "version": "9999999-dev",
-            "package": "react/event-loop"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "react/event-loop": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

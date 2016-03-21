@@ -6,3 +6,5 @@ framework:
     serializer: true
     validation:
         enable_annotations: true
+    annotations:
+        cache: none

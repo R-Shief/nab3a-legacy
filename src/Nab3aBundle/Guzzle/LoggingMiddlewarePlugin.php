@@ -6,7 +6,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 class LoggingMiddlewarePlugin implements MiddlewareInterface

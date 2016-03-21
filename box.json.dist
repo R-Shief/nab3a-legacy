@@ -1,13 +1,80 @@
 {
-    "directories": ["src"],
-    "main": "bin/nab3a",
-    "output": "nab3a.phar",
-    "stub": true,
+    "algorithm": "OPENSSL",
+    "banner": "nab3a",
+    "bootstrap": "app/bootstrap.php",
+    "chmod": "0755",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Json",
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "compression": "BZ2",
+    "directories": [
+        "app/cache/prod",
+        "src"
+    ],
+    "files": [
+        "app/cache/prod/appProdProjectContainer.php",
+        "vendor/autoload.php"
+    ],
     "finder": [
         {
             "name": "*.php",
-            "exclude": ["Tests"],
-            "in": "vendor"
+            "exclude": [
+                "Tests",
+                "tests",
+                "test"
+            ],
+            "in": [
+                "vendor/bangpound",
+                "vendor/composer",
+                "vendor/doctrine",
+                "vendor/evenement",
+                "vendor/guzzlehttp",
+                "vendor/matthiasnoback",
+                "vendor/monolog",
+                "vendor/paragonie",
+                "vendor/psr",
+                "vendor/react",
+                "vendor/symfony/class-loader",
+                "vendor/symfony/config",
+                "vendor/symfony/console",
+                "vendor/symfony/debug",
+                "vendor/symfony/dependency-injection",
+                "vendor/symfony/event-dispatcher",
+                "vendor/symfony/expression-language",
+                "vendor/symfony/filesystem",
+                "vendor/symfony/finder",
+                "vendor/symfony/framework-bundle",
+                "vendor/symfony/http-foundation",
+                "vendor/symfony/http-kernel",
+                "vendor/symfony/intl",
+                "vendor/symfony/monolog-bridge",
+                "vendor/symfony/monolog-bundle",
+                "vendor/symfony/polyfill-intl-icu",
+                "vendor/symfony/polyfill-mbstring",
+                "vendor/symfony/polyfill-php56",
+                "vendor/symfony/polyfill-php70",
+                "vendor/symfony/polyfill-util",
+                "vendor/symfony/property-access",
+                "vendor/symfony/serializer",
+                "vendor/symfony/translation",
+                "vendor/symfony/validator",
+                "vendor/symfony/yaml"
+            ]
+        },
+        {
+            "name": "*.json",
+            "in": [
+                "vendor/symfony/intl/Resources/data/languages",
+                "vendor/symfony/intl/Resources/data/locales",
+                "vendor/symfony/intl/Resources/data/scripts"
+            ]
         }
-    ]
+    ],
+    "git-version": "package_version",
+    "intercept": true,
+    "key": ".travis/phar-private.pem",
+    "main": "bin/nab3a.php",
+    "output": "nab3a.phar",
+    "stub": true
 }

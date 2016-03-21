@@ -2,4 +2,6 @@
 vendor
 app/cache/
 nab3a.yml
-
+.travis/phar-private.pem
+nab3a.phar
+nab3a.phar.pubkey

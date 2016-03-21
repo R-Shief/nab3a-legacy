@@ -104,11 +104,6 @@ class TwitterPlugin implements BundlePlugin
      */
     public function build(ContainerBuilder $container)
     {
-        //        $container->addCompilerPass(new CallableCompilerPass(function (ContainerBuilder $container) {
-//            $definition = $container->getDefinition('console.application');
-//            $definition->addMethodCall('add', [new Reference('filter.command')]);
-//            $definition->addMethodCall('add', [new Reference('sample.command')]);
-//        }));
     }
 
     /**
@@ -120,6 +115,5 @@ class TwitterPlugin implements BundlePlugin
      */
     public function boot(ContainerInterface $container)
     {
-        // TODO: Implement boot() method.
     }
 }

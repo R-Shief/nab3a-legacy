@@ -26,7 +26,6 @@ services:
 
     guzzle.middleware.log:
         class: Nab3aBundle\Guzzle\LoggingMiddlewarePlugin
-        public: false
         calls:
             - [ setLogger, ['@logger'] ]
         tags:

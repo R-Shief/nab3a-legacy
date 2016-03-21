@@ -4,10 +4,7 @@ services:
     console.application:
         class: Nab3aBundle\Console\Application
         arguments:
-            - "@service_container"
             - 'nab3a'
-            - "@=constant('Symfony\\\\Component\\\\HttpKernel\\\\Kernel::VERSION') ~ ' ' ~ parameter('kernel.name') ~ '/' ~ parameter('kernel.environment') ~ (parameter('kernel.debug') ? '/debug' : '')"
-        arguments: ['@service_container', '', '0.0.0']
         calls:
             - [ setDispatcher, [ "@event_dispatcher" ] ]
             - [ setContainer, [ "@service_container" ] ]

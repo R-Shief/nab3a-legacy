@@ -13,6 +13,7 @@
         "src"
     ],
     "files": [
+        "app/autoload.php",
         "app/cache/prod/appProdProjectContainer.php",
         "vendor/autoload.php"
     ],

@@ -1,7 +1,6 @@
 <?php
 
-$loader = require __DIR__.'/../vendor/autoload.php';
-\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+$loader = require __DIR__.'/../app/autoload.php';
 
 $proc = new \Symfony\Component\Process\Process('composer install --no-dev');
 $proc->run();

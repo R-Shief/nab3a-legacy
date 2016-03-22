@@ -22,7 +22,8 @@ class StreamCommand extends AbstractCommand
     {
         $loop = $this->container->get('event_loop');
 
-        $params = $this->container->getParameter('nab3a.stream.'.$input->getArgument('name'));
+        $name = 'nab3a.stream.'.$input->getArgument('name');
+        $params = $this->container->get('nab3a.standalone.parameters')->get($name);
 
         $callback = function ($params) {
             $promise = $this->container->get('nab3a.twitter.request_factory')->fromStream($params);

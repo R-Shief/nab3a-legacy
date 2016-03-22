@@ -12,6 +12,7 @@ class AppKernel extends Kernel
             new Nab3aBundle\Stream\StreamPlugin(),
             new Nab3aBundle\Twitter\TwitterPlugin(),
             new Nab3aBundle\Watch\WatchPlugin(),
+            new Nab3aBundle\Standalone\StandalonePlugin(),
           ]),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -33,6 +34,5 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config.yml');
-        $loader->load(getcwd() .'/nab3a.yml');
     }
 }

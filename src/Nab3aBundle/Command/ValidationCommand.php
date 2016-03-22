@@ -31,8 +31,9 @@ class ValidationCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $name = 'nab3a.stream.'.$input->getArgument('name');
+        $params = $this->container->get('nab3a.standalone.parameters')->get($name);
         $io = new SymfonyStyle($input, $output);
-        $params = $this->container->getParameter('nab3a.stream.'.$input->getArgument('name'));
 
         $serializer = $this->container->get('serializer');
         $query = $serializer->denormalize($params['parameters'], StreamParameters::class);

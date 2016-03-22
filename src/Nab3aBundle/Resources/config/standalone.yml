@@ -1,0 +1,14 @@
+services:
+    nab3a.standalone.loader:
+        class: Nab3aBundle\Loader\YamlFileLoader
+        synthetic: true
+
+    nab3a.standalone.parameters:
+        class: Nab3aBundle\Standalone\RuntimeParameterBag
+        arguments: [ "@nab3a.standalone.parameter_provider" ]
+        calls:
+            - [ setContainer, [ "@service_container" ]]
+
+    nab3a.standalone.parameter_provider:
+        class: Nab3aBundle\Standalone\ParameterProvider
+        arguments: [ 'nab3a' ]

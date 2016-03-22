@@ -59,7 +59,19 @@ services:
 
     twitter.guzzle.stack.configurator:
         parent: guzzle.stack.configurator
+        arguments:
+            - '@event_loop'
+            -
+                - '@guzzle.middleware.retry'
+                - '@guzzle.middleware.log'
+                - '@guzzle.middleware.history'
+                - '@twitter.guzzle.middleware.oauth'
 
     twitter.guzzle.middleware.oauth:
         parent: guzzle.middleware.oauth
-
+        arguments:
+            -
+                consumer_key:    "@=service('nab3a.standalone.parameters').get('nab3a.twitter.consumer_key')"
+                consumer_secret: "@=service('nab3a.standalone.parameters').get('nab3a.twitter.consumer_secret')"
+                token:           "@=service('nab3a.standalone.parameters').get('nab3a.twitter.access_token')"
+                token_secret:    "@=service('nab3a.standalone.parameters').get('nab3a.twitter.access_token_secret')"

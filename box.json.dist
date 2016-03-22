@@ -21,12 +21,12 @@
         {
             "name": "*.php",
             "exclude": [
+                "Resources/views",
                 "Tests",
                 "tests",
                 "test"
             ],
             "in": [
-                "vendor/bangpound",
                 "vendor/composer",
                 "vendor/doctrine",
                 "vendor/evenement",

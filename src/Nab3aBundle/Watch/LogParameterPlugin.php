@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\StreamParameter;
+namespace Nab3aBundle\Watch;
 
 use Nab3aBundle\Evenement\PluginInterface;
 use Evenement\EventEmitterInterface;

@@ -22,6 +22,6 @@ class EvenementPlugin extends SimpleBundlePlugin
 
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AttachPluginsCompilerPass());
+        $container->addCompilerPass(new AttachPluginsCompilerPass('nab3a.evenement.configurator', 'evenement.plugin'));
     }
 }

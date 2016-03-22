@@ -10,13 +10,24 @@ use Symfony\Component\DependencyInjection\Reference;
 class AttachPluginsCompilerPass implements CompilerPassInterface
 {
     /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
+     * @var
      */
+    private $configuratorService;
+
+    /**
+     * @var
+     */
+    private $pluginTag;
+
+    public function __construct($configuratorService, $pluginTag)
+    {
+        $this->configuratorService = $configuratorService;
+        $this->pluginTag = $pluginTag;
+    }
+
     public function process(ContainerBuilder $container)
     {
-        $serviceIds = $container->findTaggedServiceIds('evenement.plugin');
+        $serviceIds = $container->findTaggedServiceIds($this->pluginTag);
 
         $configurators = [];
         foreach ($serviceIds as $serviceId => $tags) {
@@ -30,7 +41,7 @@ class AttachPluginsCompilerPass implements CompilerPassInterface
             $emitterDefinition = $container->getDefinition($forServiceId);
 
             if (!$emitterDefinition->getConfigurator()) {
-                $configuratorDefinition = new DefinitionDecorator('nab3a.evenement.configurator');
+                $configuratorDefinition = new DefinitionDecorator($this->configuratorService);
                 $configuratorDefinition->setArguments([
                     array_map(function ($id) {
                         return new Reference($id);

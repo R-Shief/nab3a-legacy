@@ -3,6 +3,7 @@
 namespace Nab3aBundle\EventLoop;
 
 use Matthias\BundlePlugins\SimpleBundlePlugin;
+use Nab3aBundle\Evenement\AttachPluginsCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -33,6 +34,6 @@ class EventLoopPlugin extends SimpleBundlePlugin
 
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AttachPluginsCompilerPass());
+        $container->addCompilerPass(new AttachPluginsCompilerPass('nab3a.event_loop.configurator', 'event_loop.plugin'));
     }
 }

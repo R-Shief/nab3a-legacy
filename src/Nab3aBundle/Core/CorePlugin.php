@@ -3,32 +3,19 @@
 namespace Nab3aBundle\Core;
 
 use Bangpound\Symfony\DependencyInjection\CallableCompilerPass;
-use Matthias\BundlePlugins\BundlePlugin;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Matthias\BundlePlugins\SimpleBundlePlugin;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
-class CorePlugin implements BundlePlugin
+class CorePlugin extends SimpleBundlePlugin
 {
-    /**
-     * The name of this plugin. It will be used as the configuration key.
-     *
-     * @return string
-     */
     public function name()
     {
         return 'core';
     }
 
-    /**
-     * Load this plugin: define services, load service definition files, etc.
-     *
-     * @param array            $pluginConfiguration The part of the bundle configuration for this plugin
-     * @param ContainerBuilder $container
-     */
     public function load(array $pluginConfiguration, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config']));
@@ -37,28 +24,6 @@ class CorePlugin implements BundlePlugin
         $loader->load('console.yml');
     }
 
-    /**
-     * Add configuration nodes for this plugin to the provided node, e.g.:
-     *     $pluginNode
-     *         ->children()
-     *             ->scalarNode('foo')
-     *                 ->isRequired()
-     *             ->end()
-     *         ->end();.
-     *
-     * @param ArrayNodeDefinition $pluginNode
-     */
-    public function addConfiguration(ArrayNodeDefinition $pluginNode)
-    {
-    }
-
-    /**
-     * When the container is generated for the first time, you can register compiler passes inside this method.
-     *
-     * @see BundleInterface::build()
-     *
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new CallableCompilerPass(function (ContainerBuilder $container) {
@@ -75,17 +40,5 @@ class CorePlugin implements BundlePlugin
                 $definition->addMethodCall('add', [new Reference($id)]);
             }
         }));
-    }
-
-    /**
-     * When the bundles are booted, you can do any runtime initialization required inside this method.
-     *
-     * @see BundleInterface::boot()
-     *
-     * @param ContainerInterface $container
-     */
-    public function boot(ContainerInterface $container)
-    {
-        // TODO: Implement boot() method.
     }
 }

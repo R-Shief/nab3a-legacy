@@ -2,14 +2,13 @@
 
 namespace Nab3aBundle\Stream;
 
-use Matthias\BundlePlugins\BundlePlugin;
+use Matthias\BundlePlugins\SimpleBundlePlugin;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class StreamPlugin implements BundlePlugin
+class StreamPlugin extends SimpleBundlePlugin
 {
     public function name()
     {
@@ -54,14 +53,5 @@ class StreamPlugin implements BundlePlugin
                 ->end()
           ->end()
         ;
-    }
-
-    public function build(ContainerBuilder $container)
-    {
-    }
-
-    public function boot(ContainerInterface $container)
-    {
-        // TODO: Implement boot() method.
     }
 }

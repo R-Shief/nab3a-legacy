@@ -8,7 +8,6 @@
         "classmap": ["app/AppKernel.php"]
     },
     "require": {
-        "bangpound/callable-compiler-pass": "^1.0",
         "evenement/evenement": "^2.0",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3",

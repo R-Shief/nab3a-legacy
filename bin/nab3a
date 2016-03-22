@@ -25,5 +25,5 @@ if ($debug) {
 $kernel = new AppKernel($env, $debug);
 $kernel->boot();
 $container = $kernel->getContainer();
-$application = $container->get('console.application');
+$application = $container->get('nab3a.console.application');
 $application->run();

@@ -4,49 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a22428a4014ec90acfae599d81797893",
-    "content-hash": "e1ec23ee73c1ed51d134fbf2264a1a76",
+    "hash": "8c43f924ae80dee7ae445737deb0c1d9",
+    "content-hash": "331574b65ab21908404b062562f0747e",
     "packages": [
-        {
-            "name": "bangpound/callable-compiler-pass",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bangpound/callable-compiler-pass.git",
-                "reference": "06a29b0df38cac21fc33b7a991669ee5d8556b23"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bangpound/callable-compiler-pass/zipball/06a29b0df38cac21fc33b7a991669ee5d8556b23",
-                "reference": "06a29b0df38cac21fc33b7a991669ee5d8556b23",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "symfony/dependency-injection": "~2.3|~3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8|~5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Bangpound\\Symfony\\DependencyInjection\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Doherty",
-                    "email": "bjd@bangpound.org"
-                }
-            ],
-            "description": "Create compiler passes in Symfony without defining another class",
-            "time": "2016-03-11 01:49:53"
-        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",

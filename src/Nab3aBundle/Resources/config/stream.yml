@@ -4,11 +4,11 @@ services:
         calls:
             - [ setContainer, [ "@service_container" ]]
         tags:
-            - { name: console.command, app: nab3a }
+            - { name: nab3a.console.command }
 
     nab3a.validate.command:
         class: Nab3aBundle\Command\ValidationCommand
         calls:
             - [ setContainer, ['@service_container']]
         tags:
-            - { name: console.command, app: nab3a }
+            - { name: nab3a.console.command }

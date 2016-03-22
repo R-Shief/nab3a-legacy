@@ -1,16 +1,7 @@
 services:
-    nab3a.twitter.message_emitter.configurator:
-        class: Nab3aBundle\Evenement\Configurator
-        arguments:
-            -
-                - '@nab3a.twitter.message_emitter.plugin.logging'
-#                - '@nab3a.twitter.message_emitter.plugin.rabbitmq'
-        public: false
-
     nab3a.twitter.message_emitter:
         class: Nab3aBundle\StreamMessage\Emitter
         arguments: ['@nab3a.twitter.guesser.event_type']
-        configurator: [ '@nab3a.twitter.message_emitter.configurator', 'configure' ]
 
     nab3a.twitter.guesser.event_type:
         class: Nab3aBundle\StreamMessage\TypeGuesser
@@ -24,6 +15,8 @@ services:
 #            - 'tweet':
 #            - { content_type: "application/json" }
 #        public: false
+#        tags:
+#            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
 
     nab3a.twitter.message_emitter.plugin.logging:
         class: Nab3aBundle\Logger\LogMessagePlugin
@@ -32,46 +25,48 @@ services:
             - [ setLogger, [ "@logger" ] ]
         tags:
             - { name: monolog.logger, channel: twitter }
+            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
         public: false
 
     nab3a.twitter.request_factory:
         class: Nab3aBundle\Stream\RequestFactory
-        arguments: [ '@twitter.guzzle.client', { delimited: length } ]
+        arguments: [ '@nab3a.twitter.guzzle.client', { delimited: length } ]
 
     nab3a.twitter.stream_factory:
         class: Nab3aBundle\Stream\StreamFactory
-        arguments: [ '@event_loop' ]
+        arguments: [ '@nab3a.event_loop' ]
 
-    twitter.guzzle.client:
-        parent: guzzle.client
+    nab3a.twitter.guzzle.client:
+        class: GuzzleHttp\Client
         arguments:
             -
                 base_uri: https://stream.twitter.com/1.1/
-                handler: "@twitter.guzzle.stack"
                 auth: oauth
                 decode_content: 'deflate, gzip'
                 stream: true
 
-    twitter.guzzle.stack:
-        parent: guzzle.stack
-        factory: [ '@twitter.guzzle.stack.configurator', create ]
-        configurator: [ '@twitter.guzzle.stack.configurator', 'configure' ]
+    nab3a.twitter.guzzle.middleware.retry:
+        parent: nab3a.guzzle.middleware.retry
+        tags:
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
 
-    twitter.guzzle.stack.configurator:
-        parent: guzzle.stack.configurator
-        arguments:
-            - '@event_loop'
-            -
-                - '@guzzle.middleware.retry'
-                - '@guzzle.middleware.log'
-                - '@guzzle.middleware.history'
-                - '@twitter.guzzle.middleware.oauth'
+    nab3a.twitter.guzzle.middleware.log:
+        parent: nab3a.guzzle.middleware.log
+        tags:
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
 
-    twitter.guzzle.middleware.oauth:
-        parent: guzzle.middleware.oauth
+    nab3a.twitter.guzzle.middleware.history:
+        parent: nab3a.guzzle.middleware.history
+        tags:
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+
+    nab3a.twitter.guzzle.middleware.oauth:
+        parent: nab3a.guzzle.middleware.oauth
         arguments:
             -
                 consumer_key:    "@=service('nab3a.standalone.parameters').get('nab3a.twitter.consumer_key')"
                 consumer_secret: "@=service('nab3a.standalone.parameters').get('nab3a.twitter.consumer_secret')"
                 token:           "@=service('nab3a.standalone.parameters').get('nab3a.twitter.access_token')"
                 token_secret:    "@=service('nab3a.standalone.parameters').get('nab3a.twitter.access_token_secret')"
+        tags:
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }

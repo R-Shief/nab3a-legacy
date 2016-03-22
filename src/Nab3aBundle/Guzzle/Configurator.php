@@ -4,7 +4,6 @@ namespace Nab3aBundle\Guzzle;
 
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use React\EventLoop\LoopInterface;
 
 class Configurator
 {
@@ -12,24 +11,15 @@ class Configurator
      * @var array
      */
     private $plugins;
-    /**
-     * @var \React\EventLoop\LoopInterface
-     */
-    private $loop;
 
-    public function __construct(LoopInterface $loop, array $plugins = array())
+    public function __construct(array $plugins = array())
     {
         $this->plugins = $plugins;
-        $this->loop = $loop;
     }
 
-    public function create(callable $handler = null)
+    public static function create(callable $handler = null)
     {
         $handler = $handler ?: \GuzzleHttp\choose_handler();
-
-        $tap = Middleware::tap(function ($request, $options) {
-        }, function ($request, $options, $response) {
-        });
 
         return new HandlerStack($handler);
     }

@@ -1,0 +1,6 @@
+services:
+    nab3a.evenement.configurator:
+        class: Nab3aBundle\Evenement\Configurator
+        public: false
+        abstract: true
+

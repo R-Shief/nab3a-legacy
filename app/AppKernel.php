@@ -8,12 +8,7 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
-          new Nab3aBundle\Nab3aBundle([
-            new Nab3aBundle\Stream\StreamPlugin(),
-            new Nab3aBundle\Twitter\TwitterPlugin(),
-            new Nab3aBundle\Watch\WatchPlugin(),
-            new Nab3aBundle\Standalone\StandalonePlugin(),
-          ]),
+          new Nab3aBundle\Nab3aBundle([]),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
         ];

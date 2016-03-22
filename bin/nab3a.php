@@ -9,5 +9,5 @@ $loader = require __DIR__.'/../app/autoload.php';
 require_once __DIR__ .'/../app/cache/prod/appProdProjectContainer.php';
 
 $container = new appProdProjectContainer();
-$application = $container->get('console.application');
+$application = $container->get('nab3a.console.application');
 $application->run();

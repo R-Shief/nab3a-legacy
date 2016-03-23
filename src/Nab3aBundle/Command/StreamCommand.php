@@ -13,8 +13,9 @@ class StreamCommand extends AbstractCommand
     {
         $this
           ->setName('stream')
+          ->setDescription('Connect to a streaming API endpoint and collect data')
           ->addArgument('name', InputArgument::OPTIONAL, 'container parameter with filter parameters', 'default')
-          ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes')
+          ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes and reconnect according to API rules')
         ;
     }
 

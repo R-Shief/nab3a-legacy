@@ -14,6 +14,7 @@ class ValidationCommand extends AbstractCommand
     protected function configure()
     {
         $this->setName('validate')
+          ->setDescription('checks that your streaming API parameters are allowed')
           ->addArgument('name', InputArgument::OPTIONAL, 'container parameter with filter parameters', 'default')
         ;
     }

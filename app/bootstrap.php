@@ -1,8 +1,8 @@
 <?php
 
 $loader = require __DIR__.'/../app/autoload.php';
-require __DIR__ .'/../app/ContainerKernel.php';
+require __DIR__.'/../app/ContainerBuilderKernel.php';
 
-$kernel = new ContainerKernel('prod', false);
+$kernel = new ContainerBuilderKernel('prod', false);
 $kernel->boot();
 $kernel->shutdown();

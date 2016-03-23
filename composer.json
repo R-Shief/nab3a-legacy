@@ -5,7 +5,7 @@
         "psr-4": {
             "Nab3aBundle\\": "src/Nab3aBundle/"
         },
-        "classmap": ["app/AppKernel.php"]
+        "classmap": ["app/AppKernel.php","app/ContainerBuilderKernel.php"]
     },
     "require": {
         "evenement/evenement": "^2.0",

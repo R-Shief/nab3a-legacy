@@ -10,9 +10,4 @@ abstract class AbstractCommand extends Command
 {
     use LoggerAwareTrait;
     use ContainerAwareTrait;
-
-    public function getContainer()
-    {
-        return $this->container;
-    }
 }

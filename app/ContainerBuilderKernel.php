@@ -48,22 +48,14 @@ class ContainerBuilderKernel extends Kernel
     protected function initializeContainer()
     {
         $class = $this->getContainerClass();
-        $file = $this->rootDir.'/build/container.php';
+        $cache = new ConfigCache($this->rootDir.'/build/container.php', $this->debug);
         $container = $this->buildContainer();
         $container->compile();
-        $this->dumpContainerToFile($file, $container, $class, $this->getContainerBaseClass());
+        $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
 
-        require_once $file;
+        require_once $cache->getPath();
+
         $this->container = new $class();
-    }
-
-    protected function dumpContainerToFile($file, ContainerBuilder $container, $class, $baseClass) {
-        $dumper = new PhpDumper($container);
-        $content = $dumper->dump(array('class' => $class, 'base_class' => $this->getContainerBaseClass(), 'file' => $file));
-        if (!$this->debug) {
-            $content = static::stripComments($content);
-        }
-        file_put_contents($file, $content);
     }
 
     protected function buildContainer()

@@ -1,7 +1,9 @@
 .idea
 vendor
-app/cache/
-app/build/
+app/cache/*
+!app/cache/.gitkeep
+app/build/*
+!app/build/.gitkeep
 nab3a.yml
 .travis/phar-private.pem
 nab3a.phar

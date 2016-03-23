@@ -5,32 +5,23 @@ namespace Nab3aBundle\Standalone;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
-use Symfony\Component\Translation\Dumper\DumperInterface;
-use Symfony\Component\Translation\Extractor\ExtractorInterface;
-use Symfony\Component\Translation\Loader\LoaderInterface;
 
 class PruneServicesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $definitions = array_filter($container->getDefinitions(), function (Definition $definition) {
-            if (is_a($definition->getClass(), FragmentRendererInterface::class, true)) {
-                return false;
-            }
+        $removeClasses = [
+          'Symfony\\Component\\HttpKernel\\Fragment\\FragmentRendererInterface',
+          'Symfony\\Component\\Translation\\Loader\\LoaderInterface',
+          'Symfony\\Component\\Translation\\Dumper\\DumperInterface',
+          'Symfony\\Component\\Translation\\Extractor\\ExtractorInterface',
+          'Monolog\\Formatter\\FormatterInterface',
+        ];
 
-            if (is_a($definition->getClass(), LoaderInterface::class, true)) {
-                return false;
-            }
-            if (is_a($definition->getClass(), DumperInterface::class, true)) {
-                return false;
-            }
-            if (is_a($definition->getClass(), ExtractorInterface::class, true)) {
-                return false;
-            }
-
-            return true;
-
+        $definitions = array_filter($container->getDefinitions(), function (Definition $definition) use ($removeClasses) {
+            return empty(array_filter(array_map(function ($removeClass) use ($definition) {
+                return is_a($definition->getClass(), $removeClass, true);
+            }, $removeClasses)));
         });
 
         unset($definitions['cache_warmer']);

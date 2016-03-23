@@ -2,24 +2,15 @@
 
 namespace Nab3aBundle\Stream;
 
-use Matthias\BundlePlugins\SimpleBundlePlugin;
-use Symfony\Component\Config\FileLocator;
+use Nab3aBundle\DependencyInjection\BundlePlugin;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class StreamPlugin extends SimpleBundlePlugin
+class StreamPlugin extends BundlePlugin
 {
-    public function name()
-    {
-        return 'stream';
-    }
-
     public function load(array $pluginConfiguration, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config']));
-        $loader->load('stream.yml');
-
+        parent::load($pluginConfiguration, $container);
         foreach ($pluginConfiguration as $key => $value) {
             $container->setParameter('nab3a.stream.'.$key, $value);
         }

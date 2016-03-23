@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Evenement;
+namespace Nab3aBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

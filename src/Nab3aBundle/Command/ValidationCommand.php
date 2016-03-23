@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Yaml\Yaml;
 
 class ValidationCommand extends AbstractCommand
 {
@@ -19,14 +20,6 @@ class ValidationCommand extends AbstractCommand
         ;
     }
 
-    /**
-     * This is all made up!
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return StreamParameters
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = 'nab3a.stream.'.$input->getArgument('name');
@@ -47,6 +40,9 @@ class ValidationCommand extends AbstractCommand
 
         if ($errors->count() === 0) {
             $io->success($input->getArgument('name').' is valid');
+            if ($io->isVerbose()) {
+                $output->writeln(Yaml::dump($params));
+            }
         }
 
         return $errors->count();

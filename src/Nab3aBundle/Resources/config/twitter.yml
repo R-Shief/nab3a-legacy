@@ -12,7 +12,7 @@ services:
         class: Nab3aBundle\Logger\LogMessagePlugin
         arguments: ['@serializer']
         calls:
-            - [ setLogger, [ "@logger" ] ]
+            - [ setLogger, [ "@?logger" ] ]
         tags:
             - { name: monolog.logger, channel: twitter }
             - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

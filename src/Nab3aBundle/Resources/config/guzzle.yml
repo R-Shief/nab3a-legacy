@@ -21,7 +21,7 @@ services:
     nab3a.guzzle.middleware.log:
         class: Nab3aBundle\Guzzle\LoggingMiddlewarePlugin
         calls:
-            - [ setLogger, ['@logger'] ]
+            - [ setLogger, ['@?logger'] ]
         tags:
             - { name: monolog.logger, channel: guzzle }
             - { name: guzzle.middleware, id: nab3a.guzzle.client }
@@ -39,7 +39,7 @@ services:
     nab3a.guzzle.emitter:
         class: Nab3aBundle\Guzzle\Emitter
         calls:
-            - [ setLogger, [ '@logger']]
+            - [ setLogger, [ '@?logger']]
         tags:
             - { name: monolog.logger, channel: guzzle }
 

@@ -10,6 +10,6 @@ services:
         abstract: true
         calls:
             - [ setContainer, ['@service_container'] ]
-            - [ setLogger, [ '@logger' ] ]
+            - [ setLogger, [ '@?logger' ] ]
         tags:
             - { name: monolog.logger }

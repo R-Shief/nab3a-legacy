@@ -26,7 +26,6 @@ abstract class BundlePlugin extends SimpleBundlePlugin
         $classBaseName = substr(strrchr($className, '\\'), 1, -6);
 
         $this->name = Container::underscore($classBaseName);
-        dump($this);
 
         return $this->name;
     }

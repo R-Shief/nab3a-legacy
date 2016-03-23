@@ -21,11 +21,15 @@ class PruneServicesCompilerPass implements CompilerPassInterface
         ];
 
         $callback = function (Definition $definition) use ($removeClasses) {
-            return is_a($definition->getClass(), $removeClass, true);
-        };
-        $definitions = array_filter($container->getDefinitions(), $callback);
+            $class = $definition->getClass();
+            $result = array_filter(array_map(function ($removeClass) use ($class) {
+                return is_a($class, $removeClass, true);
+            }, $removeClasses));
 
-        $container->setDefinitions($definitions);
+            return $result;
+        };
+        $removeDefinitions = array_keys(array_filter($container->getDefinitions(), $callback));
+        array_walk($removeDefinitions, [$container, 'removeDefinition']);
 
         $container->removeDefinition('cache_clearer');
         $container->removeDefinition('cache_warmer');

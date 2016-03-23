@@ -16,11 +16,6 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \Symfony\Component\Config\Loader\LoaderInterface
-     */
-    private $loader;
-    private $locator;
     private $name;
 
     public function __construct($name)

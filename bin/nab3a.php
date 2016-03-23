@@ -1,7 +1,5 @@
 <?php
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
 set_time_limit(0);
 
 $loader = require __DIR__.'/../app/autoload.php';

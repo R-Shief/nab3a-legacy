@@ -68,7 +68,6 @@ class ContainerBuilderKernel extends Kernel
             $container->merge($cont);
         }
 
-        $container->addCompilerPass(new AddClassesToCachePass($this));
         $container->addResource(new EnvParametersResource('SYMFONY__'));
 
         return $container;

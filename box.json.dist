@@ -9,12 +9,12 @@
     ],
     "compression": "BZ2",
     "directories": [
-        "app/cache/prod",
+        "app/build",
         "src"
     ],
     "files": [
         "app/autoload.php",
-        "app/cache/prod/appProdProjectContainer.php",
+        "app/build/container.php",
         "vendor/autoload.php"
     ],
     "finder": [

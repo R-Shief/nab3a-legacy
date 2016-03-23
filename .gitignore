@@ -1,6 +1,7 @@
 .idea
 vendor
 app/cache/
+app/build/
 nab3a.yml
 .travis/phar-private.pem
 nab3a.phar

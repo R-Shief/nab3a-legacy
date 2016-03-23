@@ -3,6 +3,7 @@ services:
         class: Symfony\Component\Console\Application
         arguments:
             - 'nab3a'
+            - '@@package_version@'
         calls:
             - [ setDispatcher, [ "@event_dispatcher" ] ]
 

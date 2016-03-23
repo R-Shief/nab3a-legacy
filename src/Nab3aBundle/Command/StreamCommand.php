@@ -41,7 +41,7 @@ class StreamCommand extends AbstractCommand
 
         // @todo
         //
-        // we need a timer that keeps track of the time the current confection
+        // we need a timer that keeps track of the time the current connection
         // was started, because we must avoid connection churning.
         //
         // filter parameters will change, we want to signal to the streaming

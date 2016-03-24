@@ -7,6 +7,8 @@ eval "$(ssh-agent -s)" #start the ssh agent
 chmod 600 .travis/build-key.pem
 ssh-add .travis/build-key.pem
 
+ssh git@github.com -vvv
+
 # Setup git defaults:
 git config --global user.email "bjd@bangpound.org"
 git config --global user.name "Benjamin Doherty"

@@ -14,20 +14,19 @@ class ValidationCommand extends AbstractCommand
 {
     protected function configure()
     {
-        $this->setName('validate')
+        parent::configure();
+        $this
+          ->setName('validate')
           ->setDescription('checks that your streaming API parameters are allowed')
-          ->addArgument('name', InputArgument::OPTIONAL, 'container parameter with filter parameters', 'default')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = 'nab3a.stream.'.$input->getArgument('name');
-        $params = $this->container->get('nab3a.standalone.parameters')->get($name);
         $io = new SymfonyStyle($input, $output);
 
         $serializer = $this->container->get('serializer');
-        $query = $serializer->denormalize($params['parameters'], StreamParameters::class);
+        $query = $serializer->denormalize($this->params['parameters'], StreamParameters::class);
 
         $validator = $this->container->get('validator');
         $errors = $validator->validate($query);
@@ -41,7 +40,7 @@ class ValidationCommand extends AbstractCommand
         if ($errors->count() === 0) {
             $io->success($input->getArgument('name').' is valid');
             if ($io->isVerbose()) {
-                $output->writeln(Yaml::dump($params));
+                $output->writeln(Yaml::dump($this->params));
             }
         }
 

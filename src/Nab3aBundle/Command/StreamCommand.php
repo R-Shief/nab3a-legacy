@@ -15,10 +15,10 @@ class StreamCommand extends AbstractCommand
 {
     protected function configure()
     {
+        parent::configure();
         $this
           ->setName('stream')
           ->setDescription('Connect to a streaming API endpoint and collect data')
-          ->addArgument('name', InputArgument::OPTIONAL, 'container parameter with filter parameters', 'default')
           ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes and reconnect according to API rules')
         ;
     }
@@ -26,9 +26,6 @@ class StreamCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $loop = $this->container->get('nab3a.event_loop');
-
-        $name = 'nab3a.stream.'.$input->getArgument('name');
-        $params = $this->container->get('nab3a.standalone.parameters')->get($name);
 
         $callback = function ($params) {
             return $this->container->get('nab3a.twitter.request_factory')->fromStreamConfig($params)
@@ -44,7 +41,7 @@ class StreamCommand extends AbstractCommand
             $watcher = $this->container->get('nab3a.watch.stream_parameter');
             $watcher->on('filter_change', $callback($params));
         } else {
-            $callback($params);
+            $stream = $callback($this->params);
         }
 
         // @todo

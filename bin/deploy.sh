@@ -34,4 +34,4 @@ git add nab3a.phar nab3a.phar.version
 
 # Commit and push:
 git commit -m 'Rebuilt phar'
-git push deploy gh-pages:gh-pages
+git push -v deploy gh-pages:gh-pages

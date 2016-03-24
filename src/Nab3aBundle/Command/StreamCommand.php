@@ -2,11 +2,7 @@
 
 namespace Nab3aBundle\Command;
 
-use Evenement\EventEmitterInterface;
-use Nab3aBundle\Stream\MessageEmitter;
-use Nab3aBundle\Stream\TwitterStream;
 use Psr\Http\Message\MessageInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,6 +16,7 @@ class StreamCommand extends AbstractCommand
           ->setName('stream')
           ->setDescription('Connect to a streaming API endpoint and collect data')
           ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes and reconnect according to API rules')
+          ->addOption('out', null, InputOption::VALUE_OPTIONAL, 'output', STDOUT)
         ;
     }
 

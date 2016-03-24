@@ -1,3 +1,6 @@
+parameters:
+    nab3a.twitter.output.pattern: 'data/{created_at.date}/{created_at.time}/{user.screen_name}/{id}.json'
+
 services:
     nab3a.twitter.message_emitter:
         class: Nab3aBundle\Stream\MessageEmitter
@@ -58,3 +61,9 @@ services:
                 token_secret:    "@=service('nab3a.standalone.parameters').get('nab3a.twitter.access_token_secret')"
         tags:
             - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+
+    nab3a.twitter.file_output:
+        class: Nab3aBundle\Output\FileOutputPlugin
+        arguments: [%nab3a.twitter.output.pattern%, '@filesystem']
+        tags:
+            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

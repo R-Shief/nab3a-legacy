@@ -6,6 +6,12 @@ use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
 use Nab3aBundle\Evenement\PluginInterface;
 
+/**
+ * Class MessageEmitter.
+ *
+ * This emitter is also a listener because it converts raw messages
+ * into typed messages.
+ */
 class MessageEmitter implements EventEmitterInterface, PluginInterface
 {
     use EventEmitterTrait;
@@ -30,6 +36,9 @@ class MessageEmitter implements EventEmitterInterface, PluginInterface
         $emitter->on('data', [$this, 'onData']);
     }
 
+    /**
+     * @param $data
+     */
     public function onData($data)
     {
         $event = $this->guesser->getEventName($data);

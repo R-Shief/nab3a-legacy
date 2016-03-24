@@ -1,5 +1,5 @@
 parameters:
-    nab3a.twitter.output.pattern: 'data/{created_at.date}/{created_at.time}/{user.screen_name}/{id}.json'
+    nab3a.twitter.output.pattern: 'data/{user.screen_name}/{created_at.date}/{id}.json'
 
 services:
     nab3a.twitter.message_emitter:

@@ -8,5 +8,7 @@ nab3a.yml
 .travis/phar-private.pem
 nab3a.phar
 nab3a.phar.pubkey
+nab3a.phar.version
 .travis/build-key.pem
 .travis/secrets.tar
+box.phar

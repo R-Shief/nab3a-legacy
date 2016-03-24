@@ -7,14 +7,12 @@ eval "$(ssh-agent -s)" #start the ssh agent
 chmod 600 .travis/build-key.pem
 ssh-add .travis/build-key.pem
 
-ssh git@github.com -vvv
-
 # Setup git defaults:
 git config --global user.email "bjd@bangpound.org"
 git config --global user.name "Benjamin Doherty"
 
 # Add SSH-based remote to GitHub repo:
-git remote add deploy git@github.com:r-shief/nab3a.git
+git remote add deploy git@github.com:R-Shief/nab3a.git
 git fetch deploy
 
 # Get box and build PHAR
@@ -36,4 +34,4 @@ git add nab3a.phar nab3a.phar.version
 
 # Commit and push:
 git commit -m 'Rebuilt phar'
-git push -v deploy gh-pages:gh-pages
+git push deploy gh-pages:gh-pages

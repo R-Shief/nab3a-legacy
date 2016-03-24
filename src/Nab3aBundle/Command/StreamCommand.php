@@ -41,7 +41,7 @@ class StreamCommand extends AbstractCommand
         };
 
         if ($input->getOption('watch')) {
-            $watcher = $this->container->get('watcher');
+            $watcher = $this->container->get('nab3a.watch.stream_parameter');
             $watcher->on('filter_change', $callback($params));
         } else {
             $callback($params);

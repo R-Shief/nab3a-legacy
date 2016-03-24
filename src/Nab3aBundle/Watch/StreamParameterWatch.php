@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\StreamParameter;
+namespace Nab3aBundle\Watch;
 
 use Nab3aBundle\Loader\LoaderHelper;
 use Nab3aBundle\Nab3a\Nab3aExtension;
@@ -15,7 +15,7 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class Watcher implements EventEmitterInterface
+class StreamParameterWatch implements EventEmitterInterface
 {
     use EventEmitterTrait;
 

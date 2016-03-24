@@ -8,3 +8,8 @@ framework:
         enable_annotations: true
     annotations:
         cache: none
+
+monolog:
+    handlers:
+        console:
+            type: console

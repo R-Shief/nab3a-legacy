@@ -15,7 +15,3 @@ services:
         tags:
             - { name: monolog.logger }
 
-    nab3a.console.no_kernel_command_listener:
-        class: Nab3aBundle\Console\NoKernelCommandListener
-        tags:
-            - { name: kernel.event_listener, event: console.command, method: onCommand  }

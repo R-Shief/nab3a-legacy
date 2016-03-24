@@ -47,9 +47,9 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param array $arguments
      *
-     * @return \Symfony\Component\DependencyInjection\Definition
+     * @return Definition
      */
     private static function getHandlerDefinition(array $arguments = [[]])
     {
@@ -67,7 +67,7 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
     /**
      * @param $ids
      *
-     * @return \Symfony\Component\DependencyInjection\Definition
+     * @return Definition
      */
     private static function getConfiguratorDefinition($ids)
     {

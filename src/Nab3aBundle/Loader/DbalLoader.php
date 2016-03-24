@@ -2,6 +2,7 @@
 
 namespace Nab3aBundle\Loader;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Config\Loader\Loader;
 
 class DbalLoader extends Loader
@@ -9,12 +10,13 @@ class DbalLoader extends Loader
     /**
      * Loads a resource.
      *
-     * @param mixed       $resource The resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param string|null $type The resource type or null if unknown
      *
      * @throws \Exception If something went wrong
+     *
+     * @return array
      */
-    public function load(\Doctrine\DBAL\Connection $conn, $type = null)
+    public function load(Connection $conn, $type = null)
     {
         $params = [];
 
@@ -55,6 +57,6 @@ class DbalLoader extends Loader
      */
     public function supports($resource, $type = null)
     {
-        return $resource instanceof \Doctrine\DBAL\Connection;
+        return $resource instanceof Connection;
     }
 }

@@ -106,8 +106,8 @@ class Statistics
          * against this.
          */
         if ((time() - $lastStreamActivity) > $this->idleReconnectTimeout) {
-            $this->log('Idle timeout: No stream activity for > '.$this->idleReconnectTimeout.' seconds. '.
-                ' Reconnecting.', 'info');
+            $this->logger->info('Idle timeout: No stream activity for > '.$this->idleReconnectTimeout.' seconds. '.
+                ' Reconnecting.');
             $this->reconnect();
             $lastStreamActivity = time();
         }

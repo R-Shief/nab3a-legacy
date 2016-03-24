@@ -6,17 +6,10 @@ use Nab3aBundle\Evenement\PluginInterface;
 use Evenement\EventEmitterInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class LogMessagePlugin implements PluginInterface
 {
     use LoggerAwareTrait;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * @var array
@@ -36,12 +29,11 @@ class LogMessagePlugin implements PluginInterface
     /**
      * LogMessagePlugin constructor.
      *
-     * @param \Symfony\Component\Serializer\SerializerInterface $serializer
-     * @param array                                             $events
+     * @param array $events
      */
-    public function __construct(Serializer $serializer, array $events = [])
+    public function __construct(array $events = [])
     {
-        $this->serializer = $serializer;
+        $this->events = array_merge($this->events, $events);
     }
 
     public function attachEvents(EventEmitterInterface $emitter)

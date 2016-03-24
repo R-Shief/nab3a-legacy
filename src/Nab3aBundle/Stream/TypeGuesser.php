@@ -2,25 +2,8 @@
 
 namespace Nab3aBundle\Stream;
 
-use Symfony\Component\Serializer\Serializer;
-
 class TypeGuesser
 {
-    /**
-     * @var Serializer
-     */
-    private $serializer;
-
-    /**
-     * MessageClassifier constructor.
-     *
-     * @param Serializer $serializer
-     */
-    public function __construct(Serializer $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
     /**
      * @param $message
      *
@@ -31,7 +14,7 @@ class TypeGuesser
         if ($message === "\r\n") {
             $event = 'keep-alive';
         } else {
-            $data = $this->serializer->decode($message, 'json');
+            $data = json_decode($message, true);
             $event = count($data) > 1 ? 'tweet' : key($data);
         }
 

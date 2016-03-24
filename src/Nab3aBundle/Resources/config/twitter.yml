@@ -7,12 +7,10 @@ services:
 
     nab3a.twitter.guesser.event_type:
         class: Nab3aBundle\Stream\TypeGuesser
-        arguments: [ '@serializer']
         public: false
 
     nab3a.twitter.message_emitter.plugin.logging:
         class: Nab3aBundle\Logger\LogMessagePlugin
-        arguments: ['@serializer']
         calls:
             - [ setLogger, [ "@?logger" ] ]
         tags:

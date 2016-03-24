@@ -2,8 +2,6 @@ services:
     nab3a.twitter.message_emitter:
         class: Nab3aBundle\Stream\MessageEmitter
         arguments: ['@nab3a.twitter.guesser.event_type']
-        tags:
-            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
 
     nab3a.twitter.guesser.event_type:
         class: Nab3aBundle\Stream\TypeGuesser

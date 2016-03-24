@@ -30,10 +30,10 @@ class StreamCommand extends AbstractCommand
         $callback = function ($params) {
             return $this->container->get('nab3a.twitter.request_factory')->fromStreamConfig($params)
               ->then(function (MessageInterface $message) {
-                return $this->container->get('nab3a.twitter.stream_factory')->fromMessage($message);
-              })
-              ->then(function (TwitterStream $stream) {
-                return $this->container->get('nab3a.twitter.message_emitter')->attachEvents($stream);
+                $stream = $this->container->get('nab3a.twitter.stream_factory')->fromMessage($message);
+                $this->container->get('nab3a.twitter.message_emitter')->attachEvents($stream);
+
+                return $stream;
               });
         };
 

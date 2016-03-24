@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\StreamMessage;
+namespace Nab3aBundle\Stream;
 
 use Symfony\Component\Serializer\Serializer;
 

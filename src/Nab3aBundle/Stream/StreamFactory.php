@@ -2,14 +2,13 @@
 
 namespace Nab3aBundle\Stream;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\MessageInterface;
 use React\EventLoop\LoopInterface;
 
 class StreamFactory
 {
     /**
-     * @var \React\EventLoop\LoopInterface
+     * @var LoopInterface
      */
     private $loop;
 
@@ -18,12 +17,10 @@ class StreamFactory
         $this->loop = $loop;
     }
 
-    public function stream(PromiseInterface $promise)
+    public function fromMessage(MessageInterface $message)
     {
-        return $promise->then(function (MessageInterface $message) {
-            $stream = $message->getBody();
+        $stream = $message->getBody();
 
-            return new TwitterStream($stream, $this->loop);
-        });
+        return new TwitterStream($stream, $this->loop);
     }
 }

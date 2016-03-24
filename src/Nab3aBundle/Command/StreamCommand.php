@@ -2,6 +2,10 @@
 
 namespace Nab3aBundle\Command;
 
+use Evenement\EventEmitterInterface;
+use Nab3aBundle\Stream\MessageEmitter;
+use Nab3aBundle\Stream\TwitterStream;
+use Psr\Http\Message\MessageInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -27,9 +31,13 @@ class StreamCommand extends AbstractCommand
         $params = $this->container->get('nab3a.standalone.parameters')->get($name);
 
         $callback = function ($params) {
-            $promise = $this->container->get('nab3a.twitter.request_factory')->fromStream($params);
-            $promise = $this->container->get('nab3a.twitter.stream_factory')->stream($promise);
-            $promise = $this->container->get('nab3a.twitter.message_emitter')->messages($promise);
+            return $this->container->get('nab3a.twitter.request_factory')->fromStreamConfig($params)
+              ->then(function (MessageInterface $message) {
+                return $this->container->get('nab3a.twitter.stream_factory')->fromMessage($message);
+              })
+              ->then(function (TwitterStream $stream) {
+                return $this->container->get('nab3a.twitter.message_emitter')->attachEvents($stream);
+              });
         };
 
         if ($input->getOption('watch')) {

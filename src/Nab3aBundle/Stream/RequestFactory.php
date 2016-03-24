@@ -69,7 +69,7 @@ class RequestFactory
         return $this->client->requestAsync($method, $uri, $options);
     }
 
-    public function fromStream($config)
+    public function fromStreamConfig($config)
     {
         switch ($config['type']) {
             case 'filter':

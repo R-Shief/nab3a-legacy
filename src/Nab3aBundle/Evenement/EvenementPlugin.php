@@ -10,6 +10,6 @@ class EvenementPlugin extends BundlePlugin
 {
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AttachPluginsCompilerPass('nab3a.evenement.configurator', 'evenement.plugin'));
+        $container->addCompilerPass(new AttachPluginsCompilerPass(Configurator::class, 'evenement.plugin'));
     }
 }

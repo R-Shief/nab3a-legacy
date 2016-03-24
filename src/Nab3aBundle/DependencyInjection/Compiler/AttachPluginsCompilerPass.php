@@ -4,7 +4,7 @@ namespace Nab3aBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 class AttachPluginsCompilerPass implements CompilerPassInterface
@@ -41,11 +41,10 @@ class AttachPluginsCompilerPass implements CompilerPassInterface
             $emitterDefinition = $container->getDefinition($forServiceId);
 
             if (!$emitterDefinition->getConfigurator()) {
-                $configuratorDefinition = new DefinitionDecorator($this->configuratorService);
-                $configuratorDefinition->setArguments([
-                    array_map(function ($id) {
-                        return new Reference($id);
-                    }, $pluginIds),
+                $configuratorDefinition = new Definition($this->configuratorService, [
+                  array_map(function ($id) {
+                      return new Reference($id);
+                  }, $pluginIds),
                 ]);
                 $emitterDefinition->setConfigurator([$configuratorDefinition, 'configure']);
             }

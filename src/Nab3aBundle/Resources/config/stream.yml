@@ -1,14 +1,12 @@
 services:
     nab3a.stream.command:
         class: Nab3aBundle\Command\StreamCommand
-        calls:
-            - [ setContainer, [ "@service_container" ]]
+        parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
 
     nab3a.validate.command:
         class: Nab3aBundle\Command\ValidationCommand
-        calls:
-            - [ setContainer, ['@service_container']]
+        parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }

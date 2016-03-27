@@ -17,14 +17,14 @@ class Configurator
         $this->plugins = $plugins;
     }
 
-    public static function create(callable $handler = null)
+    public static function createHandler(callable $handler = null)
     {
         $handler = $handler ?: \GuzzleHttp\choose_handler();
 
-        return new HandlerStack($handler);
+        return $handler;
     }
 
-    public function configure(HandlerStack $stack)
+    public function __invoke(HandlerStack $stack)
     {
         $stack->push(Middleware::httpErrors(), 'http_errors');
         $stack->push(Middleware::prepareBody(), 'prepare_body');

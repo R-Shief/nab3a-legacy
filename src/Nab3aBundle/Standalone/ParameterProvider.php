@@ -35,7 +35,7 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 
     public function getParametersAsKeyValueHash()
     {
-        $paths = [$_SERVER['HOME'].'/.rshief', getcwd()];
+        $paths = [self::expandHomeDirectory('~/.rshief'), getcwd()];
         $locator = new FileLocator($paths);
         $loader = new YamlFileLoader($locator);
 
@@ -61,5 +61,15 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
         }
 
         return $params;
+    }
+
+    private static function expandHomeDirectory($path)
+    {
+        $homeDir = getenv('HOME');
+        if (empty($homeDir)) {
+            $homeDir = getenv('HOMEDRIVE').getenv('HOMEPATH');
+        }
+
+        return str_replace('~', realpath($homeDir), $path);
     }
 }

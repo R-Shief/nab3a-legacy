@@ -16,7 +16,7 @@ services:
             - [ setLogger, [ "@?logger" ] ]
         tags:
             - { name: monolog.logger, channel: twitter }
-            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+            # - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
         public: false
 
     nab3a.twitter.request_factory:
@@ -36,21 +36,6 @@ services:
                 decode_content: 'deflate, gzip'
                 stream: true
 
-    nab3a.twitter.guzzle.middleware.retry:
-        parent: nab3a.guzzle.middleware.retry
-        tags:
-            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
-
-    nab3a.twitter.guzzle.middleware.log:
-        parent: nab3a.guzzle.middleware.log
-        tags:
-            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
-
-    nab3a.twitter.guzzle.middleware.history:
-        parent: nab3a.guzzle.middleware.history
-        tags:
-            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
-
     nab3a.twitter.guzzle.middleware.oauth:
         parent: nab3a.guzzle.middleware.oauth
         arguments:
@@ -65,5 +50,5 @@ services:
     nab3a.twitter.file_output:
         class: Nab3aBundle\Output\FileOutputPlugin
         arguments: [%nab3a.twitter.output.pattern%, '@filesystem']
-        tags:
-            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+#        tags:
+#            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

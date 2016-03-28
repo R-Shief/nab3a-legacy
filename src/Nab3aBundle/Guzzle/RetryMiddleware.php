@@ -33,6 +33,13 @@ class RetryMiddleware
         return $prev($request, $options);
     }
 
+    public static function retry()
+    {
+        return function (callable $handler) {
+            return new RetryMiddleware($handler);
+        };
+    }
+
     private static function retryMiddlewares()
     {
         return array(

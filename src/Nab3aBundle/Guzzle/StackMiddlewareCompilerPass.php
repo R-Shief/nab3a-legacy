@@ -23,24 +23,25 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $serviceIds = $container->findTaggedServiceIds('guzzle.middleware');
-        $configurators = [];
+        $stacks = [];
         foreach ($serviceIds as $serviceId => $tags) {
             foreach ($tags as $tag) {
                 $clientId = $tag['id'];
-                $configurators[$clientId][] = $serviceId;
+                $stacks[$clientId][] = $serviceId;
             }
         }
 
-        foreach ($configurators as $clientId => $middlewareIds) {
+        foreach ($stacks as $clientId => $middlewareIds) {
             $clientDefinition = $container->getDefinition($clientId);
             $arguments = $clientDefinition->getArguments();
 
             $handlerDefinition = self::hasHandlerDefinition($arguments) ? self::getHandlerDefinition($arguments) : self::newHandlerDefinition($container);
-            $configuratorDefinition = self::getConfiguratorDefinition($middlewareIds);
 
             $stackDefinition = new DefinitionDecorator('nab3a.guzzle.handler_stack');
             $stackDefinition->setArguments([$handlerDefinition]);
-            $stackDefinition->setConfigurator([$configuratorDefinition, '__invoke']);
+            foreach ($middlewareIds as $middlewareId) {
+                $stackDefinition->addMethodCall('push', [new Reference($middlewareId)]);
+            }
 
             $arguments[0]['handler'] = $stackDefinition;
 
@@ -64,45 +65,49 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
         return $arguments[0]['handler'];
     }
 
+    /**
+     * @see \GuzzleHttp\choose_handler()
+     *
+     * @param ContainerBuilder $container
+     *
+     * @return null|Definition
+     */
     private static function newHandlerDefinition(ContainerBuilder $container)
     {
         $definition = null;
         if (function_exists('curl_multi_exec') && function_exists('curl_exec')) {
-            $container->register('nab3a.guzzle.handler.curl_multi', CurlMultiHandler::class)->setPublic(false);
-            $container->register('nab3a.guzzle.handler.curl', CurlHandler::class)->setPublic(false);
+            if (!$container->hasDefinition('nab3a.guzzle.handler.curl_multi')) {
+                $container->register('nab3a.guzzle.handler.curl_multi', CurlMultiHandler::class)->setPublic(false);
+            }
+            if (!$container->hasDefinition('nab3a.guzzle.handler.curl')) {
+                $container->register('nab3a.guzzle.handler.curl', CurlHandler::class)->setPublic(false);
+            }
             $definition = new Definition(\Closure::class, [new Reference('nab3a.guzzle.handler.curl_multi'), new Reference('nab3a.guzzle.handler.curl')]);
             $definition->setFactory([Proxy::class, 'wrapSync']);
         } elseif (function_exists('curl_exec')) {
-            $definition = $container->register('nab3a.guzzle.handler.curl', CurlHandler::class)->setPublic(false);
+            $definition = $container->hasDefinition('nab3a.guzzle.handler.curl')
+              ? $container->getDefinition('nab3a.guzzle.handler.curl')
+              : $container->register('nab3a.guzzle.handler.curl', CurlHandler::class)->setPublic(false);
         } elseif (function_exists('curl_multi_exec')) {
-            $definition = $container->register('nab3a.guzzle.handler.curl_multi', CurlMultiHandler::class)->setPublic(false);
+            $definition = $container->hasDefinition('nab3a.guzzle.handler.curl_multi')
+              ? $container->getDefinition('nab3a.guzzle.handler.curl_multi')
+              : $container->register('nab3a.guzzle.handler.curl_multi', CurlMultiHandler::class)->setPublic(false);
         }
 
         if (ini_get('allow_url_fopen')) {
-            $container->register('nab3a.guzzle.handler.stream', StreamHandler::class)->setPublic(false);
+            if (!$container->hasDefinition('nab3a.guzzle.handler.stream')) {
+                $container->register('nab3a.guzzle.handler.stream', StreamHandler::class)->setPublic(false);
+            }
             $definition = $definition
               ? new Definition(\Closure::class, [$definition, new Reference('nab3a.guzzle.handler.stream')])
               : $container->getDefinition('nab3a.guzzle.handler.stream');
             $definition->setFactory([Proxy::class, 'wrapStreaming']);
         } elseif (!$definition) {
+            // @todo find the right place to say this.
             throw new RuntimeException('GuzzleHttp requires cURL, the '
               .'allow_url_fopen ini setting, or a custom HTTP handler.');
         }
 
         return $definition;
-    }
-
-    /**
-     * @param $ids
-     *
-     * @return Definition
-     */
-    private static function getConfiguratorDefinition($ids)
-    {
-        $arguments = array_map(function ($id) {
-            return new Reference($id);
-        }, $ids);
-
-        return new Definition(Configurator::class, [$arguments]);
     }
 }

@@ -4,7 +4,6 @@ namespace Nab3aBundle\Debug;
 
 use GuzzleHttp\Promise\TaskQueue;
 use Nab3aBundle\EventLoop\PluginInterface;
-use PHPPM\Utils;
 use Psr\Log\LoggerAwareTrait;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\Timer\TimerInterface;
@@ -32,16 +31,10 @@ class LoopPlugin implements PluginInterface
 
     public function attach(LoopInterface $loop)
     {
-        $timer = $loop->addPeriodicTimer(1, function () {
-        });
-        Utils::bindAndCall(function () {
-            dump($this->queue);
-        }, $this->queue, [], []);
-
-        $timer = $loop->addPeriodicTimer(1, [$this, 'info']);
+        $loop->addPeriodicTimer(1, [$this, 'logCounters']);
     }
 
-    public function info(TimerInterface $timer)
+    public function logCounters(TimerInterface $timer)
     {
         $counters = $this->infoProvider->getCounters();
         foreach ($counters as $entity => $value) {

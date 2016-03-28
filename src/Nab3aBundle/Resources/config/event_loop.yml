@@ -1,9 +1,6 @@
 services:
-    nab3a.event_loop.default:
+    nab3a.event_loop:
         class: React\EventLoop\LoopInterface
         factory: ['React\EventLoop\Factory','create']
         public: false
-
-    nab3a.event_loop:
-        alias: nab3a.event_loop.default
 

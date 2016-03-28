@@ -14,7 +14,6 @@ services:
         arguments:
             -
                 base_path: '@=constant(''Google_Client::API_BASE_PATH'')'
-                debug: true
                 synchronous: false
                 stream: false
 

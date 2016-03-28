@@ -44,8 +44,10 @@ class SheetStream extends WritableStream
     {
         $request = $this->s->makeRequest('addRows', [$this->documentId, 'Sheet1', $data]);
 
-        $promise = $this->s->run($request)->then(function ($x) {
-            return $x;
+        $promise = $this->s->run($request);
+
+        $results = $promise->then(function ($response) {
+            return $response['response']['result'];
         });
 
         $timer = $this->loop->addPeriodicTimer(1, function (TimerInterface $timer) use (&$promise) {

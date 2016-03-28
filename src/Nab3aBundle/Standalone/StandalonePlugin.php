@@ -3,6 +3,7 @@
 namespace Nab3aBundle\Standalone;
 
 use Nab3aBundle\DependencyInjection\BundlePlugin;
+use Nab3aBundle\ExpressionLanguage\ExpressionLanguageProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
@@ -10,6 +11,7 @@ class StandalonePlugin extends BundlePlugin implements PrependExtensionInterface
 {
     public function build(ContainerBuilder $container)
     {
+        $container->addExpressionLanguageProvider(new ExpressionLanguageProvider());
         $container->addCompilerPass(new PruneServicesCompilerPass());
     }
 

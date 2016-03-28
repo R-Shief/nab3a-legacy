@@ -9,6 +9,7 @@
     },
     "require": {
         "evenement/evenement": "^2.0",
+        "google/apiclient": "^2.0@rc",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3",
         "matthiasnoback/symfony-bundle-plugins": "^1.1",

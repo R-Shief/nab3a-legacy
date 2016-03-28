@@ -1,0 +1,18 @@
+services:
+    nab3a.event_loop.debug:
+        class: WyriHaximus\React\Inspector\LoopDecorator
+        public: false
+
+    nab3a.event_loop.info_provider:
+        class: WyriHaximus\React\Inspector\InfoProvider
+        arguments:
+            - '@?nab3a.event_loop'
+
+    nab3a.event_loop.plugins:
+        class: Nab3aBundle\Debug\LoopPlugin
+        arguments: ['@?nab3a.event_loop.info_provider', '@nab3a.guzzle.task_queue' ]
+        calls:
+            - [ setLogger, [ '@?logger' ]]
+        tags:
+            - { name: monolog.logger, channel: event_loop }
+            - { name: event_loop.plugin, id: nab3a.event_loop }

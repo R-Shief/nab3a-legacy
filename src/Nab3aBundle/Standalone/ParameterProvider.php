@@ -4,6 +4,7 @@ namespace Nab3aBundle\Standalone;
 
 use Matthias\BundlePlugins\ConfigurationWithPlugins;
 use Matthias\BundlePlugins\ExtensionWithPlugins;
+use Nab3aBundle\Google\GooglePlugin;
 use Nab3aBundle\Loader\YamlFileLoader;
 use Nab3aBundle\Stream\StreamPlugin;
 use Nab3aBundle\Twitter\TwitterPlugin;
@@ -26,6 +27,7 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
     private static function getConfiguration($name)
     {
         return new ConfigurationWithPlugins($name, [
+          new GooglePlugin(),
           new StreamPlugin(),
           new TwitterPlugin(),
         ]);
@@ -33,7 +35,7 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 
     public function getParametersAsKeyValueHash()
     {
-        $paths = [$_SERVER['HOME'].'/.rshief', getcwd()];
+        $paths = [self::expandHomeDirectory('~/.rshief'), getcwd()];
         $locator = new FileLocator($paths);
         $loader = new YamlFileLoader($locator);
 
@@ -59,5 +61,15 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
         }
 
         return $params;
+    }
+
+    private static function expandHomeDirectory($path)
+    {
+        $homeDir = getenv('HOME');
+        if (empty($homeDir)) {
+            $homeDir = getenv('HOMEDRIVE').getenv('HOMEPATH');
+        }
+
+        return str_replace('~', realpath($homeDir), $path);
     }
 }

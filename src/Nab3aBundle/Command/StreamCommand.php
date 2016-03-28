@@ -2,7 +2,10 @@
 
 namespace Nab3aBundle\Command;
 
-use Psr\Http\Message\MessageInterface;
+use GuzzleHttp\Exception\RequestException;
+use Nab3aBundle\Stream\TwitterStream;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,23 +27,6 @@ class StreamCommand extends AbstractCommand
     {
         $loop = $this->container->get('nab3a.event_loop');
 
-        $callback = function ($params) {
-            return $this->container->get('nab3a.twitter.request_factory')->fromStreamConfig($params)
-              ->then(function (MessageInterface $message) {
-                $stream = $this->container->get('nab3a.twitter.stream_factory')->fromMessage($message);
-                $this->container->get('nab3a.twitter.message_emitter')->attachEvents($stream);
-
-                return $stream;
-              });
-        };
-
-        if ($input->getOption('watch')) {
-            $watcher = $this->container->get('nab3a.watch.stream_parameter');
-            $watcher->on('filter_change', $callback($params));
-        } else {
-            $stream = $callback($this->params);
-        }
-
         // @todo
         //
         // we need a timer that keeps track of the time the current connection
@@ -55,6 +41,25 @@ class StreamCommand extends AbstractCommand
         // When this app receives those errors, it manages them correctly,
         // but it still stupidly allows these situations to arise.
         // $timer = $watcher->watch($resource);
+
+        $rf = $this->container->get('nab3a.twitter.request_factory');
+        $me = $this->container->get('nab3a.twitter.message_emitter');
+
+        $promise = $rf
+          ->fromStreamConfig($this->params);
+
+        $stream = $promise
+          ->then(function (ResponseInterface $response) {
+              return $response->getBody();
+          }, function (RequestException $e) { throw $e; })
+          ->then(function (StreamInterface $s) use ($me, $loop) {
+              $stream = new TwitterStream($s, $loop);
+              $me->attachEvents($stream);
+
+              return $stream;
+          });
+
+        $stream->wait();
 
         $loop->run();
     }

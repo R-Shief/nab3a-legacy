@@ -1,0 +1,59 @@
+parameters:
+    google.script_id: MucGxyzCyizxtJra-vr1R74TNjrWpbpzH
+    google.sheet_id: 1q_yO2uFBliEXgsKceIY4zxq_xSHji13LZS0U59oM8Qc
+
+services:
+    nab3a.google.command:
+        class: Nab3aBundle\Command\AccessTokenCommand
+        parent: nab3a.console.command
+        tags:
+            - { name: nab3a.console.command }
+
+    google.guzzle.client:
+        parent: nab3a.guzzle.client
+        arguments:
+            -
+                base_path: '@=constant(''Google_Client::API_BASE_PATH'')'
+                synchronous: false
+                stream: false
+                on_stats: [ '@nab3a.guzzle.emitter', 'onStats' ]
+                on_headers: [ '@nab3a.guzzle.emitter', 'onHeaders' ]
+
+    google.client.unauth:
+        class: Google_Client
+        scope: container
+        arguments:
+            -
+                access_type: offline
+        calls:
+            - [ setHttpClient, [ '@google.guzzle.client' ]]
+            - [ setDefer, [ true ] ]
+            - [ setLogger, [ "@logger" ] ]
+            - [ setAuthConfig, [ '@=nab3a_parameter(''nab3a.google.client_secret_path'')' ]]
+            - [ setScopes, [['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/spreadsheets']]]
+        tags:
+            - { name: monolog.logger, channel: google }
+
+    google.client:
+        parent: google.client.unauth
+        configurator: [ '@google.client.configurator', '__invoke' ]
+
+    google.client.configurator:
+        class: Nab3aBundle\Google\Configurator
+        public: false
+        arguments:
+            - '@=nab3a_parameter(''nab3a.google.credentials_path'')'
+
+    google.sheet.stream:
+        class: Nab3aBundle\Google\SheetStream
+        arguments:
+            - %google.script_id%
+            - %google.sheet_id%
+            - '@google.client'
+            - '@nab3a.event_loop'
+
+    google.output.buffer:
+        class: Nab3aBundle\Output\BufferOutputPlugin
+        arguments: [%google.output_buffer.size%, %google.output.mapping%, '@google.sheet.stream' ]
+        tags:
+            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

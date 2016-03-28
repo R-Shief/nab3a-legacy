@@ -1,40 +1,92 @@
 parameters:
 
 services:
-    nab3a.guzzle.middleware.history:
-        class: Nab3aBundle\Guzzle\HistoryMiddlewarePlugin
+    nab3a.guzzle.middleware.http_errors:
+        class: Closure
         public: false
+        shared: false
+        factory: [ GuzzleHttp\Middleware, httpErrors ]
         tags:
             - { name: guzzle.middleware, id: nab3a.guzzle.client }
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+
+    nab3a.guzzle.middleware.prepare_body:
+        class: Closure
+        public: false
+        shared: false
+        factory: [ GuzzleHttp\Middleware, prepareBody ]
+        tags:
+            - { name: guzzle.middleware, id: nab3a.guzzle.client }
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+
+    nab3a.guzzle.middleware.history:
+        class: Closure
+        factory: [ Nab3aBundle\Guzzle\HistoryMiddleware, history ]
+        public: false
+        shared: false
+        tags:
+            - { name: guzzle.middleware, id: nab3a.guzzle.client }
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+
+    nab3a.guzzle.middleware.history.container:
+        class: ArrayObject
+        factory: [ Nab3aBundle\Guzzle\HistoryMiddleware, container ]
 
     nab3a.guzzle.middleware.retry:
-        class: Nab3aBundle\Guzzle\RetryMiddlewarePlugin
+        class: Closure
         public: false
+        shared: false
+        factory: [ Nab3aBundle\Guzzle\RetryMiddleware, retry ]
         tags:
-            - { name: guzzle.middleware, id: nab3a.guzzle.client }
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
 
     nab3a.guzzle.middleware.oauth:
-        class: Nab3aBundle\Guzzle\OauthMiddlewarePlugin
+        class: GuzzleHttp\Subscriber\Oauth\Oauth1
         abstract: true
         public: false
+        shared: false
 
     nab3a.guzzle.middleware.log:
-        class: Nab3aBundle\Guzzle\LoggingMiddlewarePlugin
-        calls:
-            - [ setLogger, ['@?logger'] ]
+        class: Closure
+        factory: [ GuzzleHttp\Middleware, log ]
+        arguments: [ '@?logger', '@nab3a.guzzle.middleware.log.formatter' ]
         tags:
             - { name: monolog.logger, channel: guzzle }
             - { name: guzzle.middleware, id: nab3a.guzzle.client }
+            - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
+        public: false
+        shared: false
+
+    nab3a.guzzle.middleware.log.formatter:
+        class: GuzzleHttp\MessageFormatter
+        arguments: [ '@=constant(''GuzzleHttp\\MessageFormatter::CLF'')' ]
         public: false
 
     nab3a.guzzle.client:
         class: GuzzleHttp\Client
         public: false
         abstract: true
+        arguments:
+            -
+                on_stats: [ '@nab3a.guzzle.emitter', 'onStats' ]
+                on_headers: [ '@nab3a.guzzle.emitter', 'onHeaders' ]
+
+    nab3a.guzzle.handler_stack:
+        class: GuzzleHttp\HandlerStack
+        public: false
+        shared: false
 
     nab3a.guzzle.task_queue:
         class: GuzzleHttp\Promise\TaskQueue
         factory: GuzzleHttp\Promise\queue
+        public: false
+
+    nab3a.guzzle.task_queue.listener:
+        class: Closure
+        arguments:
+            - [ '@nab3a.guzzle.task_queue', 'run' ]
+        factory: [ Nab3aBundle\EventLoop\PerpetualListener, wrap ]
+        public: false
 
     nab3a.guzzle.emitter:
         class: Nab3aBundle\Guzzle\Emitter
@@ -42,9 +94,11 @@ services:
             - [ setLogger, [ '@?logger']]
         tags:
             - { name: monolog.logger, channel: guzzle }
+        public: false
 
     nab3a.guzzle.event_loop.plugin:
-        class: Nab3aBundle\Guzzle\EventLoopPlugin
+        class: Nab3aBundle\Guzzle\TaskQueuePlugin
+        arguments: ['@nab3a.guzzle.task_queue.listener' ]
         public: false
         tags:
             - { name: event_loop.plugin, id: nab3a.event_loop }

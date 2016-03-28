@@ -38,7 +38,7 @@ class AttachPluginsCompilerPass implements CompilerPassInterface
         }
 
         foreach ($configurators as $forServiceId => $pluginIds) {
-            $emitterDefinition = $container->getDefinition($forServiceId);
+            $emitterDefinition = $container->findDefinition($forServiceId);
 
             if (!$emitterDefinition->getConfigurator()) {
                 $configuratorDefinition = new Definition($this->configuratorService, [

@@ -1,7 +1,6 @@
 services:
     nab3a.event_loop.debug:
         class: WyriHaximus\React\Inspector\LoopDecorator
-        arguments: ['@nab3a.event_loop.default']
         public: false
 
     nab3a.event_loop.info_provider:

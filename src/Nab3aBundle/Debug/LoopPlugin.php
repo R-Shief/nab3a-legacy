@@ -18,8 +18,9 @@ class LoopPlugin implements PluginInterface
      * @var InfoProvider
      */
     private $infoProvider;
+
     /**
-     * @var \GuzzleHttp\Promise\TaskQueue
+     * @var TaskQueue
      */
     private $queue;
 
@@ -55,13 +56,5 @@ class LoopPlugin implements PluginInterface
                 }
             }
         }
-    }
-
-    public function log(TimerInterface $timer)
-    {
-        $message = $timer->getInterval();
-        $context = $timer->getData() || [];
-
-        return $this->logger->notice($message);
     }
 }

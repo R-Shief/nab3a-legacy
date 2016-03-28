@@ -4,6 +4,7 @@ namespace Nab3aBundle\Standalone;
 
 use Matthias\BundlePlugins\ConfigurationWithPlugins;
 use Matthias\BundlePlugins\ExtensionWithPlugins;
+use Nab3aBundle\Google\GooglePlugin;
 use Nab3aBundle\Loader\YamlFileLoader;
 use Nab3aBundle\Stream\StreamPlugin;
 use Nab3aBundle\Twitter\TwitterPlugin;
@@ -26,6 +27,7 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
     private static function getConfiguration($name)
     {
         return new ConfigurationWithPlugins($name, [
+          new GooglePlugin(),
           new StreamPlugin(),
           new TwitterPlugin(),
         ]);

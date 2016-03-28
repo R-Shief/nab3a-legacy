@@ -6,6 +6,7 @@ use Matthias\BundlePlugins\BundleWithPlugins;
 use Nab3aBundle\Console\ConsolePlugin;
 use Nab3aBundle\Evenement\EvenementPlugin;
 use Nab3aBundle\EventLoop\EventLoopPlugin;
+use Nab3aBundle\Google\GooglePlugin;
 use Nab3aBundle\Guzzle\GuzzlePlugin;
 use Nab3aBundle\Logger\LoggerPlugin;
 use Nab3aBundle\Standalone\StandalonePlugin;
@@ -26,6 +27,7 @@ class Nab3aBundle extends BundleWithPlugins
           new ConsolePlugin(),
           new EvenementPlugin(),
           new EventLoopPlugin(),
+          new GooglePlugin(),
           new GuzzlePlugin(),
           new LoggerPlugin(),
           new StandalonePlugin(),

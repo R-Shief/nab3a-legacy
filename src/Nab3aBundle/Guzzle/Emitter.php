@@ -4,6 +4,7 @@ namespace Nab3aBundle\Guzzle;
 
 use Evenement\EventEmitterTrait;
 use GuzzleHttp\TransferStats;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareTrait;
 
 class Emitter
@@ -11,9 +12,12 @@ class Emitter
     use EventEmitterTrait;
     use LoggerAwareTrait;
 
-    public function __invoke(TransferStats $stats)
+    public function onHeaders(ResponseInterface $response) {
+        // nothing.
+    }
+
+    public function onStats(TransferStats $stats)
     {
-        $this->emit('stats', [$stats]);
-        $this->logger->error('stats', ['transfer_time' => $stats->getTransferTime()]);
+        $this->logger->info(sprintf('Transfer time: %f seconds', $stats->getTransferTime()), $stats->getHandlerStats());
     }
 }

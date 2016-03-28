@@ -66,6 +66,10 @@ services:
         class: GuzzleHttp\Client
         public: false
         abstract: true
+        arguments:
+            -
+                on_stats: [ '@nab3a.guzzle.emitter', 'onStats' ]
+                on_headers: [ '@nab3a.guzzle.emitter', 'onHeaders' ]
 
     nab3a.guzzle.handler_stack:
         class: GuzzleHttp\HandlerStack

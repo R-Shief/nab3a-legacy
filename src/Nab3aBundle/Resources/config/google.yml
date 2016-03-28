@@ -16,6 +16,8 @@ services:
                 base_path: '@=constant(''Google_Client::API_BASE_PATH'')'
                 synchronous: false
                 stream: false
+                on_stats: [ '@nab3a.guzzle.emitter', 'onStats' ]
+                on_headers: [ '@nab3a.guzzle.emitter', 'onHeaders' ]
 
     google.client.unauth:
         class: Google_Client

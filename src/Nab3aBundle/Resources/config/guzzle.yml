@@ -96,9 +96,3 @@ services:
             - { name: monolog.logger, channel: guzzle }
         public: false
 
-    nab3a.guzzle.event_loop.plugin:
-        class: Nab3aBundle\Guzzle\TaskQueuePlugin
-        arguments: ['@nab3a.guzzle.task_queue.listener' ]
-        public: false
-        tags:
-            - { name: event_loop.plugin, id: nab3a.event_loop }

@@ -51,7 +51,7 @@ class RequestFactory
     public function sample($params)
     {
         $promise = $this->request(self::SAMPLE_METHOD, self::SAMPLE_URL, [
-            'query' => array_filter($params) + $this->options,
+          'query' => array_filter($params) + $this->options,
         ]);
 
         return $promise;
@@ -69,6 +69,11 @@ class RequestFactory
         return $this->client->requestAsync($method, $uri, $options);
     }
 
+    /**
+     * @param $config
+     *
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
     public function fromStreamConfig($config)
     {
         switch ($config['type']) {

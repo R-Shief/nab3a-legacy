@@ -12,7 +12,8 @@ class Emitter
     use EventEmitterTrait;
     use LoggerAwareTrait;
 
-    public function onHeaders(ResponseInterface $response) {
+    public function onHeaders(ResponseInterface $response)
+    {
         // nothing.
     }
 

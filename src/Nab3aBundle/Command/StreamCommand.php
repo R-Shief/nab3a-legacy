@@ -51,7 +51,9 @@ class StreamCommand extends AbstractCommand
         $stream = $promise
           ->then(function (ResponseInterface $response) {
               return $response->getBody();
-          }, function (RequestException $e) { throw $e; })
+          }, function (RequestException $e) {
+              throw $e;
+          })
           ->then(function (StreamInterface $s) use ($me, $loop) {
               $stream = new TwitterStream($s, $loop);
               $me->attachEvents($stream);
@@ -60,7 +62,6 @@ class StreamCommand extends AbstractCommand
           });
 
         $stream->wait();
-
         $loop->run();
     }
 }

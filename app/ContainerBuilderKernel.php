@@ -62,7 +62,9 @@ class ContainerBuilderKernel extends Kernel
     {
         $container = $this->getContainerBuilder();
         $container->addObjectResource($this);
-        $container->addCompilerPass(new Nab3aBundle\Standalone\CompilerDebugDumpPass(), Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_AFTER_REMOVING);
+        if ($this->isDebug()) {
+            $container->addCompilerPass(new Nab3aBundle\Standalone\CompilerDebugDumpPass(), Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_AFTER_REMOVING);
+        }
         $this->prepareContainer($container);
 
         if (null !== $cont = $this->registerContainerConfiguration($this->getContainerLoader($container))) {

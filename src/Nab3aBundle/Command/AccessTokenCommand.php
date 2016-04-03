@@ -18,7 +18,7 @@ class AccessTokenCommand extends AbstractCommand
     {
         $credentialsPath = $this->container->get('nab3a.standalone.parameters')->get('nab3a.google.credentials_path');
 
-        $client = $this->container->get('google.client.unauth');
+        $client = $this->container->get('nab3a.google.client.unauth');
         $url = $client->createAuthUrl();
 
         $io = new SymfonyStyle($input, $output);

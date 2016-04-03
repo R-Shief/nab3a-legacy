@@ -32,7 +32,7 @@ services:
         tags:
             - { name: nab3a.console.command }
 
-    google.guzzle.client:
+    nab3a.google.guzzle.client:
         parent: nab3a.guzzle.client
         arguments:
             -
@@ -40,31 +40,31 @@ services:
                 on_stats: [ '@nab3a.guzzle.emitter', 'onStats' ]
                 on_headers: [ '@nab3a.guzzle.emitter', 'onHeaders' ]
 
-    google.client.unauth:
+    nab3a.google.client.unauth:
         class: Google_Client
         scope: container
         arguments:
             -
                 access_type: offline
         calls:
-            - [ setHttpClient, [ '@google.guzzle.client' ]]
+            - [ setHttpClient, [ '@nab3a.google.guzzle.client' ]]
             - [ setLogger, [ '@logger' ] ]
             - [ setAuthConfig, [ '@=nab3a_parameter(''nab3a.google.client_secret_path'')' ]]
             - [ setScopes, [['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/spreadsheets']]]
         tags:
             - { name: monolog.logger, channel: google }
 
-    google.client:
-        parent: google.client.unauth
-        configurator: [ '@google.client.configurator', '__invoke' ]
+    nab3a.google.client:
+        parent: nab3a.google.client.unauth
+        configurator: [ '@nab3a.google.client.configurator', '__invoke' ]
 
-    google.client.configurator:
+    nab3a.google.client.configurator:
         class: Nab3aBundle\Google\Configurator
         public: false
         arguments:
             - '@=nab3a_parameter(''nab3a.google.credentials_path'')'
 
-    google.output.buffer:
+    nab3a.google.output.buffer:
         class: Nab3aBundle\Output\BufferOutputPlugin
         arguments: [ '%nab3a.google.output_buffer.size%', '@=nab3a_parameter(''nab3a.google.mapping'')', '@nab3a.event_loop', '@=nab3a_parameter(''nab3a.google.document'')', '@=nab3a_parameter(''nab3a.google.sheet'')' ]
         tags:

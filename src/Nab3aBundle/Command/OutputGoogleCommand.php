@@ -35,7 +35,7 @@ class OutputGoogleCommand extends Command
         }
 
         $scriptId = $this->container->get('nab3a.standalone.parameters')->get('nab3a.google.script');
-        $client = $this->container->get('google.client');
+        $client = $this->container->get('nab3a.google.client');
         $documentId = $input->getArgument('document');
         $sheetId = $input->getArgument('sheet');
 

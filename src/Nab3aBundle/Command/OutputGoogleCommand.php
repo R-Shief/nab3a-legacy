@@ -38,7 +38,6 @@ class OutputGoogleCommand extends Command
         $client = $this->container->get('google.client');
         $documentId = $input->getArgument('document');
         $sheetId = $input->getArgument('sheet');
-        $output->write($buffer);
 
         $data = json_decode($buffer, true);
 

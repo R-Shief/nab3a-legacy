@@ -76,18 +76,6 @@ services:
         public: false
         shared: false
 
-    nab3a.guzzle.task_queue:
-        class: GuzzleHttp\Promise\TaskQueue
-        factory: GuzzleHttp\Promise\queue
-        public: false
-
-    nab3a.guzzle.task_queue.listener:
-        class: Closure
-        arguments:
-            - [ '@nab3a.guzzle.task_queue', 'run' ]
-        factory: [ Nab3aBundle\EventLoop\PerpetualListener, wrap ]
-        public: false
-
     nab3a.guzzle.emitter:
         class: Nab3aBundle\Guzzle\Emitter
         calls:
@@ -95,4 +83,3 @@ services:
         tags:
             - { name: monolog.logger, channel: guzzle }
         public: false
-

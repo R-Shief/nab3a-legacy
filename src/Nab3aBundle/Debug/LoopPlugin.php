@@ -2,7 +2,6 @@
 
 namespace Nab3aBundle\Debug;
 
-use GuzzleHttp\Promise\TaskQueue;
 use Nab3aBundle\EventLoop\PluginInterface;
 use Psr\Log\LoggerAwareTrait;
 use React\EventLoop\LoopInterface;
@@ -18,15 +17,9 @@ class LoopPlugin implements PluginInterface
      */
     private $infoProvider;
 
-    /**
-     * @var TaskQueue
-     */
-    private $queue;
-
-    public function __construct(InfoProvider $infoProvider, TaskQueue $queue)
+    public function __construct(InfoProvider $infoProvider)
     {
         $this->infoProvider = $infoProvider;
-        $this->queue = $queue;
     }
 
     public function attach(LoopInterface $loop)

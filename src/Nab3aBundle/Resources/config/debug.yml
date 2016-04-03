@@ -10,7 +10,7 @@ services:
 
     nab3a.event_loop.plugins:
         class: Nab3aBundle\Debug\LoopPlugin
-        arguments: ['@?nab3a.event_loop.info_provider', '@nab3a.guzzle.task_queue' ]
+        arguments: ['@?nab3a.event_loop.info_provider' ]
         calls:
             - [ setLogger, [ '@?logger' ]]
         tags:

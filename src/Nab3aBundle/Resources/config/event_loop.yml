@@ -3,6 +3,3 @@ services:
         class: React\EventLoop\LoopInterface
         factory: ['React\EventLoop\Factory','create']
         public: false
-        calls:
-            - [ futureTick, [ '@nab3a.guzzle.task_queue.listener' ] ]
-

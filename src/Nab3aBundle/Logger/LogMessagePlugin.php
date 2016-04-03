@@ -33,7 +33,7 @@ class LogMessagePlugin implements PluginInterface
      */
     public function __construct(array $events = [])
     {
-        $this->events = array_merge($this->events, $events);
+        $this->events = array_filter(array_merge($this->events, $events));
     }
 
     public function attachEvents(EventEmitterInterface $emitter)

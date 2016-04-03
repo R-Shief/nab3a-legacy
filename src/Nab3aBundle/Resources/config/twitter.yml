@@ -13,11 +13,15 @@ services:
 
     nab3a.twitter.message_emitter.plugin.logging:
         class: Nab3aBundle\Logger\LogMessagePlugin
+        arguments:
+            -
+                delete:           ~
+                tweet:            ~
         calls:
             - [ setLogger, [ '@?logger' ] ]
         tags:
             - { name: monolog.logger, channel: twitter }
-            # - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
         public: false
 
     nab3a.twitter.request_factory:

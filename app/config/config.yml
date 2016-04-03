@@ -12,4 +12,5 @@ framework:
 monolog:
     handlers:
         console:
-            type: console
+            type: service
+            id: nab3a.logger.handler

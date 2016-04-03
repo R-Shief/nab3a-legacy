@@ -3,3 +3,20 @@ services:
         class: Monolog\Processor\MemoryUsageProcessor
         tags:
             - { name: monolog.processor }
+
+    nab3a.logger.formatter.json:
+        parent: monolog.formatter.loggly
+        arguments: ['@=constant(''Monolog\\Formatter\\JsonFormatter::BATCH_MODE_NEWLINES'')', true]
+        public: true
+
+    nab3a.logger.handler:
+        class: '%monolog.handler.console.class%'
+        configurator: ['@nab3a.logger.handler.configurator', '__invoke']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    nab3a.logger.handler.configurator:
+        class: Nab3aBundle\Logger\HandlerConfigurator
+        arguments: ['@=service(''nab3a.console.input'').hasParameterOption(''--child'') ? service(''nab3a.logger.formatter.json'')']
+        calls:
+            - [ setContainer, ['@service_container']]

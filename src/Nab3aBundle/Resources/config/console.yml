@@ -1,6 +1,6 @@
 services:
     nab3a.console.application:
-        class: Symfony\Component\Console\Application
+        class: Nab3aBundle\Console\Application
         arguments:
             - 'nab3a'
             - '@@package_version@'
@@ -14,3 +14,17 @@ services:
             - [ setLogger, [ '@?logger' ] ]
         tags:
             - { name: monolog.logger }
+
+    nab3a.console.input:
+        class: Symfony\Component\Console\Input\ArgvInput
+        synthetic: true
+
+    nab3a.console.output:
+        class: Symfony\Component\Console\Output\ConsoleOutput
+        synthetic: true
+
+    nab3a.console.logger_helper:
+        class: Nab3aBundle\Console\LoggerHelper
+        arguments: ['@=service(''nab3a.console.output'').getErrorOutput()']
+        calls:
+            - [ setContainer, ['@service_container'] ]

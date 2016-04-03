@@ -29,6 +29,16 @@ class GooglePlugin extends BundlePlugin
               ->scalarNode('client_secret_path')
                   ->isRequired()
               ->end()
+              ->scalarNode('script')
+                  ->isRequired()
+              ->end()
+              ->scalarNode('document')
+                  ->isRequired()
+              ->end()
+              ->arrayNode('mapping')
+                  ->prototype('scalar')
+                  ->end()
+              ->end()
         ;
     }
 }

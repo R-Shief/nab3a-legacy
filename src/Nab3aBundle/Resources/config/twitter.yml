@@ -57,6 +57,6 @@ services:
 
     nab3a.twitter.file_output:
         class: Nab3aBundle\Output\FileOutputPlugin
-        arguments: [%nab3a.twitter.output.pattern%, '@filesystem']
-#        tags:
+        arguments: [ '%nab3a.twitter.output.pattern%', '@filesystem']
+        tags:
 #            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

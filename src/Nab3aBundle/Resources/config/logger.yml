@@ -1,6 +1,7 @@
 services:
     nab3a.logger.processor.memory_usage:
         class: Monolog\Processor\MemoryUsageProcessor
+        arguments: [ true, false ]
         tags:
             - { name: monolog.processor }
 

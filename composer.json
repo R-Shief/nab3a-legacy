@@ -16,7 +16,7 @@
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3",
         "matthiasnoback/symfony-bundle-plugins": "^1.1",
-        "react/child-process": "^0.4.0",
+        "react/child-process": "dev-develop",
         "react/event-loop": "^0.4",
         "react/stream": "^0.4",
         "symfony/console": "^3.0",
@@ -38,7 +38,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:bangpound/pecan.git"
+            "url": "git@github.com:bangpound/child-process.git"
         }
     ],
     "config": {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0ba37cd64012587256e827d4d41a1e56",
-    "content-hash": "36a8cd0c20e4bb0bad6095121b882538",
+    "hash": "4e40a3200a49f784a22a799e13ea0f36",
+    "content-hash": "18a72d13b25ebac3d277ae4b604f2dad",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -967,36 +967,38 @@
         },
         {
             "name": "react/child-process",
-            "version": "v0.4.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/reactphp/child-process.git",
-                "reference": "8bf211533bcbb2034e00528a47400367570dc3d7"
+                "url": "https://github.com/bangpound/child-process.git",
+                "reference": "5efe48edc7cd767cbdd74706f56ba0d0081c98c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/child-process/zipball/8bf211533bcbb2034e00528a47400367570dc3d7",
-                "reference": "8bf211533bcbb2034e00528a47400367570dc3d7",
+                "url": "https://api.github.com/repos/bangpound/child-process/zipball/5efe48edc7cd767cbdd74706f56ba0d0081c98c8",
+                "reference": "5efe48edc7cd767cbdd74706f56ba0d0081c98c8",
                 "shasum": ""
             },
             "require": {
                 "evenement/evenement": "~2.0",
                 "php": ">=5.4.0",
                 "react/event-loop": "0.4.*",
-                "react/stream": "0.4.*"
+                "react/stream": "~0.4.2"
+            },
+            "require-dev": {
+                "sebastian/environment": "~1.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.4-dev"
+                    "dev-master": "0.5-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "React\\ChildProcess\\": ""
+                    "React\\ChildProcess\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1004,7 +1006,10 @@
             "keywords": [
                 "process"
             ],
-            "time": "2014-02-02 01:11:26"
+            "support": {
+                "source": "https://github.com/bangpound/child-process/tree/develop"
+            },
+            "time": "2016-04-03 03:31:24"
         },
         {
             "name": "react/event-loop",
@@ -4470,6 +4475,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "google/apiclient": 5,
+        "react/child-process": 20,
         "wyrihaximus/react-event-loop-inspector": 20
     },
     "prefer-stable": false,

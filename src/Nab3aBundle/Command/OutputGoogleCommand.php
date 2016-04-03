@@ -52,7 +52,7 @@ class OutputGoogleCommand extends Command
         if ($response->getError()) {
             /** @var \Google_Service_Script_Status $error */
             $error = $response->getError();
-            throw new \RuntimeException($error->getMessage(), $error->getCode());
+            throw new \RuntimeException($error->getDetails()->current()['errorMessage'], $error->getCode());
         }
 
         $response = $response->getResponse();

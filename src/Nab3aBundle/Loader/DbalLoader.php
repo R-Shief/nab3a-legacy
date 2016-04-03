@@ -10,11 +10,10 @@ class DbalLoader extends Loader
     /**
      * Loads a resource.
      *
-     * @param string|null $type The resource type or null if unknown
+     * @param \Doctrine\DBAL\Connection $conn
+     * @param string|null               $type The resource type or null if unknown
      *
-     * @throws \Exception If something went wrong
-     *
-     * @return array
+     * @return array If something went wrong
      */
     public function load(Connection $conn, $type = null)
     {

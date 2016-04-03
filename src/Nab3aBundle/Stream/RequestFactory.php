@@ -46,7 +46,9 @@ class RequestFactory
     }
 
     /**
-     * @return PromiseInterface
+     * @param $params
+     *
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sample($params)
     {

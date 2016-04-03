@@ -3,7 +3,6 @@
 namespace Nab3aBundle\Watch;
 
 use Nab3aBundle\Loader\LoaderHelper;
-use Nab3aBundle\Nab3a\Nab3aExtension;
 use Nab3aBundle\Twitter\TwitterPlugin;
 use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
@@ -20,6 +19,7 @@ class StreamParameterWatch implements EventEmitterInterface
     use EventEmitterTrait;
 
     /**
+     * @param LoopInterface $loop
      * @param $resource
      * @param int $interval
      *

@@ -21,6 +21,12 @@ class StreamCommand extends AbstractCommand
         ;
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $loop = $this->container->get('nab3a.event_loop');

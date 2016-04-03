@@ -35,6 +35,7 @@ class OutputGoogleCommand extends Command
         }
 
         $scriptId = $this->container->get('nab3a.standalone.parameters')->get('nab3a.google.script');
+        /** @var \Google_Client $client */
         $client = $this->container->get('nab3a.google.client');
         $documentId = $input->getArgument('document');
         $sheetId = $input->getArgument('sheet');
@@ -56,34 +57,5 @@ class OutputGoogleCommand extends Command
 
         $response = $response->getResponse();
         $this->logger->info('added rows', $response);
-    }
-
-    private static function reduceRange($carry, $item)
-    {
-        static $prev;
-
-        if (empty($carry)) {
-            $prev = $item;
-
-            return $item;
-        }
-
-        if ($prev === $item - 1) {
-            if (!strpos($carry, ',')) {
-                $carry = substr($carry, 0, strlen($prev));
-            }
-
-            if (strrpos($carry, ',') && strpos(substr($carry, strrpos($carry, ',')), '-')) {
-                $carry = substr($carry, 0, strlen($carry) - (strlen($prev) + 1));
-            }
-
-            $prev = $item;
-
-            return $carry.'-'.$item;
-        }
-
-        $prev = $item;
-
-        return $carry.','.$item;
     }
 }

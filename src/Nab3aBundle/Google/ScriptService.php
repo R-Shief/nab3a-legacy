@@ -2,10 +2,6 @@
 
 namespace Nab3aBundle\Google;
 
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
 class ScriptService
 {
     private $scriptId;
@@ -21,9 +17,6 @@ class ScriptService
     }
 
     /**
-     * @param $function
-     * @param $parameters
-     *
      * @return \Google_Service_Script
      */
     public function makeService()
@@ -47,46 +40,5 @@ class ScriptService
         $request->setDevMode(true);
 
         return $request;
-    }
-
-    public function run(RequestInterface $request)
-    {
-        $promise = $this
-          ->client
-          ->getHttpClient()
-          ->sendAsync($request);
-
-        return $promise->then(
-          function (ResponseInterface $response) use ($request) {
-              $result = \GuzzleHttp\json_decode($response->getBody(), true);
-              if (isset($result['response'])) {
-                  return $result;
-              } else {
-                  throw new RequestException($result['error']['details'][0]['errorMessage'], $request, $response);
-              }
-          })
-          ->otherwise(function (RequestException $e) {
-              $response = \GuzzleHttp\json_decode(
-                $e->getResponse()->getBody(),
-                true
-              );
-              // The API executed, but the script returned an error.
-
-              // Extract the first (and only) set of error details. The values of this
-              // object are the script's 'errorMessage' and 'errorType', and an array of
-              // stack trace elements.
-              $error = $response['error']['details'][0];
-              throw new \RuntimeException(
-                sprintf("Script error message: %s\n", $error['errorMessage'])
-              );
-
-              if (array_key_exists('scriptStackTraceElements', $error)) {
-                  // There may not be a stacktrace if the script didn't start executing.
-                  echo "Script error stacktrace:\n";
-                  foreach ($error['scriptStackTraceElements'] as $trace) {
-                      printf("\t%s: %d\n", $trace['function'], $trace['lineNumber']);
-                  }
-              }
-          });
     }
 }

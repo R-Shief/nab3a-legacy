@@ -17,7 +17,6 @@ class PruneServicesCompilerPass implements CompilerPassInterface
           'Symfony\\Component\\Translation\\Loader\\LoaderInterface',
           'Symfony\\Component\\Translation\\Dumper\\DumperInterface',
           'Symfony\\Component\\Translation\\Extractor\\ExtractorInterface',
-          'Monolog\\Formatter\\FormatterInterface',
         ];
 
         $callback = function (Definition $definition) use ($removeClasses) {

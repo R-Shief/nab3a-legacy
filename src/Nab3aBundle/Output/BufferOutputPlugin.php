@@ -32,13 +32,23 @@ class BufferOutputPlugin implements PluginInterface
      * @var \React\EventLoop\LoopInterface
      */
     private $loop;
+    /**
+     * @var
+     */
+    private $documentId;
+    /**
+     * @var
+     */
+    private $sheetId;
 
-    public function __construct($size, $map, LoopInterface $loop)
+    public function __construct($size, $map, LoopInterface $loop, $documentId, $sheetId)
     {
         $this->buffer = [];
         $this->size = $size;
         $this->map = $map;
         $this->loop = $loop;
+        $this->documentId = $documentId;
+        $this->sheetId = $sheetId;
     }
 
     /**
@@ -57,7 +67,7 @@ class BufferOutputPlugin implements PluginInterface
 
                 $exec = $_SERVER['argv'][0];
 
-                $process = new Process('exec '.$exec.' output:google --child -vvv 1q_yO2uFBliEXgsKceIY4zxq_xSHji13LZS0U59oM8Qc Sheet1');
+                $process = new Process('exec '.$exec.' output:google --child -vvv '.$this->documentId.' '.$this->sheetId);
                 $process->on('exit', function ($code, $signal) {
                     $this->logger->debug('Exit code '.$code);
                 });

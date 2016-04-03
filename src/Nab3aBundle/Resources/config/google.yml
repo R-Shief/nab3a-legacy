@@ -66,7 +66,7 @@ services:
 
     google.output.buffer:
         class: Nab3aBundle\Output\BufferOutputPlugin
-        arguments: [ '%nab3a.google.output_buffer.size%', '@=nab3a_parameter(''nab3a.google.mapping'')', '@nab3a.event_loop' ]
+        arguments: [ '%nab3a.google.output_buffer.size%', '@=nab3a_parameter(''nab3a.google.mapping'')', '@nab3a.event_loop', '@=nab3a_parameter(''nab3a.google.document'')', '@=nab3a_parameter(''nab3a.google.sheet'')' ]
         tags:
             - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
             - { name: monolog.logger, channel: google }

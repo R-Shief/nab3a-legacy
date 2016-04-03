@@ -20,3 +20,4 @@ services:
         arguments: ['@=service(''nab3a.console.input'').hasParameterOption(''--child'') ? service(''nab3a.logger.formatter.json'')']
         calls:
             - [ setContainer, ['@service_container']]
+        public: false

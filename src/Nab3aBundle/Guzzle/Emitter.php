@@ -14,11 +14,11 @@ class Emitter
 
     public function onHeaders(ResponseInterface $response)
     {
-        // nothing.
+        $this->logger->debug(sprintf('Headers'), $response->getHeaders());
     }
 
     public function onStats(TransferStats $stats)
     {
-        $this->logger->info(sprintf('Transfer time: %f seconds', $stats->getTransferTime()), $stats->getHandlerStats());
+        $this->logger->debug(sprintf('Transfer time: %f seconds', $stats->getTransferTime()), $stats->getHandlerStats());
     }
 }

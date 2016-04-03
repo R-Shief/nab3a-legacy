@@ -5,6 +5,12 @@ services:
         tags:
             - { name: nab3a.console.command }
 
+    nab3a.stream_stdout.command:
+        class: Nab3aBundle\Command\StreamStdoutCommand
+        parent: nab3a.console.command
+        tags:
+            - { name: nab3a.console.command }
+
     nab3a.validate.command:
         class: Nab3aBundle\Command\ValidationCommand
         parent: nab3a.console.command

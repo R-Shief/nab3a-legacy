@@ -24,7 +24,20 @@ class ScriptService
      * @param $function
      * @param $parameters
      *
-     * @return RequestInterface
+     * @return \Google_Service_Script
+     */
+    public function makeService()
+    {
+        $service = new \Google_Service_Script($this->client);
+
+        return $service;
+    }
+
+    /**
+     * @param $function
+     * @param $parameters
+     *
+     * @return \Google_Service_Script_ExecutionRequest
      */
     public function makeRequest($function, $parameters)
     {
@@ -33,9 +46,7 @@ class ScriptService
         $request->setParameters($parameters);
         $request->setDevMode(true);
 
-        $service = new \Google_Service_Script($this->client);
-
-        return $service->scripts->run($this->scriptId, $request);
+        return $request;
     }
 
     public function run(RequestInterface $request)

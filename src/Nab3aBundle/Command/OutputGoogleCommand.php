@@ -44,14 +44,18 @@ class OutputGoogleCommand extends Command
         $s = new ScriptService($scriptId, $client);
 
         $request = $s->makeRequest('addRows', [$documentId, $sheetId, $data]);
+        $service = $s->makeService();
 
-        $promise = $s->run($request);
+        $response = $service->scripts->run($scriptId, $request);
 
-        $results = $promise->then(function ($response) {
-            return $response['response']['result'];
-        })->wait();
+        if ($response->getError()) {
+            /** @var \Google_Service_Script_Status $error */
+            $error = $response->getError();
+            throw new \RuntimeException($error->getMessage(), $error->getCode());
+        }
 
-        $this->logger->info('added rows', $results);
+        $response = $response->getResponse();
+        $this->logger->info('added rows', $response);
     }
 
     private static function reduceRange($carry, $item)

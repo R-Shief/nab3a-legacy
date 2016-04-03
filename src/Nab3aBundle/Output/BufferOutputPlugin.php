@@ -59,7 +59,7 @@ class BufferOutputPlugin implements PluginInterface
 
                 $process = new Process('exec '.$exec.' output:google --child -vvv 1q_yO2uFBliEXgsKceIY4zxq_xSHji13LZS0U59oM8Qc Sheet1');
                 $process->on('exit', function ($code, $signal) {
-                    $this->logger->debug('Exit code '. $code);
+                    $this->logger->debug('Exit code '.$code);
                 });
 
                 $process->start($this->loop);

@@ -2,10 +2,6 @@
 
 namespace Nab3aBundle\Command;
 
-use GuzzleHttp\Exception\RequestException;
-use Nab3aBundle\Stream\TwitterStream;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use React\ChildProcess\Process;
 use React\EventLoop\Timer\TimerInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,7 +44,7 @@ class StreamCommand extends AbstractCommand
 
         $process = new Process('exec '.$exec.' stream:stdout --child -vvv '.$input->getArgument('name'));
         $process->on('exit', function ($code, $signal) {
-            $this->logger->debug('Exit code '. $code);
+            $this->logger->debug('Exit code '.$code);
         });
 
         $loop->addTimer(1e-3, function (TimerInterface $timer) use ($process) {

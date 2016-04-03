@@ -2,7 +2,7 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
 
 framework:
-    secret: %secret%
+    secret: '%secret%'
     serializer: true
     validation:
         enable_annotations: true

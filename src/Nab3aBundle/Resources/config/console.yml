@@ -5,7 +5,7 @@ services:
             - 'nab3a'
             - '@@package_version@'
         calls:
-            - [ setDispatcher, [ "@event_dispatcher" ] ]
+            - [ setDispatcher, [ '@event_dispatcher' ] ]
 
     nab3a.console.command:
         abstract: true

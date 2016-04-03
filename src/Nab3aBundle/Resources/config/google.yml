@@ -28,7 +28,7 @@ services:
         calls:
             - [ setHttpClient, [ '@google.guzzle.client' ]]
             - [ setDefer, [ true ] ]
-            - [ setLogger, [ "@logger" ] ]
+            - [ setLogger, [ '@logger' ] ]
             - [ setAuthConfig, [ '@=nab3a_parameter(''nab3a.google.client_secret_path'')' ]]
             - [ setScopes, [['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/spreadsheets']]]
         tags:

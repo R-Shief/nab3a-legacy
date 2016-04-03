@@ -1,9 +1,9 @@
 services:
     nab3a.standalone.parameters:
         class: Nab3aBundle\Standalone\RuntimeParameterBag
-        arguments: [ "@nab3a.standalone.parameter_provider" ]
+        arguments: [ '@nab3a.standalone.parameter_provider' ]
         calls:
-            - [ setContainer, [ "@service_container" ]]
+            - [ setContainer, [ '@service_container' ]]
 
     nab3a.standalone.parameter_provider:
         class: Nab3aBundle\Standalone\ParameterProvider

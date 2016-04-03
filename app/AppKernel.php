@@ -7,8 +7,14 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
+        $plugins = [];
+
+        if ($this->isDebug()) {
+            $plugins[] = new Nab3aBundle\Debug\DebugPlugin();
+        }
+
         $bundles = [
-          new Nab3aBundle\Nab3aBundle([]),
+          new Nab3aBundle\Nab3aBundle($plugins),
           new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
           new Symfony\Bundle\MonologBundle\MonologBundle(),
         ];

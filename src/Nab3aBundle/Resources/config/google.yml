@@ -26,6 +26,12 @@ services:
         tags:
             - { name: nab3a.console.command }
 
+    nab3a.google.output_google.command:
+        class: Nab3aBundle\Command\OutputGoogleCommand
+        parent: nab3a.console.command
+        tags:
+            - { name: nab3a.console.command }
+
     google.guzzle.client:
         parent: nab3a.guzzle.client
         arguments:
@@ -61,16 +67,13 @@ services:
         arguments:
             - '@=nab3a_parameter(''nab3a.google.credentials_path'')'
 
-    google.sheet.stream:
-        class: Nab3aBundle\Google\SheetStream
-        arguments:
-            - %google.script_id%
-            - %google.sheet_id%
-            - '@google.client'
-            - '@nab3a.event_loop'
-
     google.output.buffer:
         class: Nab3aBundle\Output\BufferOutputPlugin
-        arguments: [%google.output_buffer.size%, %google.output.mapping%, '@google.sheet.stream' ]
+        arguments: [ '%nab3a.google.output_buffer.size%', '@=nab3a_parameter(''nab3a.google.mapping'')', '@nab3a.event_loop' ]
         tags:
             - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+            - { name: monolog.logger, channel: google }
+        calls:
+            - [ setLogger, ['@?logger']]
+            - [ setContainer, ['@service_container']]
+

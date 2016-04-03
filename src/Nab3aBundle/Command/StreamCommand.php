@@ -6,6 +6,8 @@ use GuzzleHttp\Exception\RequestException;
 use Nab3aBundle\Stream\TwitterStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use React\ChildProcess\Process;
+use React\EventLoop\Timer\TimerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,26 +44,20 @@ class StreamCommand extends AbstractCommand
         // but it still stupidly allows these situations to arise.
         // $timer = $watcher->watch($resource);
 
-        $rf = $this->container->get('nab3a.twitter.request_factory');
-        $me = $this->container->get('nab3a.twitter.message_emitter');
+        $exec = $_SERVER['argv'][0];
 
-        $promise = $rf
-          ->fromStreamConfig($this->params);
+        $process = new Process('exec '.$exec.' stream:stdout --child -vvv '.$input->getArgument('name'));
+        $process->on('exit', function ($code, $signal) {
+            $this->logger->debug('Exit code '. $code);
+        });
 
-        $stream = $promise
-          ->then(function (ResponseInterface $response) {
-              return $response->getBody();
-          }, function (RequestException $e) {
-              throw $e;
-          })
-          ->then(function (StreamInterface $s) use ($me, $loop) {
-              $stream = new TwitterStream($s, $loop);
-              $me->attachEvents($stream);
+        $loop->addTimer(1e-3, function (TimerInterface $timer) use ($process) {
+            $process->start($timer->getLoop());
 
-              return $stream;
-          });
+            $process->stderr->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+            $process->stdout->on('data', json_stream_callback([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
+        });
 
-        $stream->wait();
         $loop->run();
     }
 }

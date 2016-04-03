@@ -8,6 +8,9 @@
         "classmap": [
             "app/AppKernel.php",
             "app/ContainerBuilderKernel.php"
+        ],
+        "files": [
+            "src/functions.php"
         ]
     },
     "require": {

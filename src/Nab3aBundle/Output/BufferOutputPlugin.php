@@ -4,12 +4,17 @@ namespace Nab3aBundle\Output;
 
 use Evenement\EventEmitterInterface;
 use Nab3aBundle\Evenement\PluginInterface;
-use Nab3aBundle\Google\SheetStream;
+use Psr\Log\LoggerAwareTrait;
+use React\ChildProcess\Process;
+use React\EventLoop\LoopInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class BufferOutputPlugin implements PluginInterface
 {
+    use LoggerAwareTrait;
+    use ContainerAwareTrait;
+
     /**
      * @var string
      */
@@ -24,22 +29,16 @@ class BufferOutputPlugin implements PluginInterface
     private $map;
 
     /**
-     * @var PropertyAccessor
+     * @var \React\EventLoop\LoopInterface
      */
-    private $propertyAccess;
+    private $loop;
 
-    /**
-     * @var SheetStream
-     */
-    private $stream;
-
-    public function __construct($size, $map, SheetStream $stream)
+    public function __construct($size, $map, LoopInterface $loop)
     {
         $this->buffer = [];
         $this->size = $size;
         $this->map = $map;
-        $this->propertyAccess = PropertyAccess::createPropertyAccessor();
-        $this->stream = $stream;
+        $this->loop = $loop;
     }
 
     /**
@@ -49,18 +48,37 @@ class BufferOutputPlugin implements PluginInterface
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
-        $emitter->on('tweet', function ($data) {
-            $this->buffer[] = $this->filterData($data);
+        $filter = self::makeCallback($this->map);
+        $emitter->on('tweet', function ($data) use ($filter) {
+            $this->buffer[] = $filter($data);
             if (count($this->buffer) === $this->size) {
                 $data = $this->buffer;
-                $this->stream->write($data);
+                array_unshift($data, array_keys($this->map));
+
+                $exec = $_SERVER['argv'][0];
+
+                $process = new Process('exec '.$exec.' output:google --child -vvv 1q_yO2uFBliEXgsKceIY4zxq_xSHji13LZS0U59oM8Qc Sheet1');
+                $process->on('exit', function ($code, $signal) {
+                    $this->logger->debug('Exit code '. $code);
+                });
+
+                $process->start($this->loop);
+
+                $process->stderr->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+                $process->stdout->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+
+                $process->stdin->end(json_encode($data));
+
                 $this->buffer = [];
             }
         });
     }
 
-    private function filterData($data)
+    public static function makeCallback($map)
     {
+        $propertyAccess = PropertyAccess::createPropertyAccessor();
+
+        return function ($data) use ($propertyAccess, $map) {
         $tweet = json_decode($data, true);
 
         array_walk_recursive($tweet, function (&$value, $key) {
@@ -70,10 +88,12 @@ class BufferOutputPlugin implements PluginInterface
         }, $tweet);
 
         $row = [];
-        foreach ($this->map as $path) {
-            $value = $this->propertyAccess->getValue($tweet, $path);
+        foreach ($map as $path) {
+            $value = $propertyAccess->getValue($tweet, $path);
 
             if (is_array($value)) {
+
+                // Flatten the entities.
                 $value = array_map(function ($value) {
                     if (isset($value['expanded_url'])) {
                         return $value['expanded_url'];
@@ -86,7 +106,7 @@ class BufferOutputPlugin implements PluginInterface
                     }
                 }, $value);
 
-                $value = implode(',', $value);
+                $value = implode(', ', $value);
             }
 
             if (is_null($value)) {
@@ -96,6 +116,7 @@ class BufferOutputPlugin implements PluginInterface
             $row[] = $value;
         }
 
-        return json_encode($row);
+        return $row;
+        };
     }
 }

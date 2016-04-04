@@ -22,6 +22,7 @@
         "react/child-process": "dev-develop",
         "react/eep": "dev-develop",
         "react/event-loop": "^0.4",
+        "react/http": "^0.4",
         "react/stream": "^0.4",
         "symfony/console": "^3.0",
         "symfony/expression-language": "^3.0",

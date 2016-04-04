@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c4adf3f2df40bcb32b7174223029ff05",
-    "content-hash": "5c50f64fa265ed5bc68ac43896d81b26",
+    "hash": "c07f87aa1b5e6c3d09acf2cb0820f1f4",
+    "content-hash": "2264c1c7c5ae3b82a53676180ae416f8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1095,6 +1095,89 @@
                 "event-loop"
             ],
             "time": "2016-03-08 02:09:32"
+        },
+        {
+            "name": "react/http",
+            "version": "v0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/http.git",
+                "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/http/zipball/f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
+                "reference": "f575989d67b7db0a65f5dd7e431d8f47af6c2f7b",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^2.0",
+                "guzzlehttp/psr7": "^1.0",
+                "php": ">=5.4.0",
+                "react/socket": "^0.4",
+                "react/stream": "^0.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "React\\Http\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Library for building an evented http server.",
+            "keywords": [
+                "http"
+            ],
+            "time": "2015-05-21 20:12:09"
+        },
+        {
+            "name": "react/socket",
+            "version": "v0.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/socket.git",
+                "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/ce015ec5879b96f5d30905f035f223aa85013fcc",
+                "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "~2.0|~1.0",
+                "php": ">=5.3.0",
+                "react/event-loop": "0.4.*|0.3.*",
+                "react/stream": "0.4.*|0.3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "React\\Socket\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Library for building an evented socket server.",
+            "keywords": [
+                "Socket"
+            ],
+            "time": "2016-03-01 20:10:35"
         },
         {
             "name": "react/stream",
@@ -4473,12 +4556,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/reactphp-event-loop-inspector.git",
-                "reference": "5f64f3d436e0861fac2f09eb04d003af2ed6c55a"
+                "reference": "b814f6e19cca090677f034fe00685db2ce68f26a"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/WyriHaximus/reactphp-event-loop-inspector/zipball/b814f6e19cca090677f034fe00685db2ce68f26a",
-                "reference": "5f64f3d436e0861fac2f09eb04d003af2ed6c55a",
+                "reference": "b814f6e19cca090677f034fe00685db2ce68f26a",
                 "shasum": ""
             },
             "require": {
@@ -4509,7 +4592,7 @@
                     "homepage": "http://wyrihaximus.net/"
                 }
             ],
-            "time": "2016-03-06 17:01:09"
+            "time": "2016-04-03 21:41:25"
         }
     ],
     "aliases": [],

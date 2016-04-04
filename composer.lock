@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a414494f6537e19754eb87bd4d1b561",
-    "content-hash": "18a72d13b25ebac3d277ae4b604f2dad",
+    "hash": "c4adf3f2df40bcb32b7174223029ff05",
+    "content-hash": "5c50f64fa265ed5bc68ac43896d81b26",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1010,6 +1010,47 @@
                 "source": "https://github.com/bangpound/child-process/tree/develop"
             },
             "time": "2016-04-03 03:31:24"
+        },
+        {
+            "name": "react/eep",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bangpound/eep-php.git",
+                "reference": "7e7275c599eeb05525af5003de7ce82cfa03a21b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bangpound/eep-php/zipball/7e7275c599eeb05525af5003de7ce82cfa03a21b",
+                "reference": "7e7275c599eeb05525af5003de7ce82cfa03a21b",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^2.0",
+                "php": ">=5.3.2",
+                "react/event-loop": "^0.4"
+            },
+            "require-dev": {
+                "ext-pcntl": "*",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "React\\EEP": "src"
+                }
+            },
+            "license": [
+                "LGPL"
+            ],
+            "description": "EEP event process for React.",
+            "keywords": [
+                "eep"
+            ],
+            "support": {
+                "source": "https://github.com/bangpound/eep-php/tree/develop"
+            },
+            "time": "2016-04-03 23:20:24"
         },
         {
             "name": "react/event-loop",
@@ -4436,7 +4477,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/reactphp-event-loop-inspector/zipball/5f64f3d436e0861fac2f09eb04d003af2ed6c55a",
+                "url": "https://api.github.com/repos/WyriHaximus/reactphp-event-loop-inspector/zipball/b814f6e19cca090677f034fe00685db2ce68f26a",
                 "reference": "5f64f3d436e0861fac2f09eb04d003af2ed6c55a",
                 "shasum": ""
             },
@@ -4476,6 +4517,7 @@
     "stability-flags": {
         "google/apiclient": 5,
         "react/child-process": 20,
+        "react/eep": 20,
         "wyrihaximus/react-event-loop-inspector": 20
     },
     "prefer-stable": false,

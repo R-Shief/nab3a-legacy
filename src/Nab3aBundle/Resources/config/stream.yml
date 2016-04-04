@@ -16,3 +16,11 @@ services:
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
+
+    nab3a.stream.eep:
+        class: Nab3aBundle\Stream\Eep
+        arguments: [ '@nab3a.event_loop']
+        calls:
+            - [ setLogger, ['@logger']]
+        tags:
+            - { name: evenement.plugin, id: nab3a.twitter.message_emitter }

@@ -22,5 +22,14 @@ services:
         arguments: [ '@nab3a.event_loop']
         calls:
             - [ setLogger, ['@logger']]
+            - [ setContainer, ['@service_container']]
         tags:
             - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+
+    nab3a.stream.eep.idle_time:
+        class: React\EEP\Window\Periodic
+        factory: ['@nab3a.stream.eep', makeIdleTimeTracker ]
+
+    nab3a.stream.eep.status_counter:
+        class: React\EEP\Window\Periodic
+        factory: ['@nab3a.stream.eep', makeStatusCounter ]

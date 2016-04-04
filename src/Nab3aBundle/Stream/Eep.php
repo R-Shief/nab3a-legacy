@@ -5,15 +5,20 @@ namespace Nab3aBundle\Stream;
 use Evenement\EventEmitterInterface;
 use Nab3aBundle\Evenement\PluginInterface;
 use Psr\Log\LoggerAwareTrait;
+use React\EEP\Composite;
 use React\EEP\Stats\Count;
 use React\EEP\Stats\Max;
 use React\EEP\Stats\Mean;
+use React\EEP\Stats\Min;
+use React\EEP\Stats\Sum;
 use React\EEP\Window;
 use React\EventLoop\LoopInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class Eep implements PluginInterface
 {
     use LoggerAwareTrait;
+    use ContainerAwareTrait;
 
     /**
      * @var \React\EventLoop\LoopInterface
@@ -32,37 +37,47 @@ class Eep implements PluginInterface
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
-        $cnt_tw = new Window\Periodic(new Count(), 6e4);
-        $max_tw = new Window\Periodic(new Max(), 6e4);
-        $mean_tw = new Window\Periodic(new Mean(), 6e4);
+        $emitter->on('tweet', function () {
+            $this->container->get('nab3a.stream.eep.status_counter')->enqueue(1);
 
-        $cnt_tw->on('emit', function ($emit) {
-            $this->logger->alert('statusCount '.$emit);
-        });
-
-        $max_tw->on('emit', function ($emit) {
-            $this->logger->alert('maxIdlePeriod '.round($emit, 2));
-        });
-
-        $mean_tw->on('emit', function ($emit) {
-            $this->logger->alert('avgElapsed '.round($emit, 2));
-        });
-
-        $emitter->on('tweet', function () use ($cnt_tw, $max_tw, $mean_tw) {
             static $time = 0;
 
-            $cnt_tw->enqueue(1);
-
-            $value = microtime(true) - $time;
-            $time = microtime(true);
-            $mean_tw->enqueue($value);
-            $max_tw->enqueue($value);
+            $ut = microtime(true);
+            if ($time) {
+                $v = abs($ut - $time);
+                $this->container->get('nab3a.stream.eep.idle_time')->enqueue($v);
+            }
+            $time = $ut;
         });
 
-        $this->loop->addPeriodicTimer(60, function () use ($cnt_tw, $max_tw, $mean_tw) {
-            $cnt_tw->tick();
-            $max_tw->tick();
-            $mean_tw->tick();
+        $this->loop->addPeriodicTimer(60, function () {
+            $this->container->get('nab3a.stream.eep.status_counter')->tick();
+            $this->container->get('nab3a.stream.eep.idle_time')->tick();
         });
+    }
+
+    public function makeIdleTimeTracker()
+    {
+        $idle_p = new Window\Periodic(new Composite([
+          new Max(),
+          new Mean(),
+          new Min(),
+          new Sum(),
+        ]), 6e4);
+        $idle_p->on('emit', function ($emit) {
+            $this->logger->info('idleTime', array_combine(['max', 'mean', 'min', 'total'], $emit));
+        });
+
+        return $idle_p;
+    }
+
+    public function makeStatusCounter()
+    {
+        $cnt_tw = new Window\Periodic(new Count(), 6e4);
+        $cnt_tw->on('emit', function ($emit) {
+            $this->logger->info('statusCount '.$emit);
+        });
+
+        return $cnt_tw;
     }
 }

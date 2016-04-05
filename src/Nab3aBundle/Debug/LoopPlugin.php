@@ -36,7 +36,7 @@ class LoopPlugin implements PluginInterface
                 $message = $entity.' '.$metric;
                 if ($show) {
                     $context = $stats;
-                    $this->logger->notice($message, $context);
+                    $this->logger->debug($message, $context);
                 } else {
                     $this->logger->debug('no '.$message);
                 }

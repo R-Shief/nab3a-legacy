@@ -93,7 +93,7 @@ class AccessTokenCommand extends AbstractCommand
         if (!file_exists(dirname($credentialsPath))) {
             mkdir(dirname($credentialsPath), 0700, true);
         }
-        file_put_contents($credentialsPath, json_encode($accessToken));
+        file_put_contents($credentialsPath, \GuzzleHttp\json_encode($accessToken));
 
         return;
     }

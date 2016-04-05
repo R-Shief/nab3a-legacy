@@ -77,7 +77,7 @@ class BufferOutputPlugin implements PluginInterface
                 $process->stderr->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
                 $process->stdout->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
 
-                $process->stdin->end(json_encode($data));
+                $process->stdin->end(\GuzzleHttp\json_encode($data));
 
                 $this->buffer = [];
             }

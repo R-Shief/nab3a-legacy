@@ -2,6 +2,14 @@
     "name": "r-shief/nab3a",
     "description": "Streaming API client",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Benjamin Doherty",
+            "email": "bjd@bangpound.org",
+            "homepage": "https://bangpound.org",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Nab3aBundle\\": "src/Nab3aBundle/"
@@ -12,6 +20,11 @@
         ],
         "files": [
             "src/functions.php"
+        ],
+        "exclude-from-classmap": [
+            "/Tests/",
+            "/test/",
+            "/tests/"
         ]
     },
     "autoload-dev": {

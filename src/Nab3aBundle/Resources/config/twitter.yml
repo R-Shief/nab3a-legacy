@@ -28,11 +28,6 @@ services:
         class: Nab3aBundle\Stream\RequestFactory
         arguments: [ '@nab3a.twitter.guzzle.client', { delimited: length } ]
 
-    nab3a.twitter.stream_factory:
-        class: Nab3aBundle\Stream\StreamFactory
-        shared: false
-        arguments: [ '@nab3a.event_loop' ]
-
     nab3a.twitter.guzzle.client:
         class: GuzzleHttp\Client
         arguments:

@@ -1,6 +1,7 @@
 {
     "name": "r-shief/nab3a",
-    "description": "",
+    "description": "Streaming API client",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Nab3aBundle\\": "src/Nab3aBundle/"
@@ -12,6 +13,11 @@
         "files": [
             "src/functions.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nab3aBundle\\Tests\\": "tests/Nab3aBundle/"
+        }
     },
     "require": {
         "evenement/evenement": "^2.0",
@@ -35,9 +41,11 @@
         "symfony/yaml": "^3.0"
     },
     "require-dev": {
-        "symfony/debug-bundle": "^3.0",
-        "sensio/generator-bundle": "^3.0",
+        "hautelook/alice-bundle": "^1.2",
         "phpunit/phpunit": "^4.8|^5.2",
+        "sensio/generator-bundle": "^3.0",
+        "symfony/debug-bundle": "^3.0",
+        "symfony/phpunit-bridge": "^3.0",
         "wyrihaximus/react-event-loop-inspector": "dev-master"
     },
     "repositories": [

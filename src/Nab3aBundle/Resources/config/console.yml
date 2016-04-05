@@ -17,11 +17,9 @@ services:
 
     nab3a.console.input:
         class: Symfony\Component\Console\Input\ArgvInput
-        synthetic: true
 
     nab3a.console.output:
         class: Symfony\Component\Console\Output\ConsoleOutput
-        synthetic: true
 
     nab3a.console.logger_helper:
         class: Nab3aBundle\Console\LoggerHelper

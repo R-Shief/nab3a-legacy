@@ -89,44 +89,44 @@ class BufferOutputPlugin implements PluginInterface
         $propertyAccess = PropertyAccess::createPropertyAccessor();
 
         return function ($data) use ($propertyAccess, $map) {
-        $tweet = \GuzzleHttp\json_decode($data, true);
+            $tweet = \GuzzleHttp\json_decode($data, true);
 
-        array_walk_recursive($tweet, function (&$value, $key) {
-            if ($key === 'created_at') {
-                $value = \DateTime::createFromFormat('D M j H:i:s P Y', $value)->format('Y-m-d H:i:s');
+            array_walk_recursive($tweet, function (&$value, $key) {
+                if ($key === 'created_at') {
+                    $value = \DateTime::createFromFormat('D M j H:i:s P Y', $value)->format('Y-m-d H:i:s');
+                }
+            }, $tweet);
+
+            $row = [];
+            foreach ($map as $path) {
+                $value = $propertyAccess->getValue($tweet, $path);
+
+                if (is_array($value)) {
+
+                    // Flatten the entities.
+                    $value = array_map(function ($value) {
+                        if (isset($value['expanded_url'])) {
+                            return $value['expanded_url'];
+                        }
+                        if (isset($value['text'])) {
+                            return $value['text'];
+                        }
+                        if (isset($value['screen_name'])) {
+                            return $value['screen_name'];
+                        }
+                    }, $value);
+
+                    $value = implode(', ', $value);
+                }
+
+                if (is_null($value)) {
+                    $value = '';
+                }
+
+                $row[] = $value;
             }
-        }, $tweet);
 
-        $row = [];
-        foreach ($map as $path) {
-            $value = $propertyAccess->getValue($tweet, $path);
-
-            if (is_array($value)) {
-
-                // Flatten the entities.
-                $value = array_map(function ($value) {
-                    if (isset($value['expanded_url'])) {
-                        return $value['expanded_url'];
-                    }
-                    if (isset($value['text'])) {
-                        return $value['text'];
-                    }
-                    if (isset($value['screen_name'])) {
-                        return $value['screen_name'];
-                    }
-                }, $value);
-
-                $value = implode(', ', $value);
-            }
-
-            if (is_null($value)) {
-                $value = '';
-            }
-
-            $row[] = $value;
-        }
-
-        return $row;
+            return $row;
         };
     }
 }

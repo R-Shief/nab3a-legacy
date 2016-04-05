@@ -89,7 +89,7 @@ class BufferOutputPlugin implements PluginInterface
         $propertyAccess = PropertyAccess::createPropertyAccessor();
 
         return function ($data) use ($propertyAccess, $map) {
-        $tweet = json_decode($data, true);
+        $tweet = \GuzzleHttp\json_decode($data, true);
 
         array_walk_recursive($tweet, function (&$value, $key) {
             if ($key === 'created_at') {

@@ -21,7 +21,7 @@ class LoggerHelper
 
     public function onData($chunk)
     {
-        $data = json_decode($chunk, true);
+        $data = \GuzzleHttp\json_decode($chunk, true);
         if ($data) {
             $id = $data['channel'] === 'app' ? 'logger' : 'monolog.logger.'.$data['channel'];
             /** @var LoggerInterface $logger */

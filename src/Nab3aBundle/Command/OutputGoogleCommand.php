@@ -40,7 +40,7 @@ class OutputGoogleCommand extends Command
         $documentId = $input->getArgument('document');
         $sheetId = $input->getArgument('sheet');
 
-        $data = json_decode($buffer, true);
+        $data = \GuzzleHttp\json_decode($buffer, true);
 
         $s = new ScriptService($scriptId, $client);
 

@@ -14,7 +14,7 @@ class TypeGuesser
         if ($message === "\r\n") {
             $event = 'keep-alive';
         } else {
-            $data = json_decode($message, true);
+            $data = \GuzzleHttp\json_decode($message, true);
             $event = count($data) > 1 ? 'tweet' : key($data);
         }
 

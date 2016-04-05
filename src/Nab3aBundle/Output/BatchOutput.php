@@ -16,7 +16,7 @@ class BatchOutput
     public function attachEvents(EventEmitterInterface $emitter)
     {
         $emitter->on('tweet', function ($message) {
-            $data = json_decode($message, true);
+            $data = \GuzzleHttp\json_decode($message, true);
 
             $replacements = array();
             $replacements['{id}'] = $data['id'];

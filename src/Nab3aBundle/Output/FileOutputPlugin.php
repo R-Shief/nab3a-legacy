@@ -29,7 +29,7 @@ class FileOutputPlugin implements PluginInterface
     public function attachEvents(EventEmitterInterface $emitter)
     {
         $emitter->on('tweet', function ($message) {
-            $data = json_decode($message, true);
+            $data = \GuzzleHttp\json_decode($message, true);
 
             $replacements = array();
             $replacements['{created_at.date}'] = \DateTime::createFromFormat(self::TWITTER_DATE_FORMAT, $data['created_at'])->format('Y-m-d');

@@ -9,8 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 class LoggerHelper
 {
     use ContainerAwareTrait;
+
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
+     * @var OutputInterface
      */
     private $output;
 
@@ -21,17 +22,13 @@ class LoggerHelper
 
     public function onData($chunk)
     {
-        $data = \GuzzleHttp\json_decode($chunk, true);
-        if ($data) {
+        try {
+            $data = \GuzzleHttp\json_decode($chunk, true);
             $id = $data['channel'] === 'app' ? 'logger' : 'monolog.logger.'.$data['channel'];
             /** @var LoggerInterface $logger */
             $logger = $this->container->get($id);
-            $logger->log(
-              $data['level'],
-              $data['message'],
-              $data['context']
-            );
-        } else {
+            $logger->log($data['level'], $data['message'], $data['context']);
+        } catch (\InvalidArgumentException $e) {
             $this->output->write($chunk);
         }
     }

@@ -3,7 +3,6 @@ parameters:
 
 framework:
     secret: '%secret%'
-    serializer: true
     validation:
         enable_annotations: true
     annotations:

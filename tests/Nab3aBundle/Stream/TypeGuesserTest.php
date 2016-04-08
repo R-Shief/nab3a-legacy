@@ -2,6 +2,8 @@
 
 namespace Nab3aBundle\Tests\Stream;
 
+use Nab3aBundle\Stream\TypeGuesser;
+
 class TypeGuesserTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetEventName()

@@ -6,6 +6,11 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Class AddConsoleCommandPass.
+ *
+ * @see \Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass
+ */
 class AddConsoleCommandPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)

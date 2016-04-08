@@ -56,8 +56,8 @@ class StreamCommand extends AbstractCommand
         $loop->addTimer(1e-3, function (TimerInterface $timer) use ($process) {
             $process->start($timer->getLoop());
 
-            $process->stderr->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
-            $process->stdout->on('data', json_stream_callback([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
+            $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+            $process->stdout->on('data', line_delimited_stream([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
         });
 
         $loop->run();

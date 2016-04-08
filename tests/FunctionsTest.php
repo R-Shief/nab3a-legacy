@@ -10,7 +10,7 @@ class FunctionsTest extends PHPUnit_Framework_TestCase
         $callback = function ($buffer) {
             PHPUnit_Framework_Assert::assertTrue(true, 'Callback was called');
         };
-        $streamCallback = json_stream_callback($callback);
+        $streamCallback = line_delimited_stream($callback);
 
         $this->assertThat($streamCallback, new PHPUnit_Framework_Constraint_IsInstanceOf(Closure::class), 'json_stream_callback returns callable');
 

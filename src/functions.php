@@ -1,6 +1,6 @@
 <?php
 
-function json_stream_callback($callback)
+function line_delimited_stream($callback)
 {
     return function ($chunk) use ($callback) {
         static $buffer = '';

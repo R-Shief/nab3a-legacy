@@ -48,7 +48,7 @@ class StreamCommand extends AbstractCommand
 
         $exec = $_SERVER['argv'][0];
 
-        $process = new Process('exec '.$exec.' stream:stdout --child -vvv '.$input->getArgument('name'));
+        $process = new Process('exec php '.$exec.' stream:stdout --child -vvv '.$input->getArgument('name'));
         $process->on('exit', function ($code, $signal) {
             $this->logger->debug('Exit code '.$code);
         });

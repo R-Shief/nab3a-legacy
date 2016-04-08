@@ -3,12 +3,12 @@
 namespace Nab3aBundle\Output;
 
 use Evenement\EventEmitterInterface;
+use League\Pipeline\Pipeline;
 use Nab3aBundle\Evenement\PluginInterface;
 use Psr\Log\LoggerAwareTrait;
-use React\ChildProcess\Process;
-use React\EventLoop\LoopInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Process\ProcessUtils;
+use transducers as t;
 
 class BufferOutputPlugin implements PluginInterface
 {
@@ -19,34 +19,26 @@ class BufferOutputPlugin implements PluginInterface
      * @var string
      */
     private $buffer;
-    /**
-     * @var int
-     */
-    private $size;
+
     /**
      * @var array
      */
     private $map;
 
     /**
-     * @var \React\EventLoop\LoopInterface
-     */
-    private $loop;
-    /**
      * @var
      */
     private $documentId;
+
     /**
      * @var
      */
     private $sheetId;
 
-    public function __construct($size, $map, LoopInterface $loop, $documentId, $sheetId)
+    public function __construct($map, $documentId, $sheetId)
     {
         $this->buffer = [];
-        $this->size = $size;
         $this->map = $map;
-        $this->loop = $loop;
         $this->documentId = $documentId;
         $this->sheetId = $sheetId;
     }
@@ -58,75 +50,38 @@ class BufferOutputPlugin implements PluginInterface
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
-        $filter = self::makeCallback($this->map);
-        $emitter->on('tweet', function ($data) use ($filter) {
-            $this->buffer[] = $filter($data);
-            if (count($this->buffer) === $this->size) {
-                $data = $this->buffer;
-                array_unshift($data, array_keys($this->map));
+        $xf = t\comp(
+          t\map('Nab3aBundle\Process\mapTweet'),
+          t\mapcat(function ($v) {
+              $n = [];
+              foreach ($this->map as $key => $path) {
+                  $n[] = [$key, \igorw\get_in($v, $path)];
+              }
 
-                $exec = $_SERVER['argv'][0];
-
-                $process = new Process('exec '.$exec.' output:google --child -vvv '.$this->documentId.' '.$this->sheetId);
-                $process->on('exit', function ($code, $signal) {
-                    $this->logger->debug('Exit code '.$code);
-                });
-
-                $process->start($this->loop);
-
-                $process->stderr->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
-                $process->stdout->on('data', json_stream_callback([$this->container->get('nab3a.console.logger_helper'), 'onData']));
-
-                $process->stdin->end(\GuzzleHttp\json_encode($data));
-
-                $this->buffer = [];
-            }
-        });
-    }
-
-    public static function makeCallback($map)
-    {
-        $propertyAccess = PropertyAccess::createPropertyAccessor();
-
-        return function ($data) use ($propertyAccess, $map) {
-            $tweet = \GuzzleHttp\json_decode($data, true);
-
-            array_walk_recursive($tweet, function (&$value, $key) {
-                if ($key === 'created_at') {
-                    $value = \DateTime::createFromFormat('D M j H:i:s P Y', $value)->format('Y-m-d H:i:s');
-                }
-            }, $tweet);
-
-            $row = [];
-            foreach ($map as $path) {
-                $value = $propertyAccess->getValue($tweet, $path);
-
-                if (is_array($value)) {
-
-                    // Flatten the entities.
-                    $value = array_map(function ($value) {
-                        if (isset($value['expanded_url'])) {
-                            return $value['expanded_url'];
-                        }
-                        if (isset($value['text'])) {
-                            return $value['text'];
-                        }
-                        if (isset($value['screen_name'])) {
-                            return $value['screen_name'];
-                        }
-                    }, $value);
-
-                    $value = implode(', ', $value);
-                }
-
-                if (is_null($value)) {
-                    $value = '';
-                }
-
-                $row[] = $value;
-            }
-
-            return $row;
+              return $n;
+          })
+        );
+        $filter = function (array $data) use ($xf) {
+            return t\xform([$data], $xf);
         };
+
+        $cmd = 'output:google -vvv ';
+        $cmd .= ProcessUtils::escapeArgument($this->documentId).' ';
+        $cmd .= ProcessUtils::escapeArgument($this->sheetId);
+
+        $processBuilder = $this->container->get('nab3a.process.child_process');
+        $process = $processBuilder->createChildProcess($cmd);
+
+        $pipeline = new Pipeline([
+          function ($data) { return \GuzzleHttp\json_decode($data, true); },
+          $filter,
+          function (array $assoc) { return t\transduce('transducers\identity', t\assoc_reducer(), $assoc); },
+          'GuzzleHttp\json_encode',
+        ]);
+
+        $emitter->on('tweet', function (string $data) use ($pipeline, $process) {
+            $data = $pipeline->process($data);
+            $process->stdin->write($data);
+        });
     }
 }

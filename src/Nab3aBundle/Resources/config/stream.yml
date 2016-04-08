@@ -33,3 +33,9 @@ services:
     nab3a.stream.eep.status_counter:
         class: React\EEP\Window\Periodic
         factory: ['@nab3a.stream.eep', makeStatusCounter ]
+
+    nab3a.process.child_process:
+        class: Nab3aBundle\Process\ChildProcess
+        arguments:
+            - '@nab3a.event_loop'
+            - '@nab3a.console.logger_helper'

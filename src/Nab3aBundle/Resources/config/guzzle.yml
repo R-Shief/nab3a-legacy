@@ -25,7 +25,6 @@ services:
         public: false
         shared: false
         tags:
-            - { name: guzzle.middleware, id: nab3a.guzzle.client }
             - { name: guzzle.middleware, id: nab3a.twitter.guzzle.client }
 
     nab3a.guzzle.middleware.history.container:

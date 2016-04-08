@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Process;
+namespace Nab3aBundle\Tests\Process;
 
 use Clue\JsonStream\StreamingJsonParser;
 use GuzzleHttp\Psr7\Stream;

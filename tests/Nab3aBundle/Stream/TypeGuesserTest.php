@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Stream;
+namespace Nab3aBundle\Tests\Stream;
 
 class TypeGuesserTest extends \PHPUnit_Framework_TestCase
 {

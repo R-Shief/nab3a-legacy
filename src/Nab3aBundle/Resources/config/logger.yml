@@ -12,13 +12,10 @@ services:
 
     nab3a.logger.handler:
         class: '%monolog.handler.console.class%'
-        configurator: ['@nab3a.logger.handler.configurator', '__invoke']
+        calls:
+            - [ setFormatter, [ '@=service(''nab3a.console.input'').hasParameterOption(''--child'') ? service(''nab3a.logger.formatter.json'') : service(''nab3a.logger.formatter.console'')'] ]
         tags:
             - { name: kernel.event_subscriber }
 
-    nab3a.logger.handler.configurator:
-        class: Nab3aBundle\Logger\HandlerConfigurator
-        arguments: ['@=service(''nab3a.console.input'').hasParameterOption(''--child'') ? service(''nab3a.logger.formatter.json'')']
-        calls:
-            - [ setContainer, ['@service_container']]
-        public: false
+    nab3a.logger.formatter.console:
+        class: Symfony\Bridge\Monolog\Formatter\ConsoleFormatter

@@ -24,8 +24,11 @@ class ValidationCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $serializer = $this->container->get('serializer');
-        $query = $serializer->denormalize($this->params['parameters'], StreamParameters::class);
+        $query = new StreamParameters();
+        $query->setFollow($this->params['parameters']['follow']);
+        $query->setLanguage($this->params['parameters']['language']);
+        $query->setTrack($this->params['parameters']['track']);
+        $query->setLocations($this->params['parameters']['locations']);
 
         $validator = $this->container->get('validator');
         $errors = $validator->validate($query);

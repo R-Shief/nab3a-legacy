@@ -35,7 +35,7 @@ class RequestFactory
      *
      * @return PromiseInterface
      */
-    public function filter($params)
+    public function filter(array $params)
     {
         // @todo At least one predicate parameter (follow, locations, or track)
         //   must be specified. The default access level allows up to 400 track
@@ -50,7 +50,7 @@ class RequestFactory
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sample($params)
+    public function sample(array $params)
     {
         $promise = $this->request(self::SAMPLE_METHOD, self::SAMPLE_URL, [
           'query' => array_filter($params) + $this->options,

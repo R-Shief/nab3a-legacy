@@ -4,6 +4,8 @@ namespace Nab3aBundle\Command;
 
 use React\ChildProcess\Process;
 use React\EventLoop\Timer\TimerInterface;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,7 +55,9 @@ class StreamCommand extends AbstractCommand
             $this->logger->debug('Exit code '.$code);
         });
 
-        $loop->addTimer(1e-3, function (TimerInterface $timer) use ($process) {
+        $this->attachListeners($process);
+
+        $loop->addTimer(self::CHILD_PROC_TIMER, function (TimerInterface $timer) use ($process) {
             $process->start($timer->getLoop());
 
             $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
@@ -61,5 +65,19 @@ class StreamCommand extends AbstractCommand
         });
 
         $loop->run();
+    }
+
+    /**
+     * @param \React\ChildProcess\Process $process
+     */
+    private function attachListeners(Process $process)
+    {
+        $dispatcher = $this->container->get('event_dispatcher');
+        $listener = function (ConsoleEvent $event) use ($process) {
+            $process->terminate();
+            usleep(self::CHILD_PROC_TIMER * 1e6);
+        };
+        $dispatcher->addListener(ConsoleEvents::EXCEPTION, $listener);
+        $dispatcher->addListener(ConsoleEvents::TERMINATE, $listener);
     }
 }

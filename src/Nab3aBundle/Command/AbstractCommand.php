@@ -14,6 +14,8 @@ abstract class AbstractCommand extends Command
     use LoggerAwareTrait;
     use ContainerAwareTrait;
 
+    const CHILD_PROC_TIMER = 1e-3;
+
     /**
      * @var array
      */

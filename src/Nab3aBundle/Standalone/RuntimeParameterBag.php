@@ -15,7 +15,7 @@ class RuntimeParameterBag extends FrozenParameterBag implements ContainerAwareIn
     private $initialized = false;
 
     /**
-     * @var \Nab3aBundle\Standalone\ParameterProviderInterface
+     * @var ParameterProviderInterface
      */
     private $parameterProvider;
 

@@ -4,13 +4,10 @@ namespace Nab3aBundle\Tests\Guzzle;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Nab3aBundle\Guzzle\RetryMiddleware;
-use Psr\Http\Message\RequestInterface;
 
 class RetryMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,6 +17,7 @@ class RetryMiddlewareTest extends \PHPUnit_Framework_TestCase
         $mh = function ($handler) use (&$calls) {
             return function ($request, $options) use ($handler, &$calls) {
                 $calls[] = func_get_args();
+
                 return $handler($request, $options);
             };
         };

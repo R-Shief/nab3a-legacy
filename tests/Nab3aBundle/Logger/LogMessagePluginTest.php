@@ -2,7 +2,6 @@
 
 namespace Nab3aBundle\Tests\Logger;
 
-
 use Evenement\EventEmitter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;

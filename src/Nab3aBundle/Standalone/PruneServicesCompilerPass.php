@@ -32,11 +32,13 @@ class PruneServicesCompilerPass implements CompilerPassInterface
 
         $container->removeDefinition('cache_clearer');
         $container->removeDefinition('cache_warmer');
+        $container->removeDefinition('debug.stopwatch');
         $container->removeDefinition('fragment.handler');
         $container->removeDefinition('http_kernel');
         $container->removeDefinition('kernel.class_cache.cache_warmer');
         $container->removeDefinition('locale_listener');
         $container->removeDefinition('monolog.logger.translation');
+        $container->removeDefinition('property_accessor');
         $container->removeDefinition('request_stack');
         $container->removeDefinition('response_listener');
         $container->removeDefinition('streamed_response_listener');

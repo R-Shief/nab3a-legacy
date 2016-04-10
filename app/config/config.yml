@@ -3,6 +3,7 @@ parameters:
 
 framework:
     secret: '%secret%'
+    http_method_override: false
     validation:
         enable_annotations: true
     annotations:

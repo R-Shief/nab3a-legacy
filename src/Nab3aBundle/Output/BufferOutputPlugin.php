@@ -50,6 +50,13 @@ class BufferOutputPlugin implements PluginInterface
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
+        $cmd = 'output:google -vvv ';
+        $cmd .= ProcessUtils::escapeArgument($this->documentId).' ';
+        $cmd .= ProcessUtils::escapeArgument($this->sheetId);
+
+        $processBuilder = $this->container->get('nab3a.process.child_process');
+        $process = $processBuilder->makeChildProcess($cmd);
+
         $xf = t\comp(
           t\map('Nab3aBundle\Process\mapTweet'),
           t\mapcat(function ($v) {
@@ -61,20 +68,10 @@ class BufferOutputPlugin implements PluginInterface
               return $n;
           })
         );
-        $filter = function (array $data) use ($xf) {
-            return t\xform([$data], $xf);
-        };
-
-        $cmd = 'output:google -vvv ';
-        $cmd .= ProcessUtils::escapeArgument($this->documentId).' ';
-        $cmd .= ProcessUtils::escapeArgument($this->sheetId);
-
-        $processBuilder = $this->container->get('nab3a.process.child_process');
-        $process = $processBuilder->createChildProcess($cmd);
 
         $pipeline = new Pipeline([
           function ($data) { return \GuzzleHttp\json_decode($data, true); },
-          $filter,
+          function (array $data) use ($xf) { return t\xform([$data], $xf); },
           function (array $assoc) { return t\transduce('transducers\identity', t\assoc_reducer(), $assoc); },
           'GuzzleHttp\json_encode',
         ]);

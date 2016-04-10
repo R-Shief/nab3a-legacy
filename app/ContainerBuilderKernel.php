@@ -1,15 +1,24 @@
 <?php
 
-use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Config\EnvParametersResource;
+use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class ContainerBuilderKernel extends Kernel
 {
     protected $loadClassCache = false;
+
+    /**
+     * @var array
+     */
+    private $compilerLog;
 
     public function registerBundles()
     {
@@ -51,31 +60,48 @@ class ContainerBuilderKernel extends Kernel
     protected function initializeContainer()
     {
         $class = $this->getContainerClass();
-        $cache = new ConfigCache($this->rootDir.'/build/container.php', $this->debug);
-        $container = $this->buildContainer();
-        $container->compile();
-        $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
+        $path = $this->rootDir.'/build/container.php';
+        $container = new ContainerBuilder(new ParameterBag($this->getKernelParameters()));
 
-        require_once $cache->getPath();
-
-        $this->container = new $class();
-    }
-
-    protected function buildContainer()
-    {
-        $container = $this->getContainerBuilder();
-        $container->addObjectResource($this);
-        if ($this->isDebug()) {
-            $container->addCompilerPass(new Nab3aBundle\Standalone\CompilerDebugDumpPass(), Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_AFTER_REMOVING);
+        $extensions = array();
+        foreach ($this->bundles as $bundle) {
+            if ($extension = $bundle->getContainerExtension()) {
+                $container->registerExtension($extension);
+                $extensions[] = $extension->getAlias();
+            }
         }
-        $this->prepareContainer($container);
+        foreach ($this->bundles as $bundle) {
+            $bundle->build($container);
+        }
+
+        // ensure these extensions are implicitly loaded
+        $container->getCompilerPassConfig()->setMergePass(new MergeExtensionConfigurationPass($extensions));
 
         if (null !== $cont = $this->registerContainerConfiguration($this->getContainerLoader($container))) {
             $container->merge($cont);
         }
 
-        $container->addResource(new EnvParametersResource('SYMFONY__'));
+        $container->compile();
+        if (!$this->isDebug()) {
+            $this->compilerLog = $container->getCompiler()->getLog();
+        }
 
-        return $container;
+        // cache the container
+        $dumper = new PhpDumper($container);
+        $content = $dumper->dump(array('class' => $class, 'base_class' => $this->getContainerBaseClass(), 'file' => $path, 'debug' => $this->debug));
+
+        $mode = 0666;
+        $umask = umask();
+        $filesystem = new Filesystem();
+        $filesystem->dumpFile($path, $content);
+        try {
+            $filesystem->chmod($path, $mode, $umask);
+        } catch (IOException $e) {
+            // discard chmod failure (some filesystem may not support it)
+        }
+
+        require_once $path;
+
+        $this->container = new $class();
     }
 }

@@ -3,7 +3,6 @@
 namespace Nab3aBundle\Command;
 
 use React\ChildProcess\Process;
-use React\EventLoop\Timer\TimerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleEvent;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,21 +47,14 @@ class StreamCommand extends AbstractCommand
         // but it still stupidly allows these situations to arise.
         // $timer = $watcher->watch($resource);
 
-        $exec = $_SERVER['argv'][0];
+        $process = $this->container
+          ->get('nab3a.process.child_process')
+          ->makeChildProcess('stream:stdout '.$input->getArgument('name'));
 
-        $process = new Process('exec php '.$exec.' stream:stdout --child -vvv '.$input->getArgument('name'));
-        $process->on('exit', function ($code, $signal) {
-            $this->logger->debug('Exit code '.$code);
-        });
+        $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+        $process->stdout->on('data', line_delimited_stream([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
 
         $this->attachListeners($process);
-
-        $loop->addTimer(self::CHILD_PROC_TIMER, function (TimerInterface $timer) use ($process) {
-            $process->start($timer->getLoop());
-
-            $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
-            $process->stdout->on('data', line_delimited_stream([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
-        });
 
         $loop->run();
     }

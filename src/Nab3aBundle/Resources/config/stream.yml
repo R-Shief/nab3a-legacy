@@ -38,4 +38,3 @@ services:
         class: Nab3aBundle\Process\ChildProcess
         arguments:
             - '@nab3a.event_loop'
-            - '@nab3a.console.logger_helper'

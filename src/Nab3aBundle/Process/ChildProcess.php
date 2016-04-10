@@ -2,7 +2,6 @@
 
 namespace Nab3aBundle\Process;
 
-use Nab3aBundle\Console\LoggerHelper;
 use React\ChildProcess\Process;
 use React\EventLoop\LoopInterface;
 use Symfony\Component\Process\ProcessUtils;
@@ -15,38 +14,29 @@ class ChildProcess
     private $loop;
 
     /**
-     * @var LoggerHelper
-     */
-    private $loggerHelper;
-
-    /**
      * ChildProcess constructor.
      *
      * @param LoopInterface $loop
-     * @param LoggerHelper  $loggerHelper
      */
-    public function __construct(LoopInterface $loop, LoggerHelper $loggerHelper)
+    public function __construct(LoopInterface $loop)
     {
         $this->loop = $loop;
-        $this->loggerHelper = $loggerHelper;
     }
 
     /**
-     * @param $cmd
-     * @param null  $cwd
-     * @param array $env
-     * @param array $options
+     * @param string $cmd     Command line to run
+     * @param string $cwd     Current working directory or null to inherit
+     * @param array  $env     Environment variables or null to inherit
+     * @param array  $options Options for proc_open()
      *
      * @return Process
      */
-    public function createChildProcess($cmd, $cwd = null, array $env = null, array $options = array())
+    public function makeChildProcess($cmd, $cwd = null, array $env = null, array $options = array())
     {
-        $cmd = 'exec php '.ProcessUtils::escapeArgument($_SERVER['argv'][0]).' --child '.$cmd;
+        $cmd = 'exec php '.ProcessUtils::escapeArgument($_SERVER['argv'][0]).' --child -vvv '.$cmd;
 
         $process = new Process($cmd, $cwd, $env, $options);
         $process->start($this->loop);
-        $process->stderr->on('data', line_delimited_stream([$this->loggerHelper, 'onData']));
-        $process->stdout->on('data', line_delimited_stream([$this->loggerHelper, 'onData']));
 
         return $process;
     }

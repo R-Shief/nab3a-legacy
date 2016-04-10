@@ -57,6 +57,9 @@ class BufferOutputPlugin implements PluginInterface
         $processBuilder = $this->container->get('nab3a.process.child_process');
         $process = $processBuilder->makeChildProcess($cmd);
 
+        $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+        $process->stdout->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+
         $xf = t\comp(
           t\map('Nab3aBundle\Process\mapTweet'),
           t\mapcat(function ($v) {

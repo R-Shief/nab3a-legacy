@@ -27,8 +27,6 @@ class AccessTokenCommand extends AbstractCommand
         $port = random_int(pow(2, 15) + pow(2, 14), pow(2, 16) - 1);
 
         $client = $this->container->get('nab3a.google.client.unauth');
-        $client->setAccessType('online');
-        $client->setApprovalPrompt('auto');
         $client->setRedirectUri('http://localhost:'.$port);
         $url = $client->createAuthUrl();
         $url = ProcessUtils::escapeArgument($url);

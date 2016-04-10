@@ -42,13 +42,14 @@ services:
 
     nab3a.google.client.unauth:
         class: Google_Client
-        scope: container
         arguments:
             -
                 access_type: offline
+                approval_prompt: force
+                application_name: 'nab3a'
         calls:
             - [ setHttpClient, [ '@nab3a.google.guzzle.client' ]]
-            - [ setLogger, [ '@logger' ] ]
+            - [ setLogger, [ '@?logger' ] ]
             - [ setAuthConfig, [ '@=nab3a_parameter(''nab3a.google.client_secret_path'')' ]]
             - [ setScopes, [['https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/spreadsheets']]]
         tags:

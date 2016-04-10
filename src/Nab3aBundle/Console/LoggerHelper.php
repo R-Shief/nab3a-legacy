@@ -24,7 +24,10 @@ class LoggerHelper
     {
         try {
             $data = \GuzzleHttp\json_decode($chunk, true);
-            $id = $data['channel'] === 'app' ? 'logger' : 'monolog.logger.'.$data['channel'];
+            $id = 'monolog.logger';
+            if (isset($data['channel']) && $data['channel'] !== 'app') {
+                $id .= '.'.$data['channel'];
+            }
             /** @var LoggerInterface $logger */
             $logger = $this->container->get($id);
             $logger->log($data['level'], $data['message'], $data['context']);

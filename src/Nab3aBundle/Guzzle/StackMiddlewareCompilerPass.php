@@ -22,7 +22,12 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
         foreach ($serviceIds as $serviceId => $tags) {
             foreach ($tags as $tag) {
                 $clientId = $tag['id'];
-                $stacks[$clientId][] = $serviceId;
+                if (isset($tag['name'])) {
+                    $name = $tag['name'];
+                    $stacks[$clientId][$name] = $serviceId;
+                } else {
+                    $stacks[$clientId][] = $serviceId;
+                }
             }
         }
 
@@ -34,8 +39,12 @@ class StackMiddlewareCompilerPass implements CompilerPassInterface
 
             $stackDefinition = new DefinitionDecorator('nab3a.guzzle.handler_stack');
             $stackDefinition->setArguments([$handlerDefinition]);
-            foreach ($middlewareIds as $middlewareId) {
-                $stackDefinition->addMethodCall('push', [new Reference($middlewareId)]);
+            foreach ($middlewareIds as $name => $middlewareId) {
+                if (is_string($name)) {
+                    $stackDefinition->addMethodCall('push', [new Reference($middlewareId), $name]);
+                } else {
+                    $stackDefinition->addMethodCall('push', [new Reference($middlewareId)]);
+                }
             }
 
             $arguments[0]['handler'] = $stackDefinition;

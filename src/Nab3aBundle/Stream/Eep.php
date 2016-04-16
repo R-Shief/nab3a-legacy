@@ -38,19 +38,23 @@ class Eep implements PluginInterface
     public function attachEvents(EventEmitterInterface $emitter)
     {
         $emitter->on('tweet', function () {
-            $this->container->get('nab3a.stream.eep.status_counter')->enqueue(1);
+            static $time;
 
-            static $time = 0;
-
-            $ut = microtime(true);
             if ($time) {
+                $ut = microtime(true);
                 $v = abs($ut - $time);
                 $this->container->get('nab3a.stream.eep.idle_time')->enqueue($v);
+                $time = $ut;
             }
-            $time = $ut;
+            else {
+                $time = microtime(true);
+            }
+        });
+        $emitter->on('tweet', function ($data) {
+            $this->container->get('nab3a.stream.eep.status_counter')->enqueue($data);
         });
 
-        $this->loop->addPeriodicTimer(60, function () {
+        $this->loop->addPeriodicTimer(.5, function () {
             $this->container->get('nab3a.stream.eep.status_counter')->tick();
             $this->container->get('nab3a.stream.eep.idle_time')->tick();
         });
@@ -65,7 +69,10 @@ class Eep implements PluginInterface
           new Sum(),
         ]), 6e4);
         $idle_p->on('emit', function ($emit) {
-            $this->logger->info('idleTime', array_combine(['max', 'mean', 'min', 'total'], $emit));
+            $context = array_combine(['max', 'mean', 'min', 'total'], array_map(function ($num) {
+                return round($num, 4);
+            }, $emit));
+            $this->logger->info('idleTime', $context);
         });
 
         return $idle_p;
@@ -75,7 +82,7 @@ class Eep implements PluginInterface
     {
         $cnt_tw = new Window\Periodic(new Count(), 6e4);
         $cnt_tw->on('emit', function ($emit) {
-            $this->logger->info('statusCount '.$emit);
+            $this->logger->info('statusCount '.$emit .' in one minute');
         });
 
         return $cnt_tw;

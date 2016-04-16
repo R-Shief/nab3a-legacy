@@ -32,7 +32,8 @@ abstract class BundlePlugin extends SimpleBundlePlugin
 
     public function load(array $pluginConfiguration, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container, new FileLocator([__DIR__.'/../Resources/config']));
-        $loader->load($this->name.'.yml');
+        $r = new \ReflectionClass($this);
+        $loader = new YamlFileLoader($container, new FileLocator([dirname($r->getFileName())]));
+        $loader->load('config.yml');
     }
 }

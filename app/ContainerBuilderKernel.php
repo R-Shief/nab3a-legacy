@@ -5,10 +5,7 @@ use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class ContainerBuilderKernel extends Kernel
@@ -42,24 +39,8 @@ class ContainerBuilderKernel extends Kernel
         $loader->load($this->getRootDir().'/config/config.yml');
     }
 
-    protected function getContainerClass()
-    {
-        return 'ProjectServiceContainer';
-    }
-
-    final public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
-    {
-        throw new RuntimeException();
-    }
-
-    final public function terminate(Request $request, Response $response)
-    {
-        return;
-    }
-
     protected function initializeContainer()
     {
-        $class = $this->getContainerClass();
         $path = $this->rootDir.'/build/container.php';
         $container = new ContainerBuilder(new ParameterBag($this->getKernelParameters()));
 
@@ -88,7 +69,7 @@ class ContainerBuilderKernel extends Kernel
 
         // cache the container
         $dumper = new PhpDumper($container);
-        $content = $dumper->dump(array('class' => $class, 'base_class' => $this->getContainerBaseClass(), 'file' => $path, 'debug' => $this->debug));
+        $content = $dumper->dump(['file' => $path, 'debug' => $this->debug]);
 
         $mode = 0666;
         $umask = umask();
@@ -102,6 +83,6 @@ class ContainerBuilderKernel extends Kernel
 
         require_once $path;
 
-        $this->container = new $class();
+        $this->container = new ProjectServiceContainer();
     }
 }

@@ -7,4 +7,4 @@ services:
 
     nab3a.standalone.parameter_provider:
         class: Nab3aBundle\Standalone\ParameterProvider
-        arguments: [ 'nab3a' ]
+        arguments: [ 'nab3a', '@=nab3a_paths()' ]

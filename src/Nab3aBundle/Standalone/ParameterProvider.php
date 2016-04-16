@@ -17,11 +17,20 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 {
     use ContainerAwareTrait;
 
+    /**
+     * @var string
+     */
     private $name;
 
-    public function __construct($name)
+    /**
+     * @var array
+     */
+    private $paths;
+
+    public function __construct($name, array $paths = [])
     {
         $this->name = $name;
+        $this->paths = $paths;
     }
 
     private static function getConfiguration($name)
@@ -35,8 +44,7 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 
     public function getParametersAsKeyValueHash()
     {
-        $paths = [self::expandHomeDirectory('~/.rshief'), getcwd()];
-        $locator = new FileLocator($paths);
+        $locator = new FileLocator($this->paths);
         $loader = new YamlFileLoader($locator);
 
         $resources = $locator->locate($this->name.'.yml', null, false);
@@ -63,7 +71,12 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
         return $params;
     }
 
-    private static function expandHomeDirectory($path)
+    /**
+     * @param $path
+     *
+     * @return mixed
+     */
+    public static function expandHomeDirectory($path)
     {
         $homeDir = getenv('HOME');
         if (empty($homeDir)) {

@@ -70,19 +70,4 @@ class ParameterProvider implements ParameterProviderInterface, ContainerAwareInt
 
         return $params;
     }
-
-    /**
-     * @param $path
-     *
-     * @return mixed
-     */
-    public static function expandHomeDirectory($path)
-    {
-        $homeDir = getenv('HOME');
-        if (empty($homeDir)) {
-            $homeDir = getenv('HOMEDRIVE').getenv('HOMEPATH');
-        }
-
-        return str_replace('~', realpath($homeDir), $path);
-    }
 }

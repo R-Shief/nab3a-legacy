@@ -13,10 +13,15 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
     public function getFunctions()
     {
         return array(
-          new ExpressionFunction('nab3a_paths', function () {
-              return '[\Nab3aBundle\Standalone\ParameterProvider::expandHomeDirectory(\'~/.rshief\'), getcwd()]';
+          new ExpressionFunction('nab3a_getcwd', function () {
+              return 'getcwd()';
           }, function (array $variables) {
-              return [ParameterProvider::expandHomeDirectory('~/.rshief'), getcwd()];
+              return getcwd();
+          }),
+          new ExpressionFunction('nab3a_home', function () {
+              return 'realpath(getenv(\'HOME\') ?: getenv(\'HOMEDRIVE\').getenv(\'HOMEPATH\'))';
+          }, function (array $variables) {
+              return realpath(getenv('HOME') ?: getenv('HOMEDRIVE').getenv('HOMEPATH'));
           }),
           new ExpressionFunction('nab3a_parameter', function ($arg) {
               return sprintf('$this->get(\'%s\')->get(%s)', 'nab3a.standalone.parameters', $arg);

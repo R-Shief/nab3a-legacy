@@ -3,7 +3,8 @@
 namespace Nab3aBundle\Stream;
 
 use Evenement\EventEmitterInterface;
-use Nab3aBundle\Evenement\PluginInterface;
+use Nab3aBundle\Evenement;
+use Nab3aBundle\EventLoop;
 use Psr\Log\LoggerAwareTrait;
 use React\EEP\Composite;
 use React\EEP\Stats;
@@ -11,32 +12,29 @@ use React\EEP\Window;
 use React\EventLoop\LoopInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class Eep implements PluginInterface
+/**
+ * Class Eep.
+ */
+class Eep implements Evenement\PluginInterface, EventLoop\PluginInterface
 {
     use LoggerAwareTrait;
     use ContainerAwareTrait;
 
     /**
-     * @var \React\EventLoop\LoopInterface
-     */
-    private $loop;
-
-    public function __construct(LoopInterface $loop)
-    {
-        $this->loop = $loop;
-    }
-
-    /**
      * @param EventEmitterInterface $emitter
-     *
-     * @return mixed
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
         $emitter->on('tweet', [$this, 'tweetTimer']);
         $emitter->on('tweet', [$this, 'tweetCounter']);
+    }
 
-        $this->loop->addPeriodicTimer(.5, [$this, 'ticker']);
+    /**
+     * @param LoopInterface $loop
+     */
+    public function attach(LoopInterface $loop)
+    {
+        $loop->addPeriodicTimer(.5, [$this, 'ticker']);
     }
 
     /**

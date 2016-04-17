@@ -19,12 +19,12 @@ services:
 
     nab3a.stream.eep:
         class: Nab3aBundle\Stream\Eep
-        arguments: [ '@nab3a.event_loop']
         calls:
             - [ setLogger, ['@logger']]
             - [ setContainer, ['@service_container']]
         tags:
             - { name: evenement.plugin, id: nab3a.twitter.message_emitter }
+            - { name: event_loop.plugin, id: nab3a.event_loop }
 
     nab3a.stream.eep.idle_time:
         class: React\EEP\Window\Periodic

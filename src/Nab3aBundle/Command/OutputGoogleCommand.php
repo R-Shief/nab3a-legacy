@@ -53,33 +53,9 @@ class OutputGoogleCommand extends Command
 
             if (count($data) >= $input->getOption('batch')) {
                 array_unshift($data, $headers);
-                $this->runBatch($documentId, $sheetId, $data);
+                $response = $this->container->get('nab3a.google.spreadsheet_service')->addRows($documentId, $sheetId, $data);
                 $data = [];
             }
         }
-    }
-
-    private function runBatch($documentId, $sheetId, $data)
-    {
-        $scriptId = $this->container->get('nab3a.standalone.parameters')->get('nab3a.google.script');
-        $client = $this->container->get('nab3a.google.client');
-
-        $request = new \Google_Service_Script_ExecutionRequest();
-        $request->setFunction('addRows');
-        $request->setParameters([$documentId, $sheetId, $data]);
-        $request->setDevMode(true);
-
-        $service = new \Google_Service_Script($client);
-
-        $response = $service->scripts->run($scriptId, $request);
-
-        if ($response->getError()) {
-            /** @var \Google_Service_Script_Status $error */
-            $error = $response->getError();
-            throw new \RuntimeException($error->getDetails()[0]['errorMessage'], $error->getCode());
-        }
-
-        $response = $response->getResponse();
-        $this->logger->info('added rows', $response);
     }
 }

@@ -75,3 +75,11 @@ services:
             - [ setLogger, ['@?logger']]
             - [ setContainer, ['@service_container']]
 
+    nab3a.google.spreadsheet_service:
+        class: Nab3aBundle\Google\SpreadsheetService
+        arguments: ['@nab3a.google.script_service', '@=nab3a_parameter(''nab3a.google.script'')']
+
+    nab3a.google.script_service:
+        class: Google_Service_Script
+        arguments: [ '@nab3a.google.client' ]
+        public: false

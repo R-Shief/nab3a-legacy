@@ -54,6 +54,7 @@ class OutputGoogleCommand extends Command
             if (count($data) >= $input->getOption('batch')) {
                 array_unshift($data, $headers);
                 $response = $this->container->get('nab3a.google.spreadsheet_service')->addRows($documentId, $sheetId, $data);
+                $this->logger->info(sprintf('added %d rows', $response['result'][1] - $response['result'][0] + 1));
                 $data = [];
             }
         }

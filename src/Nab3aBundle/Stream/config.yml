@@ -34,6 +34,10 @@ services:
         class: React\EEP\Window\Periodic
         factory: ['@nab3a.stream.eep', makeStatusCounter ]
 
+    nab3a.stream.eep.status_averager:
+        class: React\EEP\Window\Periodic
+        factory: ['@nab3a.stream.eep', makeStatusAverager ]
+
     nab3a.process.child_process:
         class: Nab3aBundle\Process\ChildProcess
         arguments:

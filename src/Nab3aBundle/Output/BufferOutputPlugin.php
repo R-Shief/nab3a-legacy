@@ -63,12 +63,10 @@ class BufferOutputPlugin implements PluginInterface
         $xf = t\comp(
           t\map('Nab3aBundle\Process\mapTweet'),
           t\mapcat(function ($v) {
-              $n = [];
-              foreach ($this->map as $key => $path) {
-                  $n[] = [$key, \igorw\get_in($v, $path)];
-              }
-
-              return $n;
+              return array_map(function ($key, $path) use ($v) {
+                  $value = \igorw\get_in($v, $path);
+                  return [$key, $value ?: ''];
+              }, array_keys($this->map), array_values($this->map));
           })
         );
 

@@ -65,6 +65,7 @@ class BufferOutputPlugin implements PluginInterface
           t\mapcat(function ($v) {
               return array_map(function ($key, $path) use ($v) {
                   $value = \igorw\get_in($v, $path);
+
                   return [$key, $value ?: ''];
               }, array_keys($this->map), array_values($this->map));
           })

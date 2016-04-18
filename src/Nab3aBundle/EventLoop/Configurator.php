@@ -18,8 +18,9 @@ class Configurator
 
     public function configure(LoopInterface $loop)
     {
-        array_walk($this->plugins, function (PluginInterface $plugin) use ($loop) {
+        /** @var PluginInterface $plugin */
+        foreach ($this->plugins as $plugin) {
             $plugin->attach($loop);
-        });
+        }
     }
 }

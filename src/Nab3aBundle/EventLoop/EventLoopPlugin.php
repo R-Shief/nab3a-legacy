@@ -11,6 +11,6 @@ class EventLoopPlugin extends BundlePlugin
 {
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AttachPluginsCompilerPass(Configurator::class, 'event_loop.plugin'), PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(new AttachPluginsCompilerPass(Configurator::class, 'event_loop.plugin', 'nab3a.event_loop'), PassConfig::TYPE_BEFORE_REMOVING);
     }
 }

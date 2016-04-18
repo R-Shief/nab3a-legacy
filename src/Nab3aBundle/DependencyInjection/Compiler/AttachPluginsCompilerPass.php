@@ -10,21 +10,36 @@ use Symfony\Component\DependencyInjection\Reference;
 class AttachPluginsCompilerPass implements CompilerPassInterface
 {
     /**
-     * @var
+     * @var string
      */
     private $configuratorService;
 
     /**
-     * @var
+     * @var string
      */
     private $pluginTag;
+    /**
+     * @var string
+     */
+    private $defaultServiceId;
 
-    public function __construct($configuratorService, $pluginTag)
+    /**
+     * AttachPluginsCompilerPass constructor.
+     *
+     * @param string $configuratorService
+     * @param string $pluginTag
+     * @param string $defaultServiceId
+     */
+    public function __construct($configuratorService, $pluginTag, $defaultServiceId = null)
     {
         $this->configuratorService = $configuratorService;
         $this->pluginTag = $pluginTag;
+        $this->defaultServiceId = $defaultServiceId;
     }
 
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         $serviceIds = $container->findTaggedServiceIds($this->pluginTag);
@@ -32,8 +47,7 @@ class AttachPluginsCompilerPass implements CompilerPassInterface
         $configurators = [];
         foreach ($serviceIds as $serviceId => $tags) {
             foreach ($tags as $tag) {
-                $emitterId = $tag['id'];
-                $configurators[$emitterId][] = $serviceId;
+                $configurators[isset($tag['id']) ? $tag['id'] : $this->defaultServiceId][] = $serviceId;
             }
         }
 

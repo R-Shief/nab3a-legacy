@@ -18,8 +18,9 @@ class Configurator
 
     public function configure(EventEmitterInterface $emitter)
     {
-        array_walk($this->plugins, function (PluginInterface $plugin) use ($emitter) {
+        /** @var PluginInterface $plugin */
+        foreach ($this->plugins as $plugin) {
             $plugin->attachEvents($emitter);
-        });
+        }
     }
 }

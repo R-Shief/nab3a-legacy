@@ -74,51 +74,51 @@ class Eep implements Evenement\PluginInterface, EventLoop\PluginInterface
     }
 
     /**
-     * @return \React\EEP\Window\Periodic
+     * @return Window\Periodic
      */
     public function makeIdleTimeTracker()
     {
-        $idle_p = new Window\Periodic(new Composite([
+        $emitter = new Window\Periodic(new Composite([
           new Stats\Max(), new Stats\Mean(), new Stats\Min(), new Stats\Sum(),
         ]), 6e4);
-        $idle_p->on('emit', function ($emit) {
+        $emitter->on('emit', function ($emit) {
             $context = array_combine(['max', 'mean', 'min', 'total'], array_map(function ($num) {
                 return round($num, 4);
             }, $emit));
             $this->logger->info('idleTime', $context);
         });
 
-        return $idle_p;
+        return $emitter;
     }
 
     /**
-     * @return \React\EEP\Window\Periodic
+     * @return Window\Periodic
      */
     public function makeStatusCounter()
     {
-        $cnt_tw = new Window\Periodic(new Stats\Count(), 6e4);
-        $cnt_tw->on('emit', function ($emit) {
+        $emitter = new Window\Periodic(new Stats\Count(), 6e4);
+        $emitter->on('emit', function ($emit) {
             $this->logger->info('statusCount '.$emit.' in one minute');
         });
 
-        return $cnt_tw;
+        return $emitter;
     }
 
     /**
-     * @return \React\EEP\Window\Periodic
+     * @return Window\Periodic
      */
     public function makeStatusAverager()
     {
-        $avg_tw = new Window\Sliding(new Stats\Mean(), 60);
+        $avg_tw = new Window\Tumbling(new Stats\Mean(), 60);
         $avg_tw->on('emit', function ($emit) {
             $this->logger->info('statusAverage '.$emit.' per second');
         });
 
-        $cnt_tw = new Window\Periodic(new Stats\Count(), 1e3);
-        $cnt_tw->on('emit', function ($emit) use ($avg_tw) {
+        $emitter = new Window\Periodic(new Stats\Count(), 1e3);
+        $emitter->on('emit', function ($emit) use ($avg_tw) {
             $avg_tw->enqueue($emit);
         });
 
-        return $cnt_tw;
+        return $emitter;
     }
 }

@@ -10,14 +10,28 @@ use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 
+/**
+ * Class AccessTokenCommand.
+ */
 class AccessTokenCommand extends AbstractCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         parent::configure();
         $this->setName('google:access-token');
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|null|void
+     *
+     * @throws Socket\ConnectionException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $credentialsPath = $this->container
@@ -46,42 +60,48 @@ class AccessTokenCommand extends AbstractCommand
         $socket->listen($port);
 
         $http = new Http\Server($socket);
-        $http->once('request', $this->buildServerListener($client));
+        $http->once('request', [$this, 'serverListener']);
 
         $loop->run();
 
         $output->writeln(sprintf('Credentials saved to %s', $credentialsPath));
     }
 
-    private function buildServerListener(\Google_Client $client)
+    /**
+     * @param Http\Request  $request
+     * @param Http\Response $response
+     *
+     * @throws \Exception
+     */
+    public function serverListener(Http\Request $request, Http\Response $response)
     {
-        return function (Http\Request $request, Http\Response $response) use ($client) {
-            $query = $request->getQuery();
-            $code = $query['code'];
-            $accessToken = $client->fetchAccessTokenWithAuthCode($code);
-            self::saveCredentials($accessToken);
+        $client = $this->container->get('nab3a.google.client.unauth');
+        $query = $request->getQuery();
+        $code = $query['code'];
+        $accessToken = $client->fetchAccessTokenWithAuthCode($code);
+        $this->saveCredentials($accessToken);
 
-            $response->writeHead(200, array('Content-Type' => 'text/html'));
+        $response->writeHead(200, array('Content-Type' => 'text/html'));
 
-            $response->write('<!DOCTYPE "html">');
-            $response->write('<html>');
-            $response->write('<head>');
-            $response->write('<title>Successfully Authenticated</title>');
-            $response->write('</head>');
-            $response->write('<body>');
-            $response->write(
-              'You\'ve been authenticated with Google Drive! You may close this page.'
-            );
-            $response->write('<script>open(location, \'_self\').close();</script>');
-            $response->write('</body>');
-            $response->write('</html>');
-            $response->end();
-            $response->on('close', function () {
-                $this->container->get('nab3a.event_loop')->stop();
-            });
-        };
+        $response->write('<!DOCTYPE "html">');
+        $response->write('<html>');
+        $response->write('<head>');
+        $response->write('<title>Successfully Authenticated</title>');
+        $response->write('</head>');
+        $response->write('<body>');
+        $response->write('You\'ve been authenticated with Google Drive! You may close this page.');
+        $response->write('<script>open(location, \'_self\').close();</script>');
+        $response->write('</body>');
+        $response->write('</html>');
+        $response->end();
+        $response->on('close', function () {
+            $this->container->get('nab3a.event_loop')->stop();
+        });
     }
 
+    /**
+     * @param $accessToken
+     */
     private function saveCredentials($accessToken)
     {
         $credentialsPath = $this->container
@@ -92,10 +112,13 @@ class AccessTokenCommand extends AbstractCommand
             mkdir(dirname($credentialsPath), 0700, true);
         }
         file_put_contents($credentialsPath, \GuzzleHttp\json_encode($accessToken));
-
-        return;
     }
 
+    /**
+     * @param $url
+     *
+     * @return string
+     */
     private static function openBrowser($url)
     {
         $finder = new ExecutableFinder();

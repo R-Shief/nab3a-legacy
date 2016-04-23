@@ -21,12 +21,17 @@ class Configurator
         // Refresh the token if it's expired.
         if ($client->isAccessTokenExpired()) {
             $refreshToken = $client->getRefreshToken();
-            $client->fetchAccessTokenWithRefreshToken($refreshToken);
-            $accessToken = $client->getAccessToken();
-            if (!isset($accessToken['refresh_token'])) {
-                $accessToken['refresh_token'] = $refreshToken;
+            try {
+                $client->fetchAccessTokenWithRefreshToken($refreshToken);
+                $accessToken = $client->getAccessToken();
+                if (!isset($accessToken['refresh_token'])) {
+                    $accessToken['refresh_token'] = $refreshToken;
+                }
+                file_put_contents($this->credentialsPath, \GuzzleHttp\json_encode($accessToken));
+            } catch (\LogicException $e) {
+                unlink($this->credentialsPath);
+                throw $e;
             }
-            file_put_contents($this->credentialsPath, \GuzzleHttp\json_encode($accessToken));
         }
 
         $http = $client->authorize();

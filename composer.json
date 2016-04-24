@@ -19,7 +19,6 @@
             "app/ContainerBuilderKernel.php"
         ],
         "files": [
-            "src/functions.php",
             "src/Nab3aBundle/Process/functions.php"
         ],
         "exclude-from-classmap": [

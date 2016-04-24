@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Stream;
+namespace Nab3aBundle\Twitter;
 
 class TypeGuesser
 {

@@ -4,11 +4,11 @@ parameters:
 
 services:
     nab3a.twitter.message_emitter:
-        class: Nab3aBundle\Stream\MessageEmitter
+        class: Nab3aBundle\Twitter\MessageEmitter
         arguments: ['@nab3a.twitter.guesser.event_type']
 
     nab3a.twitter.guesser.event_type:
-        class: Nab3aBundle\Stream\TypeGuesser
+        class: Nab3aBundle\Twitter\TypeGuesser
         public: false
 
     nab3a.twitter.message_emitter.plugin.logging:

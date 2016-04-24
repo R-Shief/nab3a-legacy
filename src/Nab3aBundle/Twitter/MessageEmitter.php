@@ -3,8 +3,6 @@
 namespace Nab3aBundle\Twitter;
 
 use Clue\JsonStream\StreamingJsonParser;
-use Evenement\EventEmitterInterface;
-use Evenement\EventEmitterTrait;
 use React\Stream\WritableStream;
 
 /**
@@ -13,10 +11,8 @@ use React\Stream\WritableStream;
  * This writable stream emits different types of messages from Twitter
  * Streaming API.
  */
-class MessageEmitter extends WritableStream implements EventEmitterInterface
+class MessageEmitter extends WritableStream
 {
-    use EventEmitterTrait;
-
     /**
      * @var TypeGuesser
      */

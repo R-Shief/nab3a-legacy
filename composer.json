@@ -62,7 +62,7 @@
         "sensio/generator-bundle": "^3.0",
         "symfony/debug-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0",
-        "wyrihaximus/react-event-loop-inspector": "dev-master"
+        "wyrihaximus/react-event-loop-inspector": "dev-develop"
     },
     "replace": {
         "symfony/asset": "~2.8|~3.0",
@@ -81,6 +81,10 @@
         {
             "type": "vcs",
             "url": "git@github.com:bangpound/child-process.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:bangpound/reactphp-event-loop-inspector.git"
         }
     ],
     "config": {

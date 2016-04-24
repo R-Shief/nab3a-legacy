@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3a1b1361147ff2c17abe02e91fc20365",
-    "content-hash": "988b7eec6aed6374dde1772e876ec0f5",
+    "hash": "8f32cf06aebe37395913f986c6cc3fe0",
+    "content-hash": "4f596f03530f65f75d6c09662fe84acd",
     "packages": [
         {
             "name": "clue/json-stream",
@@ -3954,16 +3954,16 @@
         },
         {
             "name": "wyrihaximus/react-event-loop-inspector",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WyriHaximus/reactphp-event-loop-inspector.git",
-                "reference": "b814f6e19cca090677f034fe00685db2ce68f26a"
+                "url": "https://github.com/bangpound/reactphp-event-loop-inspector.git",
+                "reference": "0d493f981682f98160d0c0573ece500f948b77b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/reactphp-event-loop-inspector/zipball/b814f6e19cca090677f034fe00685db2ce68f26a",
-                "reference": "b814f6e19cca090677f034fe00685db2ce68f26a",
+                "url": "https://api.github.com/repos/bangpound/reactphp-event-loop-inspector/zipball/0d493f981682f98160d0c0573ece500f948b77b8",
+                "reference": "0d493f981682f98160d0c0573ece500f948b77b8",
                 "shasum": ""
             },
             "require": {
@@ -3983,7 +3983,11 @@
                     "WyriHaximus\\React\\Inspector\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "WyriHaximus\\React\\Tests\\Inspector\\": "src/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -3994,7 +3998,10 @@
                     "homepage": "http://wyrihaximus.net/"
                 }
             ],
-            "time": "2016-04-03 21:41:25"
+            "support": {
+                "source": "https://github.com/bangpound/reactphp-event-loop-inspector/tree/develop"
+            },
+            "time": "2016-04-24 04:10:13"
         }
     ],
     "aliases": [

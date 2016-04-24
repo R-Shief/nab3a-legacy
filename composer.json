@@ -34,13 +34,13 @@
         }
     },
     "require": {
-        "clue/json-stream": "^0.1.0",
+        "clue/json-stream": "^0.1",
         "evenement/evenement": "^2.0",
         "google/apiclient": "^2.0@rc",
         "guzzlehttp/guzzle": "^6.1",
         "guzzlehttp/oauth-subscriber": "^0.3",
         "igorw/get-in": "^1.0",
-        "league/pipeline": "^0.2.2",
+        "league/pipeline": "^0.2",
         "matthiasnoback/symfony-bundle-plugins": "^1.1",
         "mtdowling/transducers": "^0.3",
         "react/child-process": "dev-develop as 0.4",
@@ -81,10 +81,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:bangpound/child-process.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:bangpound/eep-php.git"
         }
     ],
     "config": {

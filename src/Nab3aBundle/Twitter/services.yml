@@ -5,9 +5,9 @@ parameters:
 services:
     nab3a.twitter.message_emitter:
         class: Nab3aBundle\Twitter\MessageEmitter
-        arguments: ['@nab3a.twitter.guesser.event_type']
+        arguments: ['@nab3a.twitter.type_guesser']
 
-    nab3a.twitter.guesser.event_type:
+    nab3a.twitter.type_guesser:
         class: Nab3aBundle\Twitter\TypeGuesser
         public: false
 

@@ -51,7 +51,7 @@ class StreamCommand extends AbstractCommand
           ->get('nab3a.process.child_process')
           ->makeChildProcess('stream:stdout '.$input->getArgument('name'));
 
-        $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
+        $process->stderr->pipe($this->container->get('nab3a.console.logger_helper'));
         $process->stdout->pipe($this->container->get('nab3a.twitter.message_emitter'));
 
         $this->attachListeners($process);

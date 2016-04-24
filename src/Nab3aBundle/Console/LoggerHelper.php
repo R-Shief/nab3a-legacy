@@ -2,11 +2,13 @@
 
 namespace Nab3aBundle\Console;
 
+use Clue\JsonStream\StreamingJsonParser;
 use Psr\Log\LoggerInterface;
+use React\Stream\WritableStream;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class LoggerHelper
+class LoggerHelper extends WritableStream
 {
     use ContainerAwareTrait;
 
@@ -15,23 +17,30 @@ class LoggerHelper
      */
     private $output;
 
+    /**
+     * @var StreamingJsonParser
+     */
+    private $parser;
+
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
+        $this->parser = new StreamingJsonParser();
     }
 
-    public function onData($chunk)
+    public function write($chunk)
     {
         try {
-            $data = \GuzzleHttp\json_decode($chunk, true);
-            $id = 'monolog.logger';
-            if (isset($data['channel']) && $data['channel'] !== 'app') {
-                $id .= '.'.$data['channel'];
+            foreach ($this->parser->push($chunk) as $data) {
+                $id = 'logger';
+                if (isset($data['channel']) && $data['channel'] !== 'app') {
+                    $id = 'monolog.logger.'.$data['channel'];
+                }
+                /** @var LoggerInterface $logger */
+                $logger = $this->container->get($id);
+                $logger->log($data['level'], $data['message'], $data['context']);
             }
-            /** @var LoggerInterface $logger */
-            $logger = $this->container->get($id);
-            $logger->log($data['level'], $data['message'], $data['context']);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\UnexpectedValueException $e) {
             $this->output->write($chunk);
         }
     }

@@ -29,7 +29,7 @@ services:
             - { name: nab3a.console.command }
 
     nab3a.google.output_google.command:
-        class: Nab3aBundle\Command\OutputGoogleCommand
+        class: Nab3aBundle\Command\StreamWriteGoogleCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }

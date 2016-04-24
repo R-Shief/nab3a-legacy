@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class OutputGoogleCommand extends Command
+class StreamWriteGoogleCommand extends Command
 {
     use LoggerAwareTrait;
     use ContainerAwareTrait;
@@ -20,7 +20,7 @@ class OutputGoogleCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('output:google')
+            ->setName('stream:write:google')
             ->addArgument('document', InputArgument::REQUIRED)
             ->addArgument('sheet', InputArgument::REQUIRED)
             ->addOption('batch', 'b', InputOption::VALUE_REQUIRED, 'number of rows per batch', 100)

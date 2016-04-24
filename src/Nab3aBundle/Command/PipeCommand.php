@@ -9,13 +9,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StreamCommand extends AbstractCommand
+class PipeCommand extends AbstractCommand
 {
     protected function configure()
     {
         parent::configure();
         $this
-          ->setName('stream')
+          ->setName('pipe')
           ->setDescription('Connect to a streaming API endpoint and collect data')
           ->addOption('watch', null, InputOption::VALUE_NONE, 'watch for stream configuration changes and reconnect according to API rules')
           ->addOption('out', null, InputOption::VALUE_OPTIONAL, 'output', STDOUT)
@@ -49,7 +49,7 @@ class StreamCommand extends AbstractCommand
 
         $process = $this->container
           ->get('nab3a.process.child_process')
-          ->makeChildProcess('stream:stdout '.$input->getArgument('name'));
+          ->makeChildProcess('stream:read:twitter '.$input->getArgument('name'));
 
         $process->stderr->pipe($this->container->get('nab3a.console.logger_helper'));
         $process->stdout->pipe($this->container->get('nab3a.twitter.message_emitter'));
@@ -60,7 +60,7 @@ class StreamCommand extends AbstractCommand
     }
 
     /**
-     * @param \React\ChildProcess\Process $process
+     * @param Process $process
      */
     private function attachListeners(Process $process)
     {

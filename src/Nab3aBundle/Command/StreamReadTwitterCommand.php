@@ -7,13 +7,13 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StreamStdoutCommand extends AbstractCommand
+class StreamReadTwitterCommand extends AbstractCommand
 {
     protected function configure()
     {
         parent::configure();
         $this
-          ->setName('stream:stdout')
+          ->setName('stream:read:twitter')
           ->setDescription('Connect to a streaming API endpoint and collect data')
         ;
     }

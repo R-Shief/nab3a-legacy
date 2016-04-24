@@ -50,7 +50,7 @@ class BufferOutputPlugin implements PluginInterface
      */
     public function attachEvents(EventEmitterInterface $emitter)
     {
-        $cmd = 'output:google -vvv ';
+        $cmd = 'stream:write:google -vvv ';
         $cmd .= ProcessUtils::escapeArgument($this->documentId).' ';
         $cmd .= ProcessUtils::escapeArgument($this->sheetId);
 

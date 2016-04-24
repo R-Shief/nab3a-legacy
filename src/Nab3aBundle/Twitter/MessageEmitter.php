@@ -2,17 +2,18 @@
 
 namespace Nab3aBundle\Twitter;
 
+use Clue\JsonStream\StreamingJsonParser;
 use Evenement\EventEmitterInterface;
 use Evenement\EventEmitterTrait;
-use Nab3aBundle\Evenement\PluginInterface;
+use React\Stream\WritableStream;
 
 /**
  * Class MessageEmitter.
  *
- * This emitter is also a listener because it converts raw messages
- * into typed messages.
+ * This writable stream emits different types of messages from Twitter
+ * Streaming API.
  */
-class MessageEmitter implements EventEmitterInterface, PluginInterface
+class MessageEmitter extends WritableStream implements EventEmitterInterface
 {
     use EventEmitterTrait;
 
@@ -21,27 +22,32 @@ class MessageEmitter implements EventEmitterInterface, PluginInterface
      */
     private $guesser;
 
+    /**
+     * @var StreamingJsonParser
+     */
+    private $parser;
+
     public function __construct(TypeGuesser $guesser)
     {
         $this->guesser = $guesser;
-    }
-
-    /**
-     * @param EventEmitterInterface $emitter
-     *
-     * @return mixed
-     */
-    public function attachEvents(EventEmitterInterface $emitter)
-    {
-        $emitter->on('data', [$this, 'onData']);
+        $this->parser = new StreamingJsonParser();
     }
 
     /**
      * @param $data
      */
-    public function onData($data)
+    public function write($data)
     {
-        $event = $this->guesser->getEventName($data);
-        $this->emit($event, [$data]);
+        // Blank lines are a keep-alive signal.
+        if ($data === "\r\n") {
+            $this->emit('keep-alive');
+
+            return;
+        }
+
+        foreach ($this->parser->push($data) as $data) {
+            $event = $this->guesser->getEventName($data);
+            $this->emit($event, [$data]);
+        }
     }
 }

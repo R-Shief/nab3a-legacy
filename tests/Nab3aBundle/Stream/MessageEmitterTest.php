@@ -2,9 +2,8 @@
 
 namespace Nab3aBundle\Tests\Stream;
 
-use Evenement\EventEmitter;
-use Nab3aBundle\Stream\MessageEmitter;
-use Nab3aBundle\Stream\TypeGuesser;
+use Nab3aBundle\Twitter\MessageEmitter;
+use Nab3aBundle\Twitter\TypeGuesser;
 
 class MessageEmitterTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,14 +11,24 @@ class MessageEmitterTest extends \PHPUnit_Framework_TestCase
     {
         $guesser = new TypeGuesser();
         $emitter = new MessageEmitter($guesser);
-        $stream = new EventEmitter();
-        $emitter->attachEvents($stream);
-        $emitter->on('event', function ($data) {
-            $this->assertEquals('{"event":[]}', $data);
+
+        $emitter->once('tweet', function ($data) {
+            $this->assertEquals([
+              'created_at' => '',
+              'text' => '',
+            ], $data);
         });
-        $emitter->on('tweet', function ($data) {
-            $this->assertEquals('{"created_at":"","text":""}', $data);
+        $emitter->write('{"created_at":"","text":""}');
+
+        $emitter->once('event', function ($data) {
+            $this->assertEquals([
+                'event' => [],
+            ], $data);
         });
-        $stream->emit('data', [json_encode(['created_at' => '', 'text' => ''])]);
+        $emitter->write('{"event":[]}');
+
+        $emitter->once('keep-alive', function () {
+            $this->assertTrue(true);
+        });
     }
 }

@@ -72,13 +72,12 @@ class BufferOutputPlugin implements PluginInterface
         );
 
         $pipeline = new Pipeline([
-          function ($data) { return \GuzzleHttp\json_decode($data, true); },
           function (array $data) use ($xf) { return t\xform([$data], $xf); },
           function (array $assoc) { return t\transduce('transducers\identity', t\assoc_reducer(), $assoc); },
           'GuzzleHttp\json_encode',
         ]);
 
-        $emitter->on('tweet', function (string $data) use ($pipeline, $process) {
+        $emitter->on('tweet', function (array $data) use ($pipeline, $process) {
             $data = $pipeline->process($data);
             $process->stdin->write($data);
         });

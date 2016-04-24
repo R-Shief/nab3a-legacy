@@ -52,7 +52,7 @@ class StreamCommand extends AbstractCommand
           ->makeChildProcess('stream:stdout '.$input->getArgument('name'));
 
         $process->stderr->on('data', line_delimited_stream([$this->container->get('nab3a.console.logger_helper'), 'onData']));
-        $process->stdout->on('data', line_delimited_stream([$this->container->get('nab3a.twitter.message_emitter'), 'onData']));
+        $process->stdout->pipe($this->container->get('nab3a.twitter.message_emitter'));
 
         $this->attachListeners($process);
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace Nab3aBundle\Model;
+namespace Nab3aBundle\Tests\Twitter;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Faker\Factory;
+use Nab3aBundle\Twitter\StreamParameters;
 use Symfony\Component\Validator\ValidatorBuilder;
 
 class StreamParametersTest extends \PHPUnit_Framework_TestCase

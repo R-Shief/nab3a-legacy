@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Model;
+namespace Nab3aBundle\Twitter;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

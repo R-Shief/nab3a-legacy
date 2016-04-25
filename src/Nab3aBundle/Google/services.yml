@@ -23,13 +23,13 @@ parameters:
 
 services:
     nab3a.google.command:
-        class: Nab3aBundle\Command\AccessTokenCommand
+        class: Nab3aBundle\Google\AccessTokenCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
 
     nab3a.google.output_google.command:
-        class: Nab3aBundle\Command\StreamWriteGoogleCommand
+        class: Nab3aBundle\Google\WriteStreamCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }

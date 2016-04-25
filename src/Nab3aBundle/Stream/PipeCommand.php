@@ -1,7 +1,8 @@
 <?php
 
-namespace Nab3aBundle\Command;
+namespace Nab3aBundle\Stream;
 
+use Nab3aBundle\Console\AbstractCommand;
 use React\ChildProcess\Process;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleEvent;

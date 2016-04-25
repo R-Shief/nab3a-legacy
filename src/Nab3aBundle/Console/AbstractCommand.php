@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Command;
+namespace Nab3aBundle\Console;
 
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;

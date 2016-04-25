@@ -1,7 +1,8 @@
 <?php
 
-namespace Nab3aBundle\Command;
+namespace Nab3aBundle\Google;
 
+use Nab3aBundle\Console\AbstractCommand;
 use React\Http;
 use React\Socket;
 use Symfony\Component\Console\Input\InputInterface;

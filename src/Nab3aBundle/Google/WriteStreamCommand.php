@@ -1,6 +1,6 @@
 <?php
 
-namespace Nab3aBundle\Command;
+namespace Nab3aBundle\Google;
 
 use Clue\JsonStream\StreamingJsonParser;
 use GuzzleHttp\Psr7\Stream;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class StreamWriteGoogleCommand extends Command
+class WriteStreamCommand extends Command
 {
     use LoggerAwareTrait;
     use ContainerAwareTrait;

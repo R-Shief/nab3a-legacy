@@ -1,18 +1,18 @@
 services:
     nab3a.stream.command:
-        class: Nab3aBundle\Command\PipeCommand
+        class: Nab3aBundle\Stream\PipeCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
 
     nab3a.stream_stdout.command:
-        class: Nab3aBundle\Command\StreamReadTwitterCommand
+        class: Nab3aBundle\Twitter\ReadStreamCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
 
     nab3a.validate.command:
-        class: Nab3aBundle\Command\ValidationCommand
+        class: Nab3aBundle\Twitter\ValidationCommand
         parent: nab3a.console.command
         tags:
             - { name: nab3a.console.command }
